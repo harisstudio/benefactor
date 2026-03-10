@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Benefactor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+        /* ========================================
+           CSS VARIABLES (matching donate.html)
+        ======================================== */
+        :root {
+            --primary-navy: #1a2b4a;
+            --primary-yellow: #FFC800;
+            --primary-orange: #FF8C00;
+            --text-dark: #333;
+            --text-gray: #666;
+            --border-navy: #1a2b4a;
+            --bg-light: #f8f9fa;
+        }
+
+        /* ========================================
+           BASE STYLES
+        ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* ========================================
+           NAVBAR (matching donate.html)
+        ======================================== */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 40px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+        .navbar .back-link {
+            position: absolute;
+            left: 40px;
+            color: var(--primary-navy);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .navbar .logo {
+            height: 40px;
+        }
+
+        .navbar .sign-in {
+            position: absolute;
+            right: 40px;
+            color: var(--primary-navy);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .navbar .sign-in span {
+            color: var(--primary-yellow);
+            font-weight: 700;
+        }
+
+        /* ========================================
+           MAIN CONTAINER
+        ======================================== */
+        .container {
+            max-width: 648px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        /* ========================================
+           CAMPAIGN HEADER (matching donate.html)
+        ======================================== */
+        .campaign-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .progress-circle {
+            width: 70px;
+            height: 70px;
+            flex-shrink: 0;
+        }
+
+        .circular-chart {
+            width: 100%;
+            height: 100%;
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: #e6e6e6;
+            stroke-width: 3;
+        }
+
+        .circle {
+            fill: none;
+            stroke: url(#progressGradient);
+            stroke-width: 3;
+            stroke-linecap: round;
+        }
+
+        .percentage {
+            fill: var(--primary-navy);
+            font-family: 'Outfit', sans-serif;
+            font-size: 8px;
+            font-weight: 800;
+            text-anchor: middle;
+        }
+
+        .campaign-info h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .campaign-info p {
+            font-size: 14px;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        /* ========================================
+           DONATION TABS (matching donate.html)
+        ======================================== */
+        .donation-tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-radius: 30px;
+            padding: 4px;
+            margin-bottom: 12px;
+        }
+
+        .donation-tab {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 26px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary-navy);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .donation-tab.active {
+            background: var(--primary-yellow);
+        }
+
+        .donation-tab .tab-icon {
+            height: 18px;
+            width: auto;
+        }
+
+        .monthly-note {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-gray);
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        /* ========================================
+           AMOUNT SELECTION (matching donate.html)
+        ======================================== */
+        .amount-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .amount-btn {
+            padding: 16px 8px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary-navy);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .amount-btn:hover {
+            border-color: var(--primary-yellow);
+        }
+
+        .amount-btn.active {
+            border-color: var(--primary-yellow);
+            background: var(--primary-yellow);
+        }
+
+        .amount-btn .suggested-img {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 20px;
+            width: auto;
+            z-index: 2;
+        }
+
+        .tab-heart {
+            width: 24px;
+            height: 21px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        #tipSection {
+            transition: all 0.3s ease;
+        }
+
+        #tipSection.hidden {
+            display: none;
+        }
+
+        /* Custom Amount Input (matching donate.html) */
+        .custom-amount {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        .custom-amount .currency-block {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .custom-amount .symbol {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary-navy);
+        }
+
+        .custom-amount .label {
+            font-size: 14px;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .custom-amount input {
+            border: none;
+            outline: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            text-align: right;
+            color: var(--primary-navy);
+            width: 100px;
+        }
+
+        /* ========================================
+           TIP SECTION
+        ======================================== */
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 8px;
+        }
+
+        .section-description {
+            font-size: 14px;
+            color: var(--text-gray);
+            font-weight: 500;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .tip-slider-container {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .tip-percent-display {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-navy);
+            margin-bottom: 12px;
+        }
+
+        .tip-percent-display .percent-sign {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .tip-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, #FF6B00, #FFC800 50%, #e0e0e0 50%);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            margin-bottom: 12px;
+        }
+
+        .tip-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #e0e0e0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+
+        .custom-tip-link {
+            background: none;
+            border: none;
+            color: var(--primary-navy);
+            text-decoration: underline;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* ========================================
+           PAYMENT METHODS (matching donate.html buttons)
+        ======================================== */
+        .payment-section {
+            margin-bottom: 20px;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border: 2px solid var(--border-navy);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .payment-option:hover {
+            background: #f9f9f9;
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary-yellow);
+            background: rgba(255, 200, 0, 0.05);
+        }
+
+        .payment-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-yellow);
+        }
+
+        .payment-option img {
+            height: 20px;
+        }
+
+        .payment-option .card-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--text-gray);
+        }
+
+        .payment-option span {
+            font-size: 15px;
+            font-weight: 400;
+            color: var(--primary-navy);
+        }
+
+        /* ========================================
+           CREDIT CARD FORM (hidden by default)
+        ======================================== */
+        .card-form {
+            display: none;
+            padding: 20px 0 0 0;
+            animation: slideDown 0.3s ease;
+        }
+
+        .card-form.visible {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-dark);
+            background: #f8f9fa;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-navy);
+            background: white;
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 16px 0;
+        }
+
+        .checkbox-row input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-navy);
+        }
+
+        .checkbox-row label {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .country-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-dark);
+            background: #f8f9fa;
+            cursor: pointer;
+        }
+
+        .country-select:focus {
+            outline: none;
+            border-color: var(--primary-navy);
+        }
+
+        .country-label {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        /* ========================================
+           PRIVACY CHECKBOXES
+        ======================================== */
+        .privacy-section {
+            margin: 20px 0;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* ========================================
+           SUMMARY (matching donate.html style)
+        ======================================== */
+        .summary-section {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .summary-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 16px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: var(--text-gray);
+            font-weight: 400;
+        }
+
+        .summary-row.total {
+            font-weight: 700;
+            color: var(--primary-navy);
+            font-size: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* ========================================
+           DONATE BUTTON (matching donate.html)
+        ======================================== */
+        .btn-donate-now {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 16px;
+            background: var(--primary-yellow);
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+            min-height: 56px;
+        }
+
+        .btn-donate-now.gpay {
+            background: #000;
+        }
+
+        .btn-donate-now .paypal-logo {
+            height: 22px;
+            width: auto;
+        }
+
+        .btn-donate-now .gpay-logo {
+            height: 36px;
+            width: auto;
+        }
+
+        .btn-donate-now:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .terms-text {
+            font-size: 13px;
+            color: var(--text-gray);
+            text-align: center;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .terms-text a {
+            color: var(--primary-navy);
+            text-decoration: underline;
+        }
+
+        /* ========================================
+           PROTECTION NOTICE
+        ======================================== */
+        .protection-notice {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-top: 24px;
+            padding: 16px;
+            background: var(--bg-light);
+            border-radius: 12px;
+        }
+
+        .protection-notice .icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .protection-notice h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 4px;
+        }
+
+        .protection-notice p {
+            font-size: 13px;
+            color: var(--text-gray);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .protection-notice a {
+            color: var(--primary-navy);
+            text-decoration: underline;
+        }
+
+        /* ========================================
+           FOOTER
+        ======================================== */
+        .checkout-footer {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .checkout-footer .logo {
+            height: 50px;
+            margin-bottom: 8px;
+        }
+
+        .checkout-footer p {
+            font-size: 13px;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ========================================
+         NAVBAR
+    ======================================== -->
+    <nav class="navbar">
+        <a href="donate.html" class="back-link">← Back</a>
+        <img src="/assets/logo.svg" alt="Benefactor" class="logo">
+        <a href="/signin.html" class="sign-in">Already have an account? <span>Sign in</span></a>
+    </nav>
+
+    <!-- ========================================
+         MAIN CONTENT
+    ======================================== -->
+    <div class="container">
+        <div class="card">
+            <!-- Campaign Header -->
+            <div class="campaign-header">
+                <div class="progress-circle">
+                    <svg viewBox="0 0 36 36" class="circular-chart">
+                        <defs>
+                            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FF8C00" />
+                                <stop offset="50%" style="stop-color:#FFA500" />
+                                <stop offset="100%" style="stop-color:#FFD700" />
+                            </linearGradient>
+                        </defs>
+                        <path class="circle-bg"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle" stroke-dasharray="75, 100"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <text x="18" y="20.35" class="percentage">75%</text>
+                    </svg>
+                </div>
+                <div class="campaign-info">
+                    <h1>Help a Family in Lithuania Stay Warm This Winter</h1>
+                    <p>Still £4,335 to go. Help us build momentum.</p>
+                </div>
+            </div>
+
+            <!-- Donation Tabs -->
+            <div class="donation-tabs">
+                <button class="donation-tab active" data-type="once">Give once</button>
+                <button class="donation-tab" data-type="monthly">Monthly</button>
+            </div>
+            <p class="monthly-note">Boost your impact by giving monthly</p>
+
+            <!-- Amount Grid -->
+            <div class="amount-grid">
+                <button class="amount-btn">£25</button>
+                <button class="amount-btn">£50</button>
+                <button class="amount-btn">£100<img src="/assets/suggested-badge.svg" alt="Suggested"
+                        class="suggested-img"></button>
+                <button class="amount-btn">£150</button>
+                <button class="amount-btn">£200</button>
+                <button class="amount-btn">£500</button>
+            </div>
+
+            <!-- Custom Amount -->
+            <div class="custom-amount">
+                <div class="currency-block">
+                    <span class="symbol">£</span>
+                    <span class="label">GBP</span>
+                </div>
+                <input type="text" value=".00" id="customAmount">
+            </div>
+
+            <!-- Tip Section -->
+            <div class="tip-section" id="tipSection">
+                <h3 class="section-title">Tip Benefactor services</h3>
+                <p class="section-description">Benefactor has a 0% platform fee for organisers. Benefactor will continue
+                    offering its services thanks to donors who will leave an optional amount here:</p>
+
+                <div class="tip-slider-container">
+                    <div class="tip-percent-display">
+                        <span id="tipPercentValue">17.5</span><span class="percent-sign">%</span>
+                    </div>
+                    <input type="range" class="tip-slider" id="tipSlider" min="0" max="30" value="17.5" step="0.5">
+                    <button class="custom-tip-link">Enter custom tip</button>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-section">
+                <h3 class="section-title">Payment method</h3>
+                <div class="payment-options">
+                    <label class="payment-option selected" data-method="paypal">
+                        <input type="radio" name="payment" value="paypal" checked>
+                        <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="PayPal">
+                        <span>PayPal</span>
+                    </label>
+                    <label class="payment-option" data-method="gpay">
+                        <input type="radio" name="payment" value="gpay">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg"
+                            alt="Google Pay">
+                        <span>Google Pay</span>
+                    </label>
+                    <label class="payment-option" data-method="card">
+                        <input type="radio" name="payment" value="card">
+                        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                        <span>Credit or debit</span>
+                    </label>
+                </div>
+
+                <!-- Credit Card Form (hidden by default) -->
+                <div class="card-form" id="cardForm">
+                    <div class="form-group">
+                        <input type="email" class="form-input" placeholder="Email address">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="First name">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="Last name">
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="billingName">
+                        <label for="billingName">Use as billing name</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Card number">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="CVV">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Name on card" style="background: #f0f0f0;">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <span class="country-label">Country</span>
+                            <select class="country-select">
+                                <option>United Kingdom</option>
+                                <option>United States</option>
+                                <option>Germany</option>
+                                <option>France</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="Postal code" style="margin-top: 18px;">
+                        </div>
+                    </div>
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="saveCard">
+                        <label for="saveCard">Save card for future donations</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Checkboxes -->
+            <div class="privacy-section">
+                <div class="checkbox-row">
+                    <input type="checkbox" id="anonymous">
+                    <label for="anonymous">Don't display my name publicly on the fundraiser.</label>
+                </div>
+                <div class="checkbox-row">
+                    <input type="checkbox" id="updates">
+                    <label for="updates">Get occasional marketing updates from Benefactor.</label>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary-section">
+                <h4 class="summary-title">Your donation</h4>
+                <div class="summary-row">
+                    <span>Your donation</span>
+                    <span id="summaryDonation">£0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Benefactor tip</span>
+                    <span id="summaryTip">£0.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total due today</span>
+                    <span id="summaryTotal">£0.00</span>
+                </div>
+            </div>
+
+            <!-- Donate Button -->
+            <button class="btn-donate-now" id="donateBtn">
+                <img src="/assets/paypal-logo.svg" alt="PayPal" class="paypal-logo">
+            </button>
+
+            <p class="terms-text">
+                By continuing, you agree to Benefactor's <a href="#">Terms of Service</a> and <a href="#">Privacy
+                    Notice</a>.
+            </p>
+
+            <!-- Protection Notice -->
+            <div class="protection-notice">
+                <img src="/assets/shield-icon.svg" alt="Shield" class="protection-icon">
+                <div>
+                    <h4>Benefactor protects your donation</h4>
+                    <p>We guarantee you a full refund for up to a year in the rare case that fraud occurs. <a
+                            href="#">Learn more</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="checkout-footer">
+            <img src="/assets/logo.svg" alt="Benefactor" class="logo">
+            <p>World Wide Fundraising Platform</p>
+        </div>
+    </div>
+
+    <!-- ========================================
+         JAVASCRIPT
+    ======================================== -->
+    <script>
+        // Amount Selection
+        const amountBtns = document.querySelectorAll('.amount-btn');
+        const customAmountInput = document.getElementById('customAmount');
+
+        amountBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                amountBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const amount = btn.textContent.replace('£', '').replace(',', '').replace('Suggested', '').trim();
+                customAmountInput.value = amount + '.00';
+                updateSummary();
+            });
+        });
+
+        customAmountInput.addEventListener('input', () => {
+            amountBtns.forEach(b => b.classList.remove('active'));
+            updateSummary();
+        });
+
+        // Donation Tabs
+        const donationTabs = document.querySelectorAll('.donation-tab');
+        const tipSection = document.getElementById('tipSection');
+
+        donationTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                donationTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Show/hide tip section based on tab type
+                if (tab.dataset.type === 'monthly') {
+                    tipSection.classList.add('hidden');
+                } else {
+                    tipSection.classList.remove('hidden');
+                }
+                updateSummary();
+            });
+        });
+
+        // Tip Slider
+        const tipSlider = document.getElementById('tipSlider');
+        const tipPercentValue = document.getElementById('tipPercentValue');
+
+        function updateSlider() {
+            const percent = parseFloat(tipSlider.value);
+            tipPercentValue.textContent = percent.toFixed(1);
+            const pos = (percent / 30) * 100;
+            tipSlider.style.background = `linear-gradient(to right, #FF6B00 0%, #FFC800 ${pos}%, #e0e0e0 ${pos}%, #e0e0e0 100%)`;
+            updateSummary();
+        }
+
+        tipSlider.addEventListener('input', updateSlider);
+        updateSlider();
+
+        // Payment Options - Show/Hide Card Form
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        const cardForm = document.getElementById('cardForm');
+        const donateBtn = document.getElementById('donateBtn');
+
+        paymentOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                paymentOptions.forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+
+                const method = option.dataset.method;
+
+                // Show card form only for credit/debit
+                if (method === 'card') {
+                    cardForm.classList.add('visible');
+                    donateBtn.classList.remove('gpay');
+                    donateBtn.innerHTML = 'Donate now';
+                } else if (method === 'gpay') {
+                    cardForm.classList.remove('visible');
+                    donateBtn.classList.add('gpay');
+                    donateBtn.innerHTML = '<img src="/assets/google-pay-mark.svg" alt="Google Pay" class="gpay-logo">';
+                } else {
+                    cardForm.classList.remove('visible');
+                    donateBtn.classList.remove('gpay');
+                    donateBtn.innerHTML = '<img src="/assets/paypal-logo.svg" alt="PayPal" class="paypal-logo">';
+                }
+            });
+        });
+
+        // Summary Calculation
+        function getDonation() {
+            return parseFloat(customAmountInput.value.replace(',', '')) || 0;
+        }
+
+        function updateSummary() {
+            const donation = getDonation();
+            const tipSectionVisible = !tipSection.classList.contains('hidden');
+            const tipPercent = tipSectionVisible ? parseFloat(tipSlider.value) : 0;
+            const tipAmount = (donation * tipPercent) / 100;
+            const total = donation + tipAmount;
+
+            document.getElementById('summaryDonation').textContent = '£' + donation.toFixed(2);
+            document.getElementById('summaryTip').textContent = '£' + tipAmount.toFixed(2);
+            document.getElementById('summaryTotal').textContent = '£' + total.toFixed(2);
+        }
+    </script>
+</body>
+
+</html>

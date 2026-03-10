@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers - Join Our Team | Benefactor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-navy: #0E3347;
+            --primary-yellow: #FFC800;
+            --text-dark: #002538;
+            --text-gray: #666666;
+            --bg-light: #ffffff;
+            --bg-section: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-dark);
+            background: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 48px;
+            background: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar .logo {
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 24px;
+            border-radius: 28px;
+            border: 2px solid var(--primary-yellow);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary-navy);
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            background: var(--primary-yellow);
+            color: var(--primary-navy);
+        }
+
+        /* Hero */
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, #1a4a5e 100%);
+            color: white;
+            padding: 80px 48px;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .page-hero .highlight {
+            color: var(--primary-yellow);
+        }
+
+        .page-hero p {
+            font-size: 18px;
+            opacity: 0.85;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        /* Why Join */
+        .why-section {
+            padding: 80px 48px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .why-section h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+            color: var(--primary-navy);
+        }
+
+        .perks-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .perk-card {
+            padding: 32px 24px;
+            text-align: center;
+            background: var(--bg-section);
+            border-radius: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .perk-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .perk-emoji {
+            font-size: 40px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .perk-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 8px;
+        }
+
+        .perk-card p {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        /* Open Roles */
+        .roles-section {
+            background: var(--bg-section);
+            padding: 80px 48px;
+        }
+
+        .roles-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .roles-inner h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary-navy);
+        }
+
+        .role-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .role-info h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 4px;
+        }
+
+        .role-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        .role-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-apply {
+            display: inline-block;
+            padding: 10px 24px;
+            background: var(--primary-yellow);
+            color: var(--primary-navy);
+            border-radius: 28px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-apply:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 200, 0, 0.4);
+        }
+
+        /* Culture Section */
+        .culture-section {
+            padding: 80px 48px;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .culture-section h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary-navy);
+        }
+
+        .culture-section p {
+            font-size: 16px;
+            color: var(--text-gray);
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            padding: 16px 40px;
+            background: var(--primary-yellow);
+            color: var(--primary-navy);
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 200, 0, 0.4);
+        }
+
+        /* Footer */
+        .page-footer {
+            background: var(--primary-navy);
+            color: white;
+            text-align: center;
+            padding: 32px;
+        }
+
+        .page-footer img {
+            height: 40px;
+            margin: 0 auto 8px;
+            filter: brightness(0) invert(1);
+        }
+
+        .page-footer p {
+            font-size: 13px;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            .perks-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .role-card {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .page-hero h1 {
+                font-size: 32px;
+            }
+
+            .navbar {
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/"><img src="/assets/logo.svg" alt="Benefactor" class="logo"></a>
+        <div class="nav-links">
+            <a href="/" class="btn-back">← Back to Home</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="page-hero">
+        <h1>Join the <span class="highlight">Benefactor</span> Team</h1>
+        <p>Help us build technology that empowers people to help each other. We're looking for passionate people to join
+            our mission.</p>
+    </section>
+
+    <!-- Why Join -->
+    <section class="why-section">
+        <h2>Why work at Benefactor?</h2>
+        <div class="perks-grid">
+            <div class="perk-card">
+                <span class="perk-emoji">🚀</span>
+                <h3>Meaningful Impact</h3>
+                <p>Your work helps millions of people raise funds for causes that matter most to them.</p>
+            </div>
+            <div class="perk-card">
+                <span class="perk-emoji">🏠</span>
+                <h3>Remote-First Culture</h3>
+                <p>Work from anywhere in the world with flexible hours and async-friendly collaboration.</p>
+            </div>
+            <div class="perk-card">
+                <span class="perk-emoji">📈</span>
+                <h3>Growth & Learning</h3>
+                <p>Access mentorship, learning budgets, and opportunities to develop your career.</p>
+            </div>
+            <div class="perk-card">
+                <span class="perk-emoji">🎯</span>
+                <h3>Competitive Benefits</h3>
+                <p>Comprehensive health insurance, generous PTO, and equity participation for all team members.</p>
+            </div>
+            <div class="perk-card">
+                <span class="perk-emoji">🤝</span>
+                <h3>Inclusive Team</h3>
+                <p>We celebrate diversity and foster an inclusive environment where everyone can thrive.</p>
+            </div>
+            <div class="perk-card">
+                <span class="perk-emoji">💛</span>
+                <h3>Giving Back</h3>
+                <p>Paid volunteer days and donation matching to causes you care about personally.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Open Roles -->
+    <section class="roles-section">
+        <div class="roles-inner">
+            <h2>Open Positions</h2>
+
+            <div class="role-card">
+                <div class="role-info">
+                    <h3>Senior Frontend Engineer</h3>
+                    <div class="role-meta">
+                        <span>🏢 Engineering</span>
+                        <span>🌍 Remote</span>
+                        <span>⏰ Full-time</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-apply">Apply →</a>
+            </div>
+
+            <div class="role-card">
+                <div class="role-info">
+                    <h3>Product Designer</h3>
+                    <div class="role-meta">
+                        <span>🎨 Design</span>
+                        <span>🌍 Remote</span>
+                        <span>⏰ Full-time</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-apply">Apply →</a>
+            </div>
+
+            <div class="role-card">
+                <div class="role-info">
+                    <h3>Community Manager</h3>
+                    <div class="role-meta">
+                        <span>💬 Community</span>
+                        <span>📍 London, UK</span>
+                        <span>⏰ Full-time</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-apply">Apply →</a>
+            </div>
+
+            <div class="role-card">
+                <div class="role-info">
+                    <h3>Data Analyst</h3>
+                    <div class="role-meta">
+                        <span>📊 Analytics</span>
+                        <span>🌍 Remote</span>
+                        <span>⏰ Full-time</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-apply">Apply →</a>
+            </div>
+
+            <div class="role-card">
+                <div class="role-info">
+                    <h3>Marketing Specialist</h3>
+                    <div class="role-meta">
+                        <span>📢 Marketing</span>
+                        <span>🌍 Remote</span>
+                        <span>⏰ Full-time</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-apply">Apply →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Culture CTA -->
+    <section class="culture-section">
+        <h2>Don't see your role?</h2>
+        <p>We're always looking for talented and passionate people. Send us your CV and tell us how you'd like to
+            contribute to Benefactor's mission.</p>
+        <a href="mailto:careers@benefactor.com" class="btn-cta">Get in Touch</a>
+    </section>
+
+    <!-- Footer -->
+    <div class="page-footer">
+        <img src="/assets/logo.svg" alt="Benefactor">
+        <p>World Wide Fundraising Platform</p>
+    </div>
+</body>
+
+</html>
