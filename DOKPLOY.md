@@ -1,4 +1,4 @@
-# Deploying Benefactor Frontend with Dokploy
+# Deploying Benefactor UI with Dokploy
 
 ## Prerequisites
 
@@ -24,18 +24,18 @@ Once installed, access the Dokploy panel at `http://<your-server-ip>:3000` and c
 
 1. Go to **Projects** > **Create Project** (e.g., "Benefactor")
 2. Inside the project, click **Add Service** > **Application**
-3. Name it `benefactor-frontend`
+3. Name it `benefactor-ui`
 
 ---
 
 ## 3. Connect Your Git Repository
 
-1. Open the `benefactor-frontend` service
+1. Open the `benefactor-ui` service
 2. Go to **General** tab
 3. Under **Source**, select **GitHub** (or GitLab)
    - If first time: click **Connect** and authorize Dokploy to access your repos
 4. Select your repository and branch (`main`)
-5. Set **Build Path** to `/frontend` (since the Dockerfile is inside the frontend folder)
+5. Set **Build Path** to `/ui` (since the Dockerfile is inside the ui folder)
 
 ---
 
@@ -45,7 +45,7 @@ Once installed, access the Dokploy panel at `http://<your-server-ip>:3000` and c
    - **Build Type**: Dockerfile
    - **Dockerfile Path**: `./Dockerfile`
 2. In the **Ports** section:
-   - Add port mapping: **Host**: leave auto / **Container**: `80`
+   - Add port mapping: **Host**: leave auto / **Container**: `3000`
 3. Click **Deploy**
 
 Wait for the build to complete. Check **Deployments** tab for logs.
@@ -97,7 +97,7 @@ Every time you push to the configured branch, you can either:
 
 | Problem | Fix |
 |---|---|
-| Build fails | Check **Deployments** tab for logs. Ensure Build Path is `/frontend` |
+| Build fails | Check **Deployments** tab for logs. Ensure Build Path is `/ui` |
 | Site not loading | Verify DNS A record points to correct server IP |
 | SSL not working | Make sure Cloudflare proxy is OFF (grey cloud) for Let's Encrypt, or set Cloudflare SSL to Full (Strict) if proxy is ON |
-| 404 on subpages | The nginx.conf handles this — ensure it was copied into the Docker image |
+| 404 on subpages | Next.js handles routing natively — check your routes in `src/app/` |

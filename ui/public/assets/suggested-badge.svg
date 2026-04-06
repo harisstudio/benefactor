@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="75" height="20" viewBox="0 0 75 20">
+  <rect width="75" height="20" rx="10" fill="#fcd54a" />
+  <text x="37.5" y="14" text-anchor="middle" fill="#002538" font-size="10"
+    font-family="Helvetica-Bold, Helvetica, Arial, sans-serif" font-weight="700">
+    💛 Suggested
+  </text>
+</svg>
