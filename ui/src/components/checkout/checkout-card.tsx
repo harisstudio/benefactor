@@ -165,7 +165,7 @@ export function CheckoutCard() {
 
       {/* Protection notice */}
       <div className="flex items-start gap-3 p-4 bg-bg-off-white rounded-sm">
-        <Image src="/assets/shield-icon.svg" alt="" width={24} height={24} className="flex-shrink-0 mt-0.5" />
+        <Image src="/assets/shield-icon.svg" alt="Security guarantee" width={24} height={24} className="flex-shrink-0 mt-0.5" />
         <div>
           <h4 className="text-sm font-bold text-primary-navy">
             Benefactor protects your donation
