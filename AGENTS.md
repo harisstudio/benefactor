@@ -10,7 +10,7 @@ The frontend is a **multi-page vanilla JS app** built with Vite. There is no fra
 
 ```
 benefactor/
-├── frontend/                  # Vite multi-page app
+├── ui/                        # Vite multi-page app (ACTIVE WORKING DIRECTORY)
 │   ├── index.html             # Homepage (hero, campaigns, fundraisers)
 │   ├── donate.html            # Campaign donation detail page
 │   ├── checkout.html          # Payment/checkout flow
@@ -31,20 +31,25 @@ benefactor/
 │   ├── assets/                # SVGs for checkout/payment UI
 │   ├── public/assets/         # Images, logos, icons (served as static)
 │   ├── vite.config.js         # Multi-page input config
-│   ├── Dockerfile             # Node 20 build → Nginx serve
-│   ├── nginx.conf             # SPA fallback + static asset caching
-│   └── package.json
+│   ├── package.json
+│   └── (other config files)
+├── frontend/                  # V2 READONLY DIRECTORY (To be removed after full 'ui' switch)
+│   └── (Same structure as 'ui' directory, but do not edit here. Root design is here but live version is 'ui')
 ├── backend/
 │   ├── server.js              # Express 5 — only /api/health exists
 │   └── package.json
 └── DOKPLOY.md                 # Deployment guide (Hostinger VPS + Cloudflare)
 ```
 
+**❗️ IMPORTANT DIRECTORY RULE:**
+- **`ui/` is the ACTIVE front-end directory.** The live version uses this content. **ALL edits and development should happen in `ui/`.**
+- **`frontend/` is READONLY.** The root design resides here, but no edits should be made in this folder. Think of it as a reference. It will be removed in the future after the full transition to "ui".
+
 ## Tech stack
 
 | Layer | Technology | Notes |
 |-------|-----------|-------|
-| Frontend | Vanilla JS + Vite 5 | No framework. Multi-page app with 9 HTML entry points |
+| UI / Frontend | Vanilla JS + Vite 5 | No framework. Multi-page app with 9 HTML entry points |
 | Styling | Custom CSS | CSS variables for design tokens. No Tailwind/SCSS |
 | Fonts | DM Sans + Outfit | Loaded via Google Fonts in each HTML `<head>` |
 | Backend | Express.js 5.2 | Minimal — only health check. Backend integration pending |
@@ -55,8 +60,8 @@ benefactor/
 ## Commands
 
 ```bash
-# Frontend
-cd frontend
+# UI / Frontend
+cd ui
 npm install
 npm run dev          # Vite dev server (localhost:5173)
 npm run build        # Production build to dist/
@@ -141,7 +146,7 @@ The backend will be built out with real API endpoints. When working on backend i
 - The Express server is at `backend/server.js`
 - CORS is already configured
 - Environment variables load via `dotenv` (no `.env.example` yet — create one when adding real config)
-- The frontend will need to call API endpoints — currently there are zero `fetch()` calls in the codebase
+- The frontend (UI) will need to call API endpoints — currently there are zero `fetch()` calls in the codebase
 
 ## Environment variables
 
@@ -161,7 +166,7 @@ More will be added during backend integration (database URL, auth secrets, payme
 
 Frontend deploys as a Docker container via Dokploy on Hostinger VPS:
 1. Dockerfile: `node:20-alpine` builds, `nginx:alpine` serves
-2. Build path: `/frontend`
+2. Build path: `/ui`
 3. Nginx handles SPA routing (`try_files $uri $uri.html $uri/ /index.html`)
 4. Static assets cached 30 days
 5. HTTPS via Let's Encrypt through Dokploy
