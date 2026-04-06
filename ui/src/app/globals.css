@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-primary-yellow: #FFC800;
+  --color-primary-navy: #0E3347;
+  --color-text-dark: #002538;
+  --color-text-gray: #666666;
+  --color-bg-light: #FFFFFF;
+  --color-bg-off-white: #F8F9FA;
+
+  /* Fonts (set by next/font CSS variables) */
+  --font-heading: var(--font-outfit);
+  --font-body: var(--font-dm-sans);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  --radius-btn: 28px;
+
+  /* Breakpoints */
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1440px;
+
+  /* Font sizes */
+  --text-heading: clamp(28px, 4vw + 1rem, 48px);
+  --text-subtext: clamp(14px, 1vw + 0.75rem, 18px);
+
+  /* Container */
+  --max-w-container: 1600px;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    color: var(--color-text-dark);
+    background: var(--color-bg-light);
+    line-height: 1.625;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--color-primary-navy);
+  }
+}
