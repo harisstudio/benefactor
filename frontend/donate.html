@@ -3,9 +3,10 @@
 
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Help a Family in Lithuania - Benefactor</title>
+    <style>body{opacity:0}body.ready{opacity:1;transition:opacity .15s ease}</style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -39,9 +40,34 @@
                     <a href="#" class="nav-link">About ▾</a>
                     <a href="./signin.html" class="nav-link">Sign in</a>
                     <a href="./start.html" class="btn btn-nav-yellow-outline">Start a Benefactor</a>
+                    <button class="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
                 </div>
             </div>
         </nav>
+
+        <!-- Mobile Navigation Drawer -->
+        <div class="mobile-nav-drawer" aria-hidden="true">
+            <div class="mobile-nav-header">
+                <img src="./assets/logo.svg" alt="Benefactor" class="logo" />
+                <button class="mobile-nav-close" aria-label="Close menu">&times;</button>
+            </div>
+            <div class="mobile-nav-links">
+                <a href="./">Home</a>
+                <a href="#">Search</a>
+                <a href="#">Donate</a>
+                <a href="#">Fundraise</a>
+                <a href="./how-benefactor-works.html">How Benefactor Works</a>
+                <a href="./about-benefactor.html">About Benefactor</a>
+                <a href="./careers.html">Careers</a>
+                <a href="./signin.html">Sign in</a>
+                <a href="./start.html" class="btn btn-nav-yellow-outline">Start a Benefactor</a>
+            </div>
+        </div>
+        <div class="mobile-nav-overlay"></div>
 
         <!-- Campaign Detail Section -->
         <section class="campaign-detail-page">

@@ -47,8 +47,8 @@
     --transition-base: 300ms ease;
 
     /* Responsive Typography (mobile-first) */
-    --heading-size: 32px;
-    --subtext-size: 16px;
+    --heading-size: clamp(28px, 4vw + 1rem, 48px);
+    --subtext-size: clamp(14px, 1vw + 0.75rem, 18px);
 }
 
 /* ============================================
@@ -262,23 +262,10 @@ h3 {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    padding: var(--space-sm) var(--space-xl);
+    padding: var(--space-sm) clamp(20px, 5vw, 120px);
     max-width: 1600px;
     margin: 0 auto;
     width: 100%;
-}
-
-/* Large screens - more padding */
-@media (min-width: 1200px) {
-    .navbar-inner {
-        padding: var(--space-sm) 80px;
-    }
-}
-
-@media (min-width: 1440px) {
-    .navbar-inner {
-        padding: var(--space-sm) 120px;
-    }
 }
 
 .nav-left {
@@ -357,13 +344,174 @@ h3 {
     height: 90px;
 }
 
-/* Hide nav links on mobile */
+/* Hide nav links on mobile, show hamburger */
 @media (max-width: 767px) {
 
-    .nav-left,
-    .nav-right .nav-link {
+    .navbar-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--space-xs) var(--container-padding);
+    }
+
+    .nav-left {
         display: none;
     }
+
+    .nav-right .nav-link,
+    .nav-right .nav-dropdown,
+    .nav-right .btn-nav-yellow-outline {
+        display: none;
+    }
+
+    .nav-right {
+        gap: 0;
+    }
+
+    .logo {
+        height: 60px;
+    }
+}
+
+/* --- Mobile Menu Toggle (Hamburger) --- */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hamburger-line {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text-dark);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+@media (max-width: 767px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+}
+
+/* Hamburger → X animation when open */
+.mobile-menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle[aria-expanded="true"] .hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* --- Mobile Nav Drawer --- */
+.mobile-nav-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(320px, 85vw);
+    height: 100vh;
+    height: 100dvh;
+    background: var(--bg-light);
+    z-index: 9999;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-lg);
+    overflow-y: auto;
+}
+
+.mobile-nav-drawer.is-open {
+    transform: translateX(0);
+}
+
+.mobile-nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-nav-header .logo {
+    height: 50px;
+}
+
+.mobile-nav-close {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--text-dark);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s ease;
+}
+
+.mobile-nav-close:hover {
+    background: var(--bg-off-white);
+}
+
+.mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-xs) 0;
+}
+
+.mobile-nav-links a {
+    display: flex;
+    align-items: center;
+    padding: 14px var(--space-md);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    border-bottom: 1px solid #f5f5f5;
+    transition: background 0.15s ease;
+}
+
+.mobile-nav-links a:hover {
+    background: var(--bg-off-white);
+}
+
+.mobile-nav-links .btn {
+    margin: var(--space-sm) var(--space-md);
+    text-align: center;
+    justify-content: center;
+    border-bottom: none;
+}
+
+/* --- Mobile Nav Overlay --- */
+.mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s;
+}
+
+.mobile-nav-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* ============================================
@@ -425,7 +573,7 @@ h3 {
 }
 
 .hero-content h1 {
-    font-size: 26px;
+    font-size: clamp(28px, 5vw + 1rem, 60px);
     line-height: 1.0;
     margin-bottom: 18px;
     color: var(--primary-navy);
@@ -438,22 +586,9 @@ h3 {
 
 
 
-@media (min-width: 768px) {
-    .hero-content h1 {
-        font-size: 40px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .hero-content h1 {
-        font-size: 60px;
-    }
-}
-
 .hero-subtitle {
     font-family: var(--font-heading);
-    font-size: 14px;
-    /* Reduced by 10% */
+    font-size: clamp(14px, 2vw + 0.5rem, 24px);
     margin-bottom: 18px;
     color: var(--primary-navy);
     font-weight: 700;
@@ -461,28 +596,13 @@ h3 {
     width: 100%;
 }
 
-@media (min-width: 1024px) {
-    .hero-subtitle {
-        font-size: 24px;
-        /* Reduced by 2x from 54px */
-    }
-}
-
 .hero-desc {
-    font-size: 9px;
-    /* Reduced by 10% */
+    font-size: clamp(13px, 1vw + 0.5rem, 16px);
     color: var(--text-gray);
     margin-bottom: 18px;
     line-height: 1.42;
     width: 100%;
     font-weight: 400;
-}
-
-@media (min-width: 1024px) {
-    .hero-desc {
-        font-size: 12.5px;
-        /* Reduced by 2x from 28px */
-    }
 }
 
 /* Center the button */
@@ -500,7 +620,7 @@ h3 {
 /* --- Globe Section with Navy Stats Bar --- */
 .hero-globe-section {
     position: relative;
-    margin-top: 280px;
+    margin-top: clamp(120px, 20vw, 280px);
     left: 0;
     transform: none;
     display: flex;
@@ -515,8 +635,8 @@ h3 {
     max-width: 920px;
     height: auto;
     display: block;
-    margin-top: -280px;
-    margin-bottom: -130px;
+    margin-top: clamp(-280px, -20vw, -120px);
+    margin-bottom: clamp(-130px, -10vw, -60px);
     transform: translateX(-10px) scale(0.836);
     /* Moved 20px further up (total 90px from initial) */
     z-index: -1;
@@ -539,7 +659,7 @@ h3 {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding: 0 50px;
+    padding: 0 clamp(15px, 3vw, 50px);
 }
 
 @media (min-width: 1200px) {
@@ -586,17 +706,25 @@ h3 {
 
 @media (max-width: 768px) {
     .hero-navy-bar {
-        width: 95%;
-        height: 50px;
-        border-radius: 25px;
-        padding: 0 15px;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
+        width: 90%;
+        height: auto;
+        border-radius: var(--radius-md);
+        padding: var(--space-sm) var(--space-md);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-xs);
     }
 
     .stats-item {
-        font-size: 12px;
+        font-size: 14px;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .stats-icon {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
     }
 
     .stats-divider {
@@ -1357,7 +1485,7 @@ button:focus-visible {
     margin: 0 auto;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1024px) {
     .footer-content {
         grid-template-columns: 1.5fr 1fr 1fr 1fr;
         /* Custom grid for specific column widths */
@@ -1547,7 +1675,7 @@ button:focus-visible {
 }
 
 /* Responsive Footer */
-@media (max-width: 991px) {
+@media (max-width: 1023px) {
     .decor-ghost-smile {
         width: 300px;
         height: 300px;
@@ -1607,8 +1735,16 @@ button:focus-visible {
     margin-bottom: var(--space-xl);
 }
 
+@media (max-width: 767px) {
+    .featured-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+    }
+}
+
 .featured-header h2 {
-    font-size: 32px;
+    font-size: clamp(24px, 3vw + 0.5rem, 32px);
     font-weight: 700;
     color: var(--primary-navy);
 }
@@ -2250,7 +2386,7 @@ button:focus-visible {
 }
 
 .donation-date {
-    font-size: 11px;
+    font-size: 12px;
     color: #666;
     font-weight: 400;
 }
@@ -3048,7 +3184,7 @@ button:focus-visible {
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
     .topic-cards-grid {
         grid-template-columns: 1fr;
     }
