@@ -1,13 +1,8 @@
 import './style.css'
+import { initNavbar } from './nav.js'
 
-window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
-});
+document.body.classList.add('ready');
+initNavbar();
 
 // Featured Fundraisers Slider Logic
 const featuredGrid = document.querySelector('.fundraiser-grid');

@@ -1,14 +1,8 @@
 import './style.css'
+import { initNavbar } from './nav.js'
 
-// Navbar scroll effect
-window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
-});
+document.body.classList.add('ready');
+initNavbar();
 
 // Detail Gallery Slider Logic
 const detailGallery = document.getElementById('detail-gallery');
@@ -43,17 +37,29 @@ const donateFeaturedNext = document.getElementById('donate-featured-next');
 
 if (donateFundraiserGrid && donateFeaturedPrev && donateFeaturedNext) {
     let scrollPosition = 0;
-    const cardWidth = 340; // Card width + gap
+
+    const getCardWidth = () => {
+        const card = donateFundraiserGrid.querySelector('.fundraiser-card, [class*="card"]');
+        if (!card) return 340;
+        const gap = parseInt(getComputedStyle(donateFundraiserGrid).gap) || 0;
+        return card.offsetWidth + gap;
+    };
 
     donateFeaturedNext.addEventListener('click', () => {
         const maxScroll = donateFundraiserGrid.scrollWidth - donateFundraiserGrid.parentElement.clientWidth;
-        scrollPosition = Math.min(scrollPosition + cardWidth, maxScroll);
+        scrollPosition = Math.min(scrollPosition + getCardWidth(), maxScroll);
         donateFundraiserGrid.style.transform = `translateX(-${scrollPosition}px)`;
     });
 
     donateFeaturedPrev.addEventListener('click', () => {
-        scrollPosition = Math.max(scrollPosition - cardWidth, 0);
+        scrollPosition = Math.max(scrollPosition - getCardWidth(), 0);
         donateFundraiserGrid.style.transform = `translateX(-${scrollPosition}px)`;
+    });
+
+    // Reset position on resize to prevent stale transform
+    window.addEventListener('resize', () => {
+        scrollPosition = 0;
+        donateFundraiserGrid.style.transform = 'translateX(0)';
     });
 }
 
