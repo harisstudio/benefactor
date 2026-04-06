@@ -32,25 +32,25 @@ const statsItems = [
 
 export function GlobeStatsBar() {
   return (
-    <div className="bg-primary-navy">
-      <div className="max-w-container mx-auto px-5 relative">
+    <div className="bg-white relative">
+      <div className="max-w-container mx-auto px-5 relative flex flex-col items-center">
         {/* Globe image */}
-        <div className="flex justify-center -mt-8 md:-mt-16">
+        <div className="flex justify-center">
           <Image
             src="/assets/world-smile-outline.svg"
             alt="World Smile Globe"
-            width={400}
-            height={400}
+            width={920}
+            height={920}
             className="w-[200px] md:w-[300px] lg:w-[400px] h-auto opacity-80"
           />
         </div>
 
-        {/* Navy stats bar */}
-        <div className="bg-[#0a2a3c] rounded-md py-4 px-6 -mt-4 mb-0 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
+        {/* Navy stats bar — pill shape matching frontend */}
+        <div className="bg-primary-navy rounded-full h-[76px] w-[84%] max-w-[1200px] shadow-[0_10px_30px_rgba(0,0,0,0.3)] flex items-center justify-around px-[clamp(15px,3vw,50px)] -mt-4">
           {statsItems.map((item, i) => (
-            <div key={item.text} className="flex items-center gap-2 text-white">
+            <div key={item.text} className="flex items-center gap-3 text-white">
               {i > 0 && (
-                <div className="hidden md:block w-px h-6 bg-white/20 mx-6" />
+                <div className="hidden md:block w-0.5 h-[30px] bg-white mr-3" />
               )}
               <span className="text-primary-yellow">{item.icon}</span>
               <span className="text-sm font-medium">{item.text}</span>

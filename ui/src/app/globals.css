@@ -34,7 +34,7 @@
   --breakpoint-2xl: 1440px;
 
   /* Font sizes */
-  --text-heading: clamp(28px, 4vw + 1rem, 48px);
+  --text-heading: clamp(28px, 5vw + 1rem, 60px);
   --text-subtext: clamp(14px, 1vw + 0.75rem, 18px);
 
   /* Container */

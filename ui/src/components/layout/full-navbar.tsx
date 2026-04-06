@@ -21,10 +21,10 @@ export function FullNavbar() {
     <>
       <nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          "sticky top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/[0.98] backdrop-blur-[10px]",
           scrolled
-            ? "bg-white/98 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.05)] py-2"
-            : "bg-transparent py-4"
+            ? "border-b border-[#f0f0f0] shadow-[0_4px_12px_rgba(0,0,0,0.05)] py-2"
+            : "py-4"
         )}
       >
         <div
@@ -35,10 +35,7 @@ export function FullNavbar() {
           <div className="hidden md:flex items-center gap-6">
             <Link
               href="#"
-              className={cn(
-                "flex items-center gap-1.5 text-sm font-medium transition-colors min-h-[44px]",
-                scrolled ? "text-text-dark" : "text-white"
-              )}
+              className="flex items-center gap-1.5 text-sm font-medium transition-colors min-h-[44px] text-text-dark"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" />
@@ -47,19 +44,13 @@ export function FullNavbar() {
             </Link>
             <Link
               href="#"
-              className={cn(
-                "text-sm font-medium transition-colors min-h-[44px] flex items-center",
-                scrolled ? "text-text-dark" : "text-white"
-              )}
+              className="text-sm font-medium transition-colors min-h-[44px] flex items-center text-text-dark"
             >
               Donate &#9662;
             </Link>
             <Link
               href="#"
-              className={cn(
-                "text-sm font-medium transition-colors min-h-[44px] flex items-center",
-                scrolled ? "text-text-dark" : "text-white"
-              )}
+              className="text-sm font-medium transition-colors min-h-[44px] flex items-center text-text-dark"
             >
               Fundraise &#9662;
             </Link>
@@ -72,10 +63,7 @@ export function FullNavbar() {
               alt="Benefactor"
               width={160}
               height={32}
-              className={cn(
-                "transition-all h-auto md:w-[160px] w-[120px]",
-                scrolled ? "brightness-100" : "brightness-0 invert"
-              )}
+              className="transition-all h-auto md:w-[160px] w-[120px]"
               priority
             />
           </Link>
@@ -88,10 +76,7 @@ export function FullNavbar() {
               onMouseLeave={() => setAboutOpen(false)}
             >
               <button
-                className={cn(
-                  "text-sm font-medium transition-colors min-h-[44px] flex items-center",
-                  scrolled ? "text-text-dark" : "text-white"
-                )}
+                className="text-sm font-medium transition-colors min-h-[44px] flex items-center text-text-dark"
               >
                 About &#9662;
               </button>
@@ -112,22 +97,14 @@ export function FullNavbar() {
 
             <Link
               href="/signin"
-              className={cn(
-                "hidden md:inline-flex items-center text-sm font-medium transition-colors min-h-[44px]",
-                scrolled ? "text-text-dark" : "text-white"
-              )}
+              className="hidden md:inline-flex items-center text-sm font-medium transition-colors min-h-[44px] text-text-dark"
             >
               Sign in
             </Link>
 
             <Link
               href="/start"
-              className={cn(
-                "hidden md:inline-flex items-center justify-center h-10 px-5 rounded-btn text-sm font-bold transition-all border-2",
-                scrolled
-                  ? "border-primary-yellow bg-primary-yellow text-primary-navy"
-                  : "border-primary-yellow text-white bg-transparent hover:bg-primary-yellow hover:text-primary-navy"
-              )}
+              className="hidden md:inline-flex items-center justify-center h-10 px-6 rounded-[100px] text-[15px] font-bold transition-all border-2 border-primary-yellow bg-white text-primary-navy hover:bg-primary-yellow hover:text-primary-navy"
             >
               Start a Benefactor
             </Link>
@@ -139,9 +116,9 @@ export function FullNavbar() {
               aria-label="Open menu"
               aria-expanded={mobileOpen}
             >
-              <span className={cn("w-5 h-0.5 transition-colors", scrolled ? "bg-text-dark" : "bg-white")} />
-              <span className={cn("w-5 h-0.5 transition-colors", scrolled ? "bg-text-dark" : "bg-white")} />
-              <span className={cn("w-5 h-0.5 transition-colors", scrolled ? "bg-text-dark" : "bg-white")} />
+              <span className="w-5 h-0.5 bg-text-dark" />
+              <span className="w-5 h-0.5 bg-text-dark" />
+              <span className="w-5 h-0.5 bg-text-dark" />
             </button>
           </div>
         </div>
