@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Help a Family in Lithuania - Benefactor</title>
+    <style>body{opacity:0}body.ready{opacity:1;transition:opacity .15s ease}</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Navbar -->
+        <nav class="navbar navbar-white">
+            <div class="navbar-inner">
+                <div class="nav-left">
+                    <a href="#" class="nav-link nav-search">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Search
+                    </a>
+                    <a href="#" class="nav-link">Donate ▾</a>
+                    <a href="#" class="nav-link">Fundraise ▾</a>
+                </div>
+                <div class="nav-center">
+                    <a href="./">
+                        <img src="./assets/logo.svg" alt="Benefactor" class="logo" />
+                    </a>
+                </div>
+                <div class="nav-right">
+                    <a href="#" class="nav-link">About ▾</a>
+                    <a href="./signin.html" class="nav-link">Sign in</a>
+                    <a href="./start.html" class="btn btn-nav-yellow-outline">Start a Benefactor</a>
+                    <button class="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Navigation Drawer -->
+        <div class="mobile-nav-drawer" aria-hidden="true">
+            <div class="mobile-nav-header">
+                <img src="./assets/logo.svg" alt="Benefactor" class="logo" />
+                <button class="mobile-nav-close" aria-label="Close menu">&times;</button>
+            </div>
+            <div class="mobile-nav-links">
+                <a href="./">Home</a>
+                <a href="#">Search</a>
+                <a href="#">Donate</a>
+                <a href="#">Fundraise</a>
+                <a href="./how-benefactor-works.html">How Benefactor Works</a>
+                <a href="./about-benefactor.html">About Benefactor</a>
+                <a href="./careers.html">Careers</a>
+                <a href="./signin.html">Sign in</a>
+                <a href="./start.html" class="btn btn-nav-yellow-outline">Start a Benefactor</a>
+            </div>
+        </div>
+        <div class="mobile-nav-overlay"></div>
+
+        <!-- Campaign Detail Section -->
+        <section class="campaign-detail-page">
+            <div class="campaign-detail-container">
+                <!-- Left Column -->
+                <div class="detail-left">
+                    <h1 class="campaign-title">Help a Family in Lithuania<br>Stay Warm This Winter</h1>
+
+                    <!-- Video Container -->
+                    <div class="detail-media-container">
+                        <a href="https://www.youtube.com/watch?v=slFSnCxUS4E" target="_blank" rel="noopener noreferrer"
+                            class="detail-video">
+                            <img src="./assets/campaign-man-new.jpg" alt="Help a Family in Lithuania" />
+                            <div class="play-button">
+                                <svg viewBox="0 0 24 24" fill="white">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                            </div>
+                            <div class="video-watermark">
+                                <img src="./assets/bf_white.svg" alt="Benefactor" style="height: 24px;" />
+                            </div>
+                            <div class="youtube-logo">
+                                <img src="./assets/yt.svg" alt="YouTube" style="width: 80px;" />
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Gallery Slider -->
+                    <div class="detail-media-container">
+                        <div class="gallery-slider" id="detail-gallery">
+                            <button class="slider-arrow prev" id="detail-gallery-prev">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M15 18l-6-6 6-6" />
+                                </svg>
+                            </button>
+                            <div class="gallery-images">
+                                <img src="./assets/gallery-house-exterior.png" class="active" alt="House Exterior" />
+                                <img src="./assets/campaign-house-new.jpg" alt="Structural details" />
+                                <img src="./assets/gallery-kitchen.png" alt="Kitchen interior" />
+                                <img src="./assets/gallery-doorstep.png" alt="Doorstep view" />
+                            </div>
+                            <button class="slider-arrow next" id="detail-gallery-next">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 18l6-6-6-6" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Story Section -->
+                    <div class="story-section">
+                        <h2>Story</h2>
+                        <div class="story-content">
+                            <p>Winter is approaching in Lithuania, and for one family, the cold brings fear instead of
+                                comfort.</p>
+                            <p>This family is currently living in a home that is no longer safe or suitable for the
+                                harsh winter months. The house has serious structural problems, poor insulation, and
+                                damaged areas that make it difficult to stay warm. Without urgent repairs, the cold
+                                weather will turn everyday life into a real struggle.</p>
+                            <p id="story-truncated">Despite their difficult situation, they are doing everything they
+                                can to survive. However, due to limited financial resources, they are unable to...</p>
+
+                            <div id="story-full" style="display: none;">
+                                <p>Despite their difficult situation, they are doing everything they can to survive.
+                                    However, due to limited financial resources, they are unable to cover the cost of
+                                    essential renovations on their own. What they need is not luxury—only a basic, safe,
+                                    and warm place to live. Our goal is to raise funds to:</p>
+                                <p><strong>Repair damaged walls and floors</strong></p>
+                                <p>Every donation, no matter the size, will go directly toward the renovation of this
+                                    home. Your support will help transform a cold, unsafe house into a warm and secure
+                                    place where this family can live with dignity and peace.</p>
+                                <p>Together, we can make sure that this family does not have to face the winter in
+                                    unsafe conditions. Your kindness today can give them warmth, safety, and hope for
+                                    the future.</p>
+                            </div>
+
+                            <button id="read-more-btn" class="btn-read-more" onclick="toggleStory()">Read more</button>
+                        </div>
+                    </div>
+
+                    <script>
+                        function toggleStory() {
+                            const truncated = document.getElementById('story-truncated');
+                            const full = document.getElementById('story-full');
+                            const btn = document.getElementById('read-more-btn');
+
+                            if (full.style.display === 'none') {
+                                full.style.display = 'block';
+                                truncated.style.display = 'none';
+                                btn.textContent = 'Read less';
+                            } else {
+                                full.style.display = 'none';
+                                truncated.style.display = 'block';
+                                btn.textContent = 'Read more';
+                            }
+                        }
+                    </script>
+
+                    <!-- Bottom Progress and Actions -->
+                    <div class="detail-bottom-bar">
+                        <div class="bottom-stats">
+                            <div class="bottom-stat">
+                                <span class="bottom-stat-value">€16,200 Raised</span>
+                            </div>
+                            <div class="bottom-stat">
+                                <span class="bottom-stat-value">299 Donations</span>
+                            </div>
+                            <div class="bottom-stat">
+                                <span class="bottom-stat-value">€19,200 Purpose</span>
+                            </div>
+                        </div>
+                        <div class="bottom-progress">
+                            <div class="bottom-progress-bar" style="width: 84%;"></div>
+                        </div>
+                        <div class="bottom-actions">
+                            <button class="btn btn-donate-orange">Donate</button>
+                            <button class="btn btn-share-outline">Share</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Donation Card -->
+                <div class="detail-right">
+                    <div class="donation-card">
+                        <!-- Progress Circle and Amount -->
+                        <div class="donation-header">
+                            <div class="progress-circle">
+                                <svg viewBox="0 0 36 36" class="circular-chart">
+                                    <defs>
+                                        <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#FF8C00" />
+                                            <stop offset="50%" style="stop-color:#FFA500" />
+                                            <stop offset="100%" style="stop-color:#FFD700" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path class="circle-bg"
+                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="circle" stroke-dasharray="84, 100"
+                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <text x="18" y="20.35" class="percentage">84%</text>
+                                </svg>
+                            </div>
+                            <div class="donation-amount-info">
+                                <span class="amount-raised-large">€16,200 raised</span>
+                                <span class="donations-count">299 donations</span>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <a href="./checkout.html" class="btn btn-donate-now">Donate now</a>
+                        <button class="btn btn-share">Share</button>
+
+                        <!-- Donor List (Same as Main Page) -->
+                        <div class="donors-container">
+                            <div class="donors-list">
+                                <div class="donors-list-inner">
+                                    <!-- Donor Item 1 -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">William Simonaitis</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Set 1 -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Gediminas Tamulynas</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€50</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 5, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">William Simonaitis</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Vaida Anuziene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€100</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">October 25, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Gabriele Stakaityte</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 21, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Karol and Kristina</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">October 7, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€20</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 1, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Laimute Venckeviciene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 31, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Lina Jurgaitiene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 12, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€75</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 15, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€200</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 20, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Set 2 (Duplicate for smooth scroll) -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Gediminas Tamulynas</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€50</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 5, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">William Simonaitis</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Vaida Anuziene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€100</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">October 25, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Gabriele Stakaityte</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 21, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Karol and Kristina</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">October 7, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€20</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 1, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Laimute Venckeviciene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 31, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Lina Jurgaitiene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 12, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€75</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 15, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€200</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 20, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Duplicate for scroll animation -->
+                                    <!-- Donor Item 1 (dup) -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">William Simonaitis</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Donor Item 2 (dup) -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Vaida Anuziene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Donor Item 3 (dup) -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€100</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">October 25, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Donor Item 4 (dup) -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Gabriele Stakaityte</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 21, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Donor Item 5 (dup) -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Karol and Kristina</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">October 7, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Donor Item 6 (dup) -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€20</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 1, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Donor Item 7 (dup) -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Laimute Venckeviciene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 31, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Set 3 (Duplicate for extra smooth scroll) -->
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Gediminas Tamulynas</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€50</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 5, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">William Simonaitis</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Vaida Anuziene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 8, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€100</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">October 25, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Gabriele Stakaityte</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">November 21, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Karol and Kristina</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">October 7, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€20</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 1, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Laimute Venckeviciene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 31, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Lina Jurgaitiene</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€500</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 12, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€75</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 15, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="donor-item">
+                                        <div class="donor-icon">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                        </div>
+                                        <div class="donor-info">
+                                            <div class="donor-name">Anonymous</div>
+                                            <div class="donor-meta">
+                                                <span class="donation-amount">€200</span>
+                                                <span class="meta-separator">&middot;</span>
+                                                <span class="donation-date">December 20, 2025</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- See All / See Top Buttons -->
+                        <div class="donor-actions">
+                            <button class="btn btn-see-all">See all</button>
+                            <button class="btn btn-see-top">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"
+                                    height="16">
+                                    <polygon
+                                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                </svg>
+                                See top
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Fundraisers Section -->
+        <section class="featured-section">
+            <div class="container">
+                <div class="featured-header">
+                    <div class="header-main-group">
+                        <button class="nearby-btn">
+                            Nearby
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                class="chevron-icon">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </button>
+                        <h2>Featured Fundraisers</h2>
+                    </div>
+                    <div class="slider-controls">
+                        <a href="#" class="view-all">View all</a>
+                    </div>
+                </div>
+
+                <div class="slider-container">
+                    <div class="fundraiser-grid" id="donate-fundraiser-grid">
+                        <!-- Card 1: Medical -->
+                        <article class="fundraiser-card">
+                            <div class="card-image">
+                                <img src="./assets/fundraiser-medical.png" alt="Medical Fundraiser" />
+                                <span class="card-tag">Medical</span>
+                            </div>
+                            <div class="card-content">
+                                <h3>Help Sarah Beat Leukemia</h3>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 75%;"></div>
+                                </div>
+                                <div class="card-stats">
+                                    <span class="raised"><strong>$45,200</strong> raised</span>
+                                    <span class="goal">of <strong>$60,000</strong> goal</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Card 2: Emergency -->
+                        <article class="fundraiser-card">
+                            <div class="card-image">
+                                <img src="./assets/fundraiser-emergency.png" alt="Emergency Relief" />
+                                <span class="card-tag">Emergency</span>
+                            </div>
+                            <div class="card-content">
+                                <h3>Community Flood Relief</h3>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 40%;"></div>
+                                </div>
+                                <div class="card-stats">
+                                    <span class="raised"><strong>$12,000</strong> raised</span>
+                                    <span class="goal">of <strong>$30,000</strong> goal</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Card 3: Education -->
+                        <article class="fundraiser-card">
+                            <div class="card-image">
+                                <img src="./assets/fundraiser-education.png" alt="Education Project" />
+                                <span class="card-tag">Education</span>
+                            </div>
+                            <div class="card-content">
+                                <h3>New Library for Village School</h3>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 90%;"></div>
+                                </div>
+                                <div class="card-stats">
+                                    <span class="raised"><strong>$18,000</strong> raised</span>
+                                    <span class="goal">of <strong>$20,000</strong> goal</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Card 4: Kite School -->
+                        <article class="fundraiser-card">
+                            <div class="card-image">
+                                <img src="./assets/fundraiser-kite.png" alt="Turkey Kite School" />
+                                <span class="card-tag">Sport</span>
+                            </div>
+                            <div class="card-content">
+                                <h3>Turkey Kite School: Ride the Aegean Winds</h3>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 65%;"></div>
+                                </div>
+                                <div class="card-stats">
+                                    <span class="raised"><strong>$13,000</strong> raised</span>
+                                    <span class="goal">of <strong>$20,000</strong> goal</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Card 5: Wild Mexico -->
+                        <article class="fundraiser-card">
+                            <div class="card-image">
+                                <img src="./assets/fundraiser-mexico.png" alt="Wild Mexico" />
+                                <span class="card-tag">Adventure</span>
+                            </div>
+                            <div class="card-content">
+                                <h3>Wild Mexico: Camp, Explore, Feel Free</h3>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 45%;"></div>
+                                </div>
+                                <div class="card-stats">
+                                    <span class="raised"><strong>$6,750</strong> raised</span>
+                                    <span class="goal">of <strong>$15,000</strong> goal</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <!-- Card 6: Brazil Tennis -->
+                        <article class="fundraiser-card">
+                            <div class="card-image">
+                                <img src="./assets/fundraiser-tennis.png" alt="Building Hope Through Tennis in Brazil" />
+                                <span class="card-tag">Community</span>
+                            </div>
+                            <div class="card-content">
+                                <h3>Building Hope Through Tennis in Brazil</h3>
+                                <div class="progress-container">
+                                    <div class="progress-bar" style="width: 80%;"></div>
+                                </div>
+                                <div class="card-stats">
+                                    <span class="raised"><strong>$24,000</strong> raised</span>
+                                    <span class="goal">of <strong>$30,000</strong> goal</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Section -->
+        <footer class="footer">
+            <div class="footer-main">
+                <div class="footer-content">
+                    <!-- Brand Column -->
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <img src="./assets/logo-footer.png" alt="Benefactor Logo" class="logo-image" />
+                        </div>
+                        <div class="footer-contact">
+                            <a href="mailto:careerbenefactor@info.com">careerbenefactor@info.com</a>
+                            <a href="mailto:benefactor@info.com">benefactor@info.com</a>
+                        </div>
+                        <button class="language-selector">
+                            <span class="flag-icon">🇬🇧</span>
+                            <span>United Kingdom - English</span>
+                        </button>
+                    </div>
+
+                    <!-- Donate Column -->
+                    <div class="footer-column">
+                        <h4>Donate</h4>
+                        <ul>
+                            <li><a href="#">Categories</a></li>
+                            <li><a href="#">Crisis relief</a></li>
+                            <li><a href="#">Social Impact Funds</a></li>
+                            <li><a href="#">Supporter Space</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Categories Column -->
+                    <div class="footer-column">
+                        <h4>Categories</h4>
+                        <ul>
+                            <li><a href="#">How to start a Benefactor</a></li>
+                            <li><a href="#">Fundraising categories</a></li>
+                            <li><a href="#">Team fundraising</a></li>
+                            <li><a href="#">Fundraising Blog</a></li>
+                            <li><a href="#">Charity fundraising</a></li>
+                            <li><a href="#">Sign up as a nonprofit</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- About Column -->
+                    <div class="footer-column">
+                        <h4>About</h4>
+                        <ul>
+                            <li><a href="#">How Benefactor works</a></li>
+                            <li><a href="#">Benefactor Giving Guarantee</a></li>
+                            <li><a href="#">Supported countries</a></li>
+                            <li><a href="#">Pricing</a></li>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">About Benefactor</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Bar (White) -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <div class="copyright-section">
+                        <span class="copyright">© 2026 Benefactor Team</span>
+                        <div class="footer-legal-links">
+                            <a href="#">Terms</a>
+                            <a href="#">Privacy</a>
+                            <a href="#">Notice</a>
+                            <a href="#">Legal</a>
+                            <a href="#">Accessibility Statement</a>
+                            <a href="#">Cookie Policy</a>
+                            <a href="#">Manage Cookie Preferences</a>
+                            <a href="#">Your Privacy Choices</a>
+                        </div>
+                    </div>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                                <path
+                                    d="M9.198 21.5h4v-8.01h3.604l.396-3.98h-4V7.5a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2.01h-2l-.396 3.98h2.396v8.01Z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="YouTube">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                                <path
+                                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 3.993L9 16z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="X (Twitter)">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script type="module" src="./src/donate.js"></script>
+</body>
+
+</html>

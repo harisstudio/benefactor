@@ -1,0 +1,281 @@
+/* ============================================
+   CAREERS PAGE STYLES
+   ============================================ */
+
+/* --- Page-specific variable overrides --- */
+:root {
+    --bg-section: #f8f9fa;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 48px;
+    background: white;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar .logo {
+    height: 60px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 24px;
+    border-radius: 28px;
+    border: 2px solid var(--primary-yellow);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--primary-navy);
+    transition: all 0.2s;
+}
+
+.btn-back:hover {
+    background: var(--primary-yellow);
+    color: var(--primary-navy);
+}
+
+/* Hero */
+.page-hero {
+    background: linear-gradient(135deg, var(--primary-navy) 0%, #1a4a5e 100%);
+    color: white;
+    padding: 80px 48px;
+    text-align: center;
+}
+
+.page-hero h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.page-hero .highlight {
+    color: var(--primary-yellow);
+}
+
+.page-hero p {
+    font-size: 18px;
+    opacity: 0.85;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+/* Why Join */
+.why-section {
+    padding: 80px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.why-section h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 48px;
+    color: var(--primary-navy);
+}
+
+.perks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+}
+
+.perk-card {
+    padding: 32px 24px;
+    text-align: center;
+    background: var(--bg-section);
+    border-radius: 16px;
+    transition: transform 0.3s ease;
+}
+
+.perk-card:hover {
+    transform: translateY(-4px);
+}
+
+.perk-emoji {
+    font-size: 40px;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.perk-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-navy);
+    margin-bottom: 8px;
+}
+
+.perk-card p {
+    font-size: 14px;
+    color: var(--text-gray);
+}
+
+/* Open Roles */
+.roles-section {
+    background: var(--bg-section);
+    padding: 80px 48px;
+}
+
+.roles-inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.roles-inner h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--primary-navy);
+}
+
+.role-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.role-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.role-info h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--primary-navy);
+    margin-bottom: 4px;
+}
+
+.role-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-gray);
+}
+
+.role-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-apply {
+    display: inline-block;
+    padding: 10px 24px;
+    background: var(--primary-yellow);
+    color: var(--primary-navy);
+    border-radius: 28px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.btn-apply:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 200, 0, 0.4);
+}
+
+/* Culture Section */
+.culture-section {
+    padding: 80px 48px;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.culture-section h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--primary-navy);
+}
+
+.culture-section p {
+    font-size: 16px;
+    color: var(--text-gray);
+    margin-bottom: 32px;
+    line-height: 1.7;
+}
+
+.btn-cta {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--primary-yellow);
+    color: var(--primary-navy);
+    border-radius: 50px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    transition: all 0.3s;
+}
+
+.btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 200, 0, 0.4);
+}
+
+/* Footer */
+.page-footer {
+    background: var(--primary-navy);
+    color: white;
+    text-align: center;
+    padding: 32px;
+}
+
+.page-footer img {
+    height: 40px;
+    margin: 0 auto 8px;
+    filter: brightness(0) invert(1);
+}
+
+.page-footer p {
+    font-size: 13px;
+    opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+    .perks-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .role-card {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .page-hero h1 {
+        font-size: 32px;
+    }
+
+    .navbar {
+        padding: 12px 20px;
+    }
+}

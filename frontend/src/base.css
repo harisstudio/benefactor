@@ -1,0 +1,159 @@
+/* ============================================
+   BENEFACTOR - SHARED BASE STYLES
+   Imported by all page-specific CSS entry files.
+   ============================================ */
+
+/* --- CSS Variables --- */
+:root {
+    /* Colors */
+    --primary-yellow: #FFC800;
+    --primary-navy: #0E3347;
+    --text-dark: #002538;
+    --text-gray: #666666;
+    --bg-light: #FFFFFF;
+    --bg-off-white: #F8F9FA;
+
+    /* Typography */
+    --font-heading: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    --font-body: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+
+    /* Spacing Scale */
+    --space-xs: 8px;
+    --space-sm: 16px;
+    --space-md: 24px;
+    --space-lg: 32px;
+    --space-xl: 48px;
+    --space-2xl: 64px;
+    --space-3xl: 96px;
+
+    /* Grid */
+    --gutter: 24px;
+    --container-max: 1200px;
+    --container-padding: 20px;
+
+    /* Radius */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-full: 9999px;
+    --radius-btn: 28px;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-base: 300ms ease;
+
+    /* Responsive Typography */
+    --heading-size: clamp(28px, 4vw + 1rem, 48px);
+    --subtext-size: clamp(14px, 1vw + 0.75rem, 18px);
+}
+
+/* ============================================
+   BASE RESET & GLOBAL STYLES
+   ============================================ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 300;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+/* --- Container --- */
+.container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+}
+
+/* --- Typography --- */
+h1, h2, h3, h4, h5 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--primary-navy);
+}
+
+h1 { font-size: var(--heading-size); letter-spacing: -0.02em; }
+h2 { font-size: 2.5rem; }
+h3 { font-size: 1.5rem; }
+
+/* --- Buttons --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 20px;
+    border-radius: var(--radius-btn);
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+    min-width: 44px;
+}
+
+@media (min-width: 768px) {
+    .btn {
+        min-height: 52px;
+        padding: 0 32px;
+    }
+}
+
+.btn-primary {
+    background-color: var(--primary-yellow);
+    color: var(--primary-navy);
+    box-shadow: 0 4px 14px rgba(255, 193, 7, 0.3);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
