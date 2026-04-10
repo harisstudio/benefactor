@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { dmSans, outfit } from "@/lib/fonts";
+import { inter, manrope } from "@/lib/fonts";
+import { LanguageProvider } from "@/context/LanguageContext";
+import { LocaleProvider } from "@/lib/i18n/LocaleContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,8 +16,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${outfit.variable}`}>
-      <body>{children}</body>
+    <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
+      <body>
+        <LocaleProvider>
+          <LanguageProvider>
+            {children}
+          </LanguageProvider>
+        </LocaleProvider>
+      </body>
     </html>
   );
 }

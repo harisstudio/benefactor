@@ -10,8 +10,8 @@
   --color-bg-off-white: #F8F9FA;
 
   /* Fonts (set by next/font CSS variables) */
-  --font-heading: var(--font-outfit);
-  --font-body: var(--font-dm-sans);
+  --font-heading: var(--font-primary, var(--font-inter));
+  --font-body: var(--font-primary, var(--font-inter));
 
   /* Shadows */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);

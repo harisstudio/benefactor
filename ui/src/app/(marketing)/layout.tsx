@@ -1,5 +1,5 @@
 import { SimpleNavbar } from "@/components/layout/simple-navbar";
-import { SimpleFooter } from "@/components/layout/simple-footer";
+import { GlobalFooter } from "@/components/layout/footer/index";
 
 export default function MarketingLayout({
   children,
@@ -10,7 +10,7 @@ export default function MarketingLayout({
     <>
       <SimpleNavbar />
       <main className="flex-1">{children}</main>
-      <SimpleFooter />
+      <GlobalFooter />
     </>
   );
 }

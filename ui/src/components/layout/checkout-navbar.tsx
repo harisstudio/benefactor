@@ -3,25 +3,37 @@ import Link from "next/link";
 
 export function CheckoutNavbar() {
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-sm">
-      <div className="max-w-container mx-auto px-5 h-16 grid grid-cols-3 items-center">
+    <nav className="sticky top-0 z-50 bg-white border-b border-gray-200">
+      <div className="relative flex items-center justify-center px-4 md:px-10 h-16">
+        {/* Back link - left */}
         <Link
           href="/campaigns/1"
-          className="text-sm font-medium text-text-dark hover:text-primary-navy transition-colors min-h-[44px] flex items-center"
+          className="absolute left-4 md:left-10 text-sm font-medium text-primary-navy hover:opacity-80 transition-opacity min-h-[44px] flex items-center gap-1"
         >
-          &larr; Back
+          <span className="text-base">←</span> Back
         </Link>
-        <Link href="/" className="flex justify-center">
-          <Image src="/assets/logo.svg" alt="Benefactor" width={140} height={28} />
+
+        {/* Logo - center */}
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/assets/logo.svg"
+            alt="Benefactor"
+            width={140}
+            height={40}
+            className="h-10 w-auto"
+          />
         </Link>
-        <div className="flex justify-end">
-          <Link
-            href="/signin"
-            className="text-sm text-text-gray hover:text-text-dark transition-colors min-h-[44px] flex items-center"
-          >
-            Already have an account? <span className="ml-1 font-semibold text-text-dark">Sign in</span>
-          </Link>
-        </div>
+
+        {/* Sign in - right */}
+        <Link
+          href="/signin"
+          className="absolute right-4 md:right-10 text-sm font-medium text-primary-navy hover:opacity-80 transition-opacity min-h-[44px] flex items-center"
+        >
+          <span className="hidden sm:inline">
+            Already have an account?{" "}
+          </span>
+          <span className="font-bold text-primary-yellow ml-1">Sign in</span>
+        </Link>
       </div>
     </nav>
   );

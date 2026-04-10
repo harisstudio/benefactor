@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { FullNavbar } from "@/components/layout/full-navbar";
-import { Footer } from "@/components/layout/footer";
+import { GlobalFooter } from "@/components/layout/footer/index";
 import { HeroSection } from "@/components/home/hero-section";
-import { GlobeStatsBar } from "@/components/home/globe-stats-bar";
 import { CampaignDiscovery } from "@/components/home/campaign-discovery";
 import { TopicFilter } from "@/components/home/topic-filter";
 import { FeaturedFundraisers } from "@/components/home/featured-fundraisers";
@@ -35,19 +34,19 @@ export default async function HomePage() {
 
       <main>
         <HeroSection />
-        <GlobeStatsBar />
         <CampaignDiscovery />
 
         {/* Topics + Featured Fundraisers */}
         <section className="bg-bg-off-white py-12 md:py-20">
-          <div className="max-w-container mx-auto px-5 space-y-16">
+          <div className="max-w-container mx-auto px-[clamp(20px,5vw,100px)] space-y-16">
             <TopicFilter labels={topicLabels} cards={topicCards} />
             <FeaturedFundraisers fundraisers={featuredFundraisers} />
           </div>
         </section>
       </main>
 
-      <Footer />
+      <GlobalFooter />
+
     </>
   );
 }

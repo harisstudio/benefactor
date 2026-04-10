@@ -1,4 +1,5 @@
 import { DashboardNavbar } from "@/components/layout/dashboard-navbar";
+import { GlobalFooter } from "@/components/layout/footer/index";
 
 export default function AppLayout({
   children,
@@ -9,6 +10,7 @@ export default function AppLayout({
     <>
       <DashboardNavbar />
       <main className="flex-1">{children}</main>
+      <GlobalFooter />
     </>
   );
 }

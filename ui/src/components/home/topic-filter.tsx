@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { cn } from "@/lib/utils";
 import type { FundraiserCard as FundraiserCardType } from "@/types/fundraiser";
 import { FundraiserCard } from "./fundraiser-card";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface TopicFilterProps {
   labels: readonly string[];
@@ -13,6 +14,7 @@ interface TopicFilterProps {
 export function TopicFilter({ labels, cards }: TopicFilterProps) {
   const [activeTopic, setActiveTopic] = useState<string>(labels[0]);
   const [, startTransition] = useTransition();
+  const { t } = useLanguage();
 
   const topicCards = cards[activeTopic] ?? [];
 
@@ -25,7 +27,7 @@ export function TopicFilter({ labels, cards }: TopicFilterProps) {
   return (
     <div>
       <h3 className="text-xl font-bold text-primary-navy mb-4">
-        Featured topics
+        {t("featuredTopics") || "Featured topics"}
       </h3>
 
       {/* Pills */}
@@ -41,7 +43,7 @@ export function TopicFilter({ labels, cards }: TopicFilterProps) {
                 : "bg-bg-off-white text-text-dark hover:bg-gray-200"
             )}
           >
-            {topic}
+            {t(topic) || topic}
           </button>
         ))}
       </div>

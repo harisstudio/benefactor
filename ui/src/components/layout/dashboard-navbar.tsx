@@ -18,9 +18,9 @@ export function DashboardNavbar() {
           <Link href="#" className="text-sm font-medium text-text-dark hover:text-primary-navy transition-colors min-h-[44px] flex items-center">
             Donations
           </Link>
-          <div className="w-9 h-9 rounded-full bg-primary-navy text-white flex items-center justify-center text-sm font-bold">
+          <Link href="/profile" className="w-9 h-9 rounded-full bg-primary-navy text-white flex items-center justify-center text-sm font-bold hover:brightness-125 transition-all shadow-sm">
             H
-          </div>
+          </Link>
         </div>
       </div>
     </nav>

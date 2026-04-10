@@ -12,8 +12,8 @@ export function CampaignStory({ truncated, full }: CampaignStoryProps) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold text-primary-navy">Story</h2>
-      <div className="text-sm text-text-gray leading-relaxed space-y-3">
+      <h2 className="text-[20px] font-bold text-primary-navy leading-[1.2]">Story</h2>
+      <div className="text-[16px] leading-[1.6] text-[#444] font-medium space-y-4">
         {expanded ? (
           full.split("\n").map((p, i) => <p key={i}>{p}</p>)
         ) : (
@@ -22,7 +22,7 @@ export function CampaignStory({ truncated, full }: CampaignStoryProps) {
       </div>
       <button
         onClick={() => setExpanded(!expanded)}
-        className="text-sm font-semibold text-primary-navy hover:underline min-h-[44px]"
+        className="text-primary-navy font-bold underline cursor-pointer hover:text-[#FF6B00] transition-colors text-[16px]"
       >
         {expanded ? "Read less" : "Read more"}
       </button>

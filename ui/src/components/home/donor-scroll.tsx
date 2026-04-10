@@ -6,24 +6,28 @@ interface DonorScrollProps {
   donors: Donor[];
 }
 
-const HeartIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" strokeWidth="2" className="w-5 h-5 flex-shrink-0">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-  </svg>
-);
-
 function DonorItem({ donor }: { donor: Donor }) {
   return (
-    <div className="flex items-center gap-3 py-3 px-1">
-      <HeartIcon />
-      <div className="min-w-0">
-        <div className="text-sm font-semibold text-text-dark truncate">
+    <div className="flex items-center py-4 border-b border-[#f5f5f5] last:border-b-0">
+      {/* Heart icon in circular background */}
+      <div className="w-10 h-10 rounded-full bg-[#FFFCF0] flex items-center justify-center mr-4 flex-shrink-0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" strokeWidth="2" className="w-5 h-5">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+        </svg>
+      </div>
+      {/* Donor info */}
+      <div className="flex-1 min-w-0">
+        <div className="text-[15px] font-normal text-primary-navy mb-0.5 truncate">
           {donor.name}
         </div>
-        <div className="text-xs text-text-gray">
-          <span className="font-semibold">{donor.currency}{donor.amount}</span>
-          <span className="mx-1">&middot;</span>
-          <span>{donor.timeAgo}</span>
+        <div className="flex items-center gap-1.5 text-[14px] text-[#666]">
+          <span className="text-[17px] font-bold text-primary-navy">
+            {donor.currency}{donor.amount}
+          </span>
+          <span className="font-normal text-[#666]">&middot;</span>
+          <span className="text-[12px] font-normal text-[#666]">
+            {donor.timeAgo}
+          </span>
         </div>
       </div>
     </div>
@@ -31,21 +35,25 @@ function DonorItem({ donor }: { donor: Donor }) {
 }
 
 export function DonorScroll({ donors }: DonorScrollProps) {
-  // Triple the list for seamless loop
-  const tripled = [...donors, ...donors, ...donors];
+  // Double the list for seamless loop
+  const doubled = [...donors, ...donors];
 
   return (
-    <div className="relative overflow-hidden h-[320px] group">
+    <div
+      className="relative overflow-hidden max-h-[450px] group"
+      style={{
+        maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 90%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 90%, transparent 100%)",
+      }}
+    >
       <style>{`
         @keyframes scrollDonors {
           0% { transform: translateY(0); }
-          100% { transform: translateY(-33.333%); }
+          100% { transform: translateY(-50%); }
         }
       `}</style>
-      <div
-        className="animate-[scrollDonors_25s_linear_infinite] group-hover:[animation-play-state:paused]"
-      >
-        {tripled.map((donor, i) => (
+      <div className="animate-[scrollDonors_14s_linear_infinite] group-hover:[animation-play-state:paused]">
+        {doubled.map((donor, i) => (
           <DonorItem key={`${donor.id}-${i}`} donor={donor} />
         ))}
       </div>

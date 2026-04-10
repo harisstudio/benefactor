@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Badge } from "@/components/ui/badge";
 import type { FundraiserCard as FundraiserCardType } from "@/types/fundraiser";
+import { TranslatedText } from "@/components/ui/translated-text";
 
 interface FundraiserCardProps {
   fundraiser: FundraiserCardType;
@@ -19,7 +20,7 @@ export function FundraiserCard({ fundraiser }: FundraiserCardProps) {
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <div className="absolute top-3 left-3">
-          <Badge>{fundraiser.tag}</Badge>
+          <Badge><TranslatedText tKey={fundraiser.tag} fallback={fundraiser.tag} /></Badge>
         </div>
       </div>
       <div className="p-4">
@@ -33,15 +34,15 @@ export function FundraiserCard({ fundraiser }: FundraiserCardProps) {
               {fundraiser.currency}
               {fundraiser.raisedAmount.toLocaleString()}
             </strong>{" "}
-            raised
+            <TranslatedText tKey="raised" fallback="raised" />
           </span>
           <span>
-            of{" "}
+            <TranslatedText tKey="ofGoal" fallback="of" />{" "}
             <strong>
               {fundraiser.currency}
               {fundraiser.goalAmount.toLocaleString()}
             </strong>{" "}
-            goal
+            <TranslatedText tKey="goal" fallback="goal" />
           </span>
         </div>
       </div>
