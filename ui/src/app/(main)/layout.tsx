@@ -1,5 +1,5 @@
 import { FullNavbar } from "@/components/layout/full-navbar";
-import { Footer } from "@/components/layout/footer";
+import { GlobalFooter } from "@/components/layout/footer/index";
 
 export default function MainLayout({
   children,
@@ -8,9 +8,9 @@ export default function MainLayout({
 }) {
   return (
     <>
-      <FullNavbar />
+      <FullNavbar alwaysShowLogo />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <GlobalFooter />
     </>
   );
 }

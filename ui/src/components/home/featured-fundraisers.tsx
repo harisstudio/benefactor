@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { FundraiserCard } from "./fundraiser-card";
 import type { FundraiserCard as FundraiserCardType } from "@/types/fundraiser";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface FeaturedFundraisersProps {
   fundraisers: FundraiserCardType[];
@@ -11,6 +12,7 @@ interface FeaturedFundraisersProps {
 
 export function FeaturedFundraisers({ fundraisers }: FeaturedFundraisersProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   const scroll = (direction: "prev" | "next") => {
     if (!scrollRef.current) return;
@@ -26,18 +28,18 @@ export function FeaturedFundraisers({ fundraisers }: FeaturedFundraisersProps) {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <button className="flex items-center gap-1 px-4 py-2 rounded-full border border-gray-300 text-sm font-medium text-text-dark hover:bg-bg-off-white transition-colors min-h-[44px]">
-            Nearby
+            {t("nearbyBtn") || "Nearby"}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-3.5 h-3.5">
               <path d="M6 9l6 6 6-6" />
             </svg>
           </button>
           <h2 className="text-xl md:text-2xl font-bold text-primary-navy">
-            Featured Fundraisers
+            {t("featuredHeading") || "Featured Fundraisers"}
           </h2>
         </div>
         <div className="flex items-center gap-3">
           <Link href="#" className="text-sm font-medium text-primary-navy hover:underline hidden sm:inline">
-            View all
+            {t("viewAll") || "View all"}
           </Link>
           <button
             onClick={() => scroll("prev")}

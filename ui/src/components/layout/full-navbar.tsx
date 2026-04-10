@@ -4,9 +4,15 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 import { MobileDrawer } from "./mobile-drawer";
 
-export function FullNavbar() {
+interface FullNavbarProps {
+  alwaysShowLogo?: boolean;
+}
+
+export function FullNavbar({ alwaysShowLogo = false }: FullNavbarProps) {
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -40,30 +46,36 @@ export function FullNavbar() {
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" />
               </svg>
-              Search
+              {t("search")}
             </Link>
             <Link
               href="#"
               className="text-sm font-medium transition-colors min-h-[44px] flex items-center text-text-dark"
             >
-              Donate &#9662;
+              {t("donate")}
             </Link>
             <Link
               href="#"
               className="text-sm font-medium transition-colors min-h-[44px] flex items-center text-text-dark"
             >
-              Fundraise &#9662;
+              {t("fundraise")}
             </Link>
           </div>
 
           {/* Center - Logo */}
-          <Link href="/" className="flex justify-center">
+          <Link 
+            href="/" 
+            className={cn(
+              "flex justify-center transition-all duration-500 ease-out", 
+              (scrolled || alwaysShowLogo) ? "opacity-100 translate-y-0 scale-100 pointer-events-auto" : "opacity-0 translate-y-6 scale-[0.95] pointer-events-none"
+            )}
+          >
             <Image
               src="/assets/logo.svg"
               alt="Benefactor"
               width={160}
               height={32}
-              className="transition-all h-auto md:w-[160px] w-[120px]"
+              className="h-auto md:w-[160px] w-[120px]"
               priority
             />
           </Link>
@@ -78,7 +90,7 @@ export function FullNavbar() {
               <button
                 className="text-sm font-medium transition-colors min-h-[44px] flex items-center text-text-dark"
               >
-                About &#9662;
+                {t("about")}
               </button>
               {aboutOpen && (
                 <div className="absolute top-full right-0 mt-1 w-56 bg-white rounded-md shadow-lg py-2 z-50">
@@ -99,14 +111,14 @@ export function FullNavbar() {
               href="/signin"
               className="hidden md:inline-flex items-center text-sm font-medium transition-colors min-h-[44px] text-text-dark"
             >
-              Sign in
+              {t("signin")}
             </Link>
 
             <Link
               href="/start"
               className="hidden md:inline-flex items-center justify-center h-10 px-6 rounded-[100px] text-[15px] font-bold transition-all border-2 border-primary-yellow bg-white text-primary-navy hover:bg-primary-yellow hover:text-primary-navy"
             >
-              Start a Benefactor
+              {t("startBenefactor")}
             </Link>
 
             {/* Mobile hamburger */}

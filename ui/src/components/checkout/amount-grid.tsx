@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface AmountGridProps {
@@ -16,40 +17,47 @@ export function AmountGrid({
   onCustomChange,
 }: AmountGridProps) {
   return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-3 gap-3">
+    <div className="space-y-5">
+      {/* Amount buttons - 6 columns on desktop, 3 on mobile */}
+      <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
         {amounts.map((amount) => (
           <button
             key={amount}
             onClick={() => onSelect(amount)}
             className={cn(
-              "relative h-12 rounded-sm border-2 text-base font-bold transition-all min-h-[44px]",
+              "relative py-4 px-2 border-2 rounded-lg text-[15px] font-semibold cursor-pointer transition-all duration-200 min-h-[44px]",
               selected === amount
-                ? "border-primary-navy bg-primary-navy text-white"
-                : "border-gray-200 text-text-dark hover:border-gray-400"
+                ? "border-primary-yellow bg-primary-yellow text-primary-navy"
+                : "border-[#e0e0e0] bg-white text-primary-navy hover:border-primary-yellow"
             )}
           >
-            &pound;{amount}
+            £{amount}
             {amount === 100 && (
-              <span className="absolute -top-2 -right-1 bg-[#FF8C00] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                Suggested
-              </span>
+              <Image
+                src="/assets/suggested-badge.svg"
+                alt="Suggested"
+                width={60}
+                height={20}
+                className="absolute -bottom-3 left-1/2 -translate-x-1/2 h-5 w-auto z-[2]"
+              />
             )}
           </button>
         ))}
       </div>
 
-      {/* Custom amount */}
-      <div className="flex items-center border-2 border-gray-200 rounded-sm overflow-hidden focus-within:border-primary-navy transition-colors">
-        <div className="flex items-center gap-1 px-3 bg-bg-off-white border-r border-gray-200 h-12">
-          <span className="text-base font-bold text-text-dark">&pound;</span>
-          <span className="text-xs text-text-gray">GBP</span>
+      {/* Custom amount input - matching original design */}
+      <div className="flex items-center justify-between border-2 border-[#e0e0e0] rounded-xl py-4 px-5 bg-white focus-within:border-primary-navy transition-colors">
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-[28px] font-extrabold text-primary-navy leading-none">
+            £
+          </span>
+          <span className="text-sm text-text-gray font-medium">GBP</span>
         </div>
         <input
           type="text"
           value={customAmount}
           onChange={(e) => onCustomChange(e.target.value)}
-          className="flex-1 h-12 px-3 text-base text-text-dark outline-none bg-white"
+          className="border-none outline-none text-[28px] font-extrabold text-right text-primary-navy w-[120px] bg-transparent placeholder:text-text-gray"
           placeholder=".00"
         />
       </div>

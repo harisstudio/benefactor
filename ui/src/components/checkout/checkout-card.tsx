@@ -35,7 +35,11 @@ function reducer(state: CheckoutState, action: CheckoutAction): CheckoutState {
     case "SET_FREQUENCY":
       return { ...state, frequency: action.payload };
     case "SET_AMOUNT":
-      return { ...state, selectedAmount: action.payload, customAmount: `${action.payload}.00` };
+      return {
+        ...state,
+        selectedAmount: action.payload,
+        customAmount: `${action.payload}.00`,
+      };
     case "SET_CUSTOM_AMOUNT":
       return { ...state, selectedAmount: null, customAmount: action.payload };
     case "SET_TIP":
@@ -64,116 +68,148 @@ const presetAmounts = [25, 50, 100, 150, 200, 500];
 export function CheckoutCard() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const donationAmount = state.selectedAmount ?? (parseFloat(state.customAmount) || 0);
-  const tipAmount = state.frequency === "once" ? donationAmount * (state.tipPercent / 100) : 0;
+  const donationAmount =
+    state.selectedAmount ?? (parseFloat(state.customAmount) || 0);
+  const tipAmount = donationAmount * (state.tipPercent / 100);
   const total = donationAmount + tipAmount;
 
   return (
-    <div className="bg-white rounded-md shadow-md p-6 md:p-8 space-y-6">
-      {/* Campaign header */}
+    <div className="bg-white rounded-2xl p-5 sm:p-7 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-6">
+      {/* ──── Campaign Header ──── */}
       <div className="flex items-center gap-4">
-        <ProgressCircle percent={75} size={64} strokeWidth={3} />
+        <ProgressCircle percent={75} size={70} strokeWidth={3} />
         <div>
-          <h1 className="text-base font-bold text-primary-navy leading-snug">
+          <h1 className="text-lg font-bold text-primary-navy leading-snug">
             Help a Family in Lithuania Stay Warm This Winter
           </h1>
-          <p className="text-sm text-text-gray mt-1">
-            Still &pound;4,335 to go. Help us build momentum.
+          <p className="text-sm text-text-gray font-medium mt-1">
+            Still £4,335 to go. Help us build momentum.
           </p>
         </div>
       </div>
 
-      {/* Tabs */}
+      {/* ──── Donation Tabs ──── */}
       <DonationTabs
         frequency={state.frequency}
         onChange={(f) => dispatch({ type: "SET_FREQUENCY", payload: f })}
       />
 
-      {/* Amount grid */}
+      {/* ──── Amount Grid ──── */}
       <AmountGrid
         amounts={presetAmounts}
         selected={state.selectedAmount}
         customAmount={state.customAmount}
         onSelect={(a) => dispatch({ type: "SET_AMOUNT", payload: a })}
-        onCustomChange={(v) => dispatch({ type: "SET_CUSTOM_AMOUNT", payload: v })}
+        onCustomChange={(v) =>
+          dispatch({ type: "SET_CUSTOM_AMOUNT", payload: v })
+        }
       />
 
-      {/* Tip section (hidden for monthly) */}
-      {state.frequency === "once" && (
-        <TipSection
-          percent={state.tipPercent}
-          onChange={(v) => dispatch({ type: "SET_TIP", payload: v })}
-        />
-      )}
+      {/* ──── Tip Section ──── */}
+      <TipSection
+        percent={state.tipPercent}
+        onChange={(v) => dispatch({ type: "SET_TIP", payload: v })}
+      />
 
-      {/* Payment methods */}
+      {/* ──── Payment Methods ──── */}
       <PaymentMethods
         selected={state.paymentMethod}
         onChange={(m) => dispatch({ type: "SET_PAYMENT", payload: m })}
       />
 
-      {/* Privacy */}
-      <div className="space-y-3">
-        <label className="flex items-center gap-3 cursor-pointer min-h-[44px]">
+      {/* ──── Privacy Checkboxes ──── */}
+      <div className="space-y-0 pt-5 border-t border-[#e0e0e0]">
+        <label className="flex items-center gap-2.5 py-2 cursor-pointer min-h-[44px]">
           <input
             type="checkbox"
             checked={state.isAnonymous}
             onChange={() => dispatch({ type: "TOGGLE_ANONYMOUS" })}
-            className="w-5 h-5 rounded border-gray-300 text-primary-yellow focus:ring-primary-yellow"
+            className="w-5 h-5 accent-primary-navy rounded-sm flex-shrink-0"
           />
-          <span className="text-sm text-text-dark">
+          <span className="text-sm text-text-dark font-medium">
             Don&rsquo;t display my name publicly on the fundraiser.
           </span>
         </label>
-        <label className="flex items-center gap-3 cursor-pointer min-h-[44px]">
+        <label className="flex items-center gap-2.5 py-2 cursor-pointer min-h-[44px]">
           <input
             type="checkbox"
             checked={state.wantsUpdates}
             onChange={() => dispatch({ type: "TOGGLE_UPDATES" })}
-            className="w-5 h-5 rounded border-gray-300 text-primary-yellow focus:ring-primary-yellow"
+            className="w-5 h-5 accent-primary-navy rounded-sm flex-shrink-0"
           />
-          <span className="text-sm text-text-dark">
+          <span className="text-sm text-text-dark font-medium">
             Get occasional marketing updates from Benefactor.
           </span>
         </label>
       </div>
 
-      {/* Summary */}
-      <DonationSummary
-        donation={donationAmount}
-        tip={tipAmount}
-        total={total}
-      />
+      {/* ──── Summary ──── */}
+      <DonationSummary donation={donationAmount} tip={tipAmount} total={total} />
 
-      {/* Donate button */}
-      <button className="w-full h-14 rounded-btn font-bold bg-primary-yellow text-primary-navy hover:brightness-110 transition-all flex items-center justify-center gap-2">
+      {/* ──── Donate Button ──── */}
+      <button
+        className={`w-full h-14 rounded-[30px] font-bold text-base cursor-pointer transition-all duration-300 flex items-center justify-center gap-3 hover:opacity-90 hover:-translate-y-0.5 ${
+          state.paymentMethod === "gpay"
+            ? "bg-black text-white"
+            : "bg-primary-yellow text-primary-navy"
+        }`}
+      >
         {state.paymentMethod === "paypal" && (
-          <Image src="/assets/paypal-logo.svg" alt="PayPal" width={80} height={20} />
+          <Image
+            src="/assets/paypal-logo.svg"
+            alt="PayPal"
+            width={80}
+            height={22}
+            className="h-[22px] w-auto"
+          />
         )}
         {state.paymentMethod === "gpay" && (
-          <Image src="/assets/google-pay-mark.svg" alt="Google Pay" width={60} height={20} />
+          <Image
+            src="/assets/google-pay-mark.svg"
+            alt="Google Pay"
+            width={60}
+            height={36}
+            className="h-9 w-auto"
+          />
         )}
         {state.paymentMethod === "card" && "Donate now"}
       </button>
 
-      {/* Terms */}
-      <p className="text-xs text-text-gray text-center">
+      {/* ──── Terms ──── */}
+      <p className="text-[13px] text-text-gray text-center leading-relaxed font-medium">
         By continuing, you agree to Benefactor&rsquo;s{" "}
-        <a href="#" className="underline">Terms of Service</a> and{" "}
-        <a href="#" className="underline">Privacy Notice</a>.
+        <a href="#" className="text-primary-navy underline hover:no-underline">
+          Terms of Service
+        </a>{" "}
+        and{" "}
+        <a href="#" className="text-primary-navy underline hover:no-underline">
+          Privacy Notice
+        </a>
+        .
       </p>
 
-      {/* Protection notice */}
-      <div className="flex items-start gap-3 p-4 bg-bg-off-white rounded-sm">
-        <Image src="/assets/shield-icon.svg" alt="Security guarantee" width={24} height={24} className="flex-shrink-0 mt-0.5" />
+      {/* ──── Protection Notice ──── */}
+      <div className="flex items-start gap-3 p-4 bg-bg-off-white rounded-xl">
+        <Image
+          src="/assets/shield-icon.svg"
+          alt="Security guarantee"
+          width={28}
+          height={28}
+          className="flex-shrink-0 mt-0.5"
+        />
         <div>
-          <h4 className="text-sm font-bold text-primary-navy">
+          <h4 className="text-sm font-bold text-primary-navy mb-1">
             Benefactor protects your donation
           </h4>
-          <p className="text-xs text-text-gray mt-1">
-            We guarantee you a full refund for up to a year in the rare case that
-            fraud occurs.{" "}
-            <a href="#" className="underline">Learn more</a>
+          <p className="text-[13px] text-text-gray font-medium leading-relaxed">
+            We guarantee you a full refund for up to a year in the rare case
+            that fraud occurs.{" "}
+            <a
+              href="#"
+              className="text-primary-navy underline hover:no-underline"
+            >
+              Learn more
+            </a>
           </p>
         </div>
       </div>

@@ -1,81 +1,103 @@
 "use client";
 
 export function CardForm() {
+  const inputClasses =
+    "w-full py-4 px-4 border-2 border-[#e0e0e0] rounded-xl text-[15px] text-text-dark bg-[#f8f9fa] transition-colors duration-200 outline-none focus:border-primary-navy focus:bg-white placeholder:text-[#999]";
+
   return (
-    <div className="space-y-3 pt-3 border-t border-gray-100">
+    <div className="space-y-3 pt-5 animate-slideDown">
+      {/* Email */}
       <input
         type="email"
         placeholder="Email address"
-        className="w-full h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
+        className={inputClasses}
       />
 
-      <div className="grid grid-cols-2 gap-3">
+      {/* Name row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <input
           type="text"
           placeholder="First name"
-          className="h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
+          className={inputClasses}
         />
         <input
           type="text"
           placeholder="Last name"
-          className="h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
+          className={inputClasses}
         />
       </div>
 
-      <label className="flex items-center gap-2 text-xs text-text-dark cursor-pointer min-h-[44px]">
-        <input type="checkbox" className="w-4 h-4 rounded border-gray-300" />
-        Use as billing name
+      {/* Use as billing name */}
+      <label className="flex items-center gap-2.5 py-2 cursor-pointer min-h-[44px]">
+        <input
+          type="checkbox"
+          className="w-5 h-5 accent-primary-navy rounded-sm"
+        />
+        <span className="text-sm text-text-dark font-medium">
+          Use as billing name
+        </span>
       </label>
 
+      {/* Card number */}
       <input
         type="text"
         placeholder="Card number"
-        className="w-full h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
+        className={inputClasses}
       />
 
-      <div className="grid grid-cols-2 gap-3">
+      {/* Expiry + CVV */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <input
           type="text"
           placeholder="MM/YY"
-          className="h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
+          className={inputClasses}
         />
         <input
           type="text"
           placeholder="CVV"
-          className="h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
+          className={inputClasses}
         />
       </div>
 
+      {/* Name on card */}
       <input
         type="text"
         placeholder="Name on card"
         disabled
-        className="w-full h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-gray bg-bg-off-white"
+        className="w-full py-4 px-4 border-2 border-[#e0e0e0] rounded-xl text-[15px] text-text-gray bg-[#f0f0f0] outline-none"
       />
 
-      <div className="grid grid-cols-2 gap-3">
+      {/* Country + Postal code */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <span className="block text-xs text-text-gray mb-1">Country</span>
-          <select className="w-full h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-dark bg-white focus:outline-none focus:border-primary-navy">
+          <span className="block text-[11px] text-text-gray mb-1">Country</span>
+          <select className="w-full py-3 px-4 border-2 border-[#e0e0e0] rounded-xl text-[15px] text-text-dark bg-[#f8f9fa] cursor-pointer outline-none focus:border-primary-navy">
             <option>United Kingdom</option>
             <option>United States</option>
             <option>Germany</option>
             <option>France</option>
+            <option>Turkey</option>
           </select>
         </div>
         <div>
-          <span className="block text-xs text-text-gray mb-1 invisible">.</span>
+          <span className="block text-[11px] text-text-gray mb-1 invisible">.</span>
           <input
             type="text"
             placeholder="Postal code"
-            className="w-full h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
+            className="w-full py-3 px-4 border-2 border-[#e0e0e0] rounded-xl text-[15px] text-text-dark bg-[#f8f9fa] outline-none focus:border-primary-navy focus:bg-white placeholder:text-[#999]"
           />
         </div>
       </div>
 
-      <label className="flex items-center gap-2 text-xs text-text-dark cursor-pointer min-h-[44px]">
-        <input type="checkbox" className="w-4 h-4 rounded border-gray-300" />
-        Save card for future donations
+      {/* Save card */}
+      <label className="flex items-center gap-2.5 py-2 cursor-pointer min-h-[44px]">
+        <input
+          type="checkbox"
+          className="w-5 h-5 accent-primary-navy rounded-sm"
+        />
+        <span className="text-sm text-text-dark font-medium">
+          Save card for future donations
+        </span>
       </label>
     </div>
   );

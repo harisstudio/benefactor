@@ -1,15 +1,14 @@
-import { DM_Sans, Outfit } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 
-export const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-dm-sans",
+export const inter = Inter({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-inter",
   display: "swap",
 });
 
-export const outfit = Outfit({
-  subsets: ["latin"],
-  weight: ["400", "600", "800"],
-  variable: "--font-outfit",
+export const manrope = Manrope({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-manrope",
   display: "swap",
 });
+

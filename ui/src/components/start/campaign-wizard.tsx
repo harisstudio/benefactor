@@ -23,6 +23,8 @@ interface WizardState {
   coverImage: string | null;
   title: string;
   story: string;
+  email: string;
+  phone: string;
 }
 
 type WizardAction =
@@ -37,7 +39,9 @@ type WizardAction =
   | { type: "TOGGLE_AUTO_GOAL" }
   | { type: "SET_COVER"; payload: string | null }
   | { type: "SET_TITLE"; payload: string }
-  | { type: "SET_STORY"; payload: string };
+  | { type: "SET_STORY"; payload: string }
+  | { type: "SET_EMAIL"; payload: string }
+  | { type: "SET_PHONE"; payload: string };
 
 function reducer(state: WizardState, action: WizardAction): WizardState {
   switch (action.type) {
@@ -65,6 +69,10 @@ function reducer(state: WizardState, action: WizardAction): WizardState {
       return { ...state, title: action.payload };
     case "SET_STORY":
       return { ...state, story: action.payload };
+    case "SET_EMAIL":
+      return { ...state, email: action.payload };
+    case "SET_PHONE":
+      return { ...state, phone: action.payload };
   }
 }
 
@@ -79,6 +87,8 @@ const initialState: WizardState = {
   coverImage: null,
   title: "",
   story: "",
+  email: "",
+  phone: "",
 };
 
 const stepTitles = [
@@ -87,8 +97,8 @@ const stepTitles = [
   "Set your fundraising goal",
   "Make your fundraiser stand out",
   "Tell potential donors your story",
-  "Review your fundraiser",
-  "You're all set!",
+  "Submit for review",
+  "Your project is being reviewed!",
 ];
 
 const stepSubtitles = [
@@ -97,7 +107,7 @@ const stepSubtitles = [
   "You can always change this later. We'll help you along the way.",
   "A great photo or video can make all the difference.",
   "A compelling story will help you connect with donors.",
-  "Make sure everything looks good before you publish.",
+  "Enter your contact details and submit for approval.",
   "",
 ];
 
@@ -108,6 +118,7 @@ function canContinue(state: WizardState): boolean {
     case 2: return state.goalAmount !== "";
     case 3: return true; // media is optional
     case 4: return state.title !== "" && state.story !== "";
+    case 5: return state.email !== "" && state.phone !== "";
     default: return true;
   }
 }
@@ -198,6 +209,8 @@ export function CampaignWizard() {
                 state={state}
                 onEdit={goTo}
                 onLaunch={next}
+                onEmailChange={(v) => dispatch({ type: "SET_EMAIL", payload: v })}
+                onPhoneChange={(v) => dispatch({ type: "SET_PHONE", payload: v })}
               />
             )}
             {state.currentStep === 6 && <StepShare />}
@@ -234,7 +247,7 @@ export function CampaignWizard() {
                   disabled={!canContinue(state)}
                   className="h-11 px-6 rounded-btn font-bold text-sm bg-primary-yellow text-primary-navy disabled:opacity-40 disabled:cursor-not-allowed hover:brightness-110 transition-all min-w-[44px]"
                 >
-                  {state.currentStep === 4 ? "Review" : "Continue"}
+                  {state.currentStep === 4 ? "Review" : state.currentStep === 5 ? "Submit to Review" : "Continue"}
                 </button>
               </div>
             </div>

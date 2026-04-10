@@ -42,41 +42,43 @@ export default async function CampaignPage({
   );
 
   return (
-    <div className="pt-20 pb-16">
-      <div className="max-w-container mx-auto px-5">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 lg:gap-12">
+    <div className="pt-10 pb-16">
+      <div className="max-w-container mx-auto px-[clamp(20px,5vw,100px)]">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-8 lg:gap-12">
           {/* Left Column */}
           <div className="space-y-6">
             <CampaignHeader title={campaign.title} />
 
             {/* Video thumbnail */}
-            <a
-              href="https://www.youtube.com/watch?v=slFSnCxUS4E"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block relative rounded-md overflow-hidden group"
-            >
-              <Image
-                src={campaign.heroImage}
-                alt={campaign.title}
-                width={800}
-                height={450}
-                className="w-full aspect-video object-cover"
-              />
-              <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
-                <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" fill="#0E3347" className="w-6 h-6 ml-0.5">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+            <div className="rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] mb-4 bg-bg-off-white">
+              <a
+                href="https://www.youtube.com/watch?v=slFSnCxUS4E"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block relative w-full aspect-video bg-black group"
+              >
+                <Image
+                  src={campaign.heroImage}
+                  alt={campaign.title}
+                  width={800}
+                  height={450}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
+                  <div className="w-[80px] h-[80px] rounded-full bg-white/30 backdrop-blur-[4px] flex items-center justify-center hover:scale-110 transition-transform">
+                    <svg viewBox="0 0 24 24" fill="white" className="w-10 h-10">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-              <div className="absolute bottom-3 left-3">
-                <Image src="/assets/bf_white.svg" alt="Benefactor" width={80} height={24} />
-              </div>
-              <div className="absolute bottom-3 right-3">
-                <Image src="/assets/yt.svg" alt="YouTube" width={80} height={18} />
-              </div>
-            </a>
+                <div className="absolute bottom-5 left-5">
+                  <Image src="/assets/bf_white.svg" alt="Benefactor" width={80} height={24} />
+                </div>
+                <div className="absolute bottom-5 right-5">
+                  <Image src="/assets/yt.svg" alt="YouTube" width={80} height={18} />
+                </div>
+              </a>
+            </div>
 
             {/* Gallery */}
             <DetailGallery images={campaign.galleryImages} />
@@ -85,27 +87,59 @@ export default async function CampaignPage({
             <CampaignStory truncated={storyTruncated} full={storyFull} />
 
             {/* Bottom stats bar */}
-            <div className="space-y-3 pt-4 border-t border-gray-200">
-              <div className="flex gap-6 text-sm">
-                <span className="font-bold text-primary-navy">
-                  {campaign.currency}16,200 Raised
-                </span>
-                <span className="font-bold text-primary-navy">
-                  299 Donations
-                </span>
-                <span className="font-bold text-primary-navy">
-                  {campaign.currency}19,200 Purpose
-                </span>
+            <div className="pt-6 border-t border-gray-200">
+              <div className="flex justify-between mb-5">
+                <div className="flex flex-col items-start text-left">
+                  <span className="text-[18px] font-bold text-primary-navy">
+                    {campaign.currency}{campaign.raisedAmount.toLocaleString()}
+                  </span>
+                  <span className="text-[14px] font-normal text-[#888]">
+                    Raised
+                  </span>
+                </div>
+                <div className="flex flex-col items-center text-center">
+                  <span className="text-[18px] font-bold text-primary-navy">
+                    {campaign.donationCount}
+                  </span>
+                  <span className="text-[14px] font-normal text-[#888]">
+                    Donations
+                  </span>
+                </div>
+                <div className="flex flex-col items-end text-right">
+                  <span className="text-[18px] font-bold text-primary-navy">
+                    {campaign.currency}{campaign.goalAmount.toLocaleString()}
+                  </span>
+                  <span className="text-[14px] font-normal text-[#888]">
+                    Purpose
+                  </span>
+                </div>
               </div>
-              <ProgressBar percent={percent} />
-              <div className="flex gap-3">
-                <button className="flex-1 h-11 rounded-btn font-bold bg-[#FF8C00] text-white hover:brightness-110 transition-all">
+
+              {/* Progress bar — matching homepage format */}
+              <div className="w-full h-[14px] bg-[#eee] rounded-full overflow-hidden mb-2.5 relative">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-primary-yellow to-[#FF6B00] relative overflow-hidden transition-all duration-500"
+                  style={{ width: `${percent}%` }}
+                >
+                  <div className="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shimmer_3s_ease-in-out_infinite]" />
+                </div>
+              </div>
+
+              {/* CTA buttons */}
+              <div className="flex gap-4 mt-6">
+                <button className="flex-1 inline-flex items-center justify-center h-[52px] rounded-btn font-bold text-[16px] bg-primary-yellow text-primary-navy shadow-[0_4px_14px_rgba(255,193,7,0.3)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(255,107,0,0.4)] transition-all">
                   Donate
                 </button>
-                <button className="flex-1 h-11 rounded-btn font-bold border-2 border-primary-navy text-primary-navy hover:bg-primary-navy hover:text-white transition-colors">
+                <button className="flex-1 inline-flex items-center justify-center h-[52px] rounded-btn font-bold text-[16px] border-2 border-primary-navy text-primary-navy hover:bg-primary-navy hover:text-white transition-colors">
                   Share
                 </button>
               </div>
+              <style>{`
+                @keyframes shimmer {
+                  0% { left: -100%; }
+                  100% { left: 100%; }
+                }
+              `}</style>
             </div>
           </div>
 
