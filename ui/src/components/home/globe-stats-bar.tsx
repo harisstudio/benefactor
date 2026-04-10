@@ -37,25 +37,18 @@ export function GlobeStatsBar() {
   ];
 
   return (
-    <div className="relative mt-[clamp(120px,20vw,280px)] left-0 flex flex-col items-center z-[2] w-full max-w-[1600px]">
-      {/* Globe image acting as the bottom arch */}
-      <img
-        src="/assets/world-smile-outline.svg"
-        alt="World Smile Globe"
-        className="w-full max-w-[920px] h-auto object-contain block transform -translate-x-[10px] scale-[0.836] mt-[clamp(-280px,-20vw,-120px)] mb-[clamp(-130px,-10vw,-60px)] relative z-[-1]"
-      />
-
-      {/* Navy stats bar — pill shape matching the design */}
-      <div className="absolute bottom-[32px] z-20 bg-primary-navy rounded-[38px] h-[76px] w-[90%] lg:w-[84%] xl:w-[72%] max-w-[1300px] shadow-[0_10px_30px_rgba(0,0,0,0.3)] flex items-center justify-around px-2 md:px-[clamp(15px,3vw,50px)]">
+    <div className="relative z-10 w-full max-w-[1300px] mx-auto px-4 mt-8 mb-12 flex justify-center">
+      {/* Navy stats bar — responsive pill shape */}
+      <div className="bg-primary-navy rounded-[32px] sm:rounded-[38px] w-full md:w-[95%] lg:w-[90%] shadow-[0_10px_30px_rgba(0,0,0,0.15)] flex flex-col md:flex-row items-center justify-around py-6 md:py-0 md:h-[76px] px-6 gap-6 md:gap-4 overflow-hidden">
         {statsItems.map((item, i) => (
-          <div key={item.text} className="flex items-center gap-2 md:gap-3 text-white hover:text-primary-yellow transition-colors cursor-default">
+          <div key={item.text} className="flex items-center gap-3 text-white hover:text-primary-yellow transition-colors cursor-default group w-full md:w-auto justify-center md:justify-start">
             {i > 0 && (
-              <div className="hidden md:block w-[2px] h-[30px] bg-white opacity-30 mr-2 md:mr-4 ml-[-8px] md:ml-[-16px]" />
+              <div className="hidden md:block w-[1px] h-[30px] bg-white opacity-20 mr-4 ml-[-20px]" />
             )}
-            <span className="text-primary-yellow scale-[0.8] md:scale-100 flex-shrink-0 w-[24px] md:w-[28px] h-[24px] md:h-[28px]">
+            <span className="text-primary-yellow shrink-0 w-6 h-6 md:w-7 md:h-7">
               {item.icon}
             </span>
-            <span className="text-[14px] md:text-[16px] font-normal leading-tight tracking-normal whitespace-nowrap hidden sm:block md:whitespace-normal">
+            <span className="text-[14px] sm:text-[15px] md:text-[16px] font-medium leading-tight">
               {item.text}
             </span>
           </div>
