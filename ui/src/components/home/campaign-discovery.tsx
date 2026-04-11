@@ -14,12 +14,15 @@ export async function CampaignDiscovery() {
   );
 
   return (
-    <section className="py-8 md:py-12 bg-white">
+    <section className="pt-2 md:pt-12 pb-8 md:pb-12 bg-white">
       <div className="max-w-container mx-auto px-[clamp(20px,5vw,100px)]">
         {/* Section heading */}
-        <h2 className="text-[clamp(20px,2.5vw,32px)] font-bold text-primary-navy text-center mb-8 md:mb-12 leading-tight">
+        <h2 className="text-[clamp(26px,4.5vw,44px)] md:text-[32px] font-bold text-primary-navy text-center mb-3 md:mb-12 leading-[1.1] md:leading-tight tracking-[-1px] md:tracking-normal">
           <TranslatedText tKey="trustedHeading" fallback="Fundraising on Benefactor is easy, powerful, and trusted" />
         </h2>
+        <h3 className="md:hidden text-[17px] font-bold text-primary-navy text-center mb-8 max-w-[800px] mx-auto leading-tight opacity-80">
+          Help a Family in Lithuania Stay Warm This Winter
+        </h3>
 
         {/* Two-column grid — 1.6fr / 1fr like original */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-6 lg:gap-10 items-stretch">
@@ -119,8 +122,8 @@ export async function CampaignDiscovery() {
           {/* ─── RIGHT COLUMN: Description + Donors ─── */}
           <div className="flex flex-col justify-between">
             {/* Campaign description */}
-            <div className="flex flex-col">
-              <h2 className="text-[clamp(22px,2vw,32px)] font-bold text-primary-navy leading-[1.2] mb-5">
+            <div className="flex flex-col pt-2">
+              <h2 className="hidden md:block text-[clamp(22px,2vw,32px)] font-bold text-primary-navy leading-[1.2] mb-5">
                 {campaign.title}
               </h2>
               <p className="text-[16px] leading-[1.6] text-[#444] font-medium mb-4">

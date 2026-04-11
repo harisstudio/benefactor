@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Image from "next/image";
 import { CampaignHeader } from "@/components/campaign/campaign-header";
 import { DetailGallery } from "@/components/campaign/detail-gallery";
@@ -127,9 +128,12 @@ export default async function CampaignPage({
 
               {/* CTA buttons */}
               <div className="flex gap-4 mt-6">
-                <button className="flex-1 inline-flex items-center justify-center h-[52px] rounded-btn font-bold text-[16px] bg-primary-yellow text-primary-navy shadow-[0_4px_14px_rgba(255,193,7,0.3)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(255,107,0,0.4)] transition-all">
+                <Link 
+                  href="/checkout"
+                  className="flex-1 inline-flex items-center justify-center h-[52px] rounded-btn font-bold text-[16px] bg-primary-yellow text-primary-navy shadow-[0_4px_14px_rgba(255,193,7,0.3)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(255,107,0,0.4)] transition-all"
+                >
                   Donate
-                </button>
+                </Link>
                 <button className="flex-1 inline-flex items-center justify-center h-[52px] rounded-btn font-bold text-[16px] border-2 border-primary-navy text-primary-navy hover:bg-primary-navy hover:text-white transition-colors">
                   Share
                 </button>

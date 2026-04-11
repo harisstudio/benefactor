@@ -45,8 +45,8 @@ export function MobileDrawer({ open, onClose }: MobileDrawerProps) {
       {/* Drawer */}
       <div
         className={cn(
-          "fixed top-0 left-0 h-full w-[280px] bg-white z-[999] shadow-lg transition-transform duration-300",
-          open ? "translate-x-0" : "-translate-x-full"
+          "fixed top-0 right-0 h-full w-[280px] bg-white z-[999] shadow-lg transition-transform duration-300",
+          open ? "translate-x-0" : "translate-x-full"
         )}
         aria-hidden={!open}
         role="dialog"
@@ -65,8 +65,11 @@ export function MobileDrawer({ open, onClose }: MobileDrawerProps) {
 
         <nav className="flex flex-col p-5 gap-1">
           {[
+            { href: "/", label: "Home" },
+            { href: "#", label: "My Fundraisers" },
+            { href: "#", label: "Donations" },
             { href: "#", label: "Search" },
-            { href: "#", label: "Donate" },
+            { href: "/campaigns/1", label: "Donate" },
             { href: "#", label: "Fundraise" },
             { href: "/how", label: "How Benefactor Works" },
             { href: "/about", label: "About Benefactor" },

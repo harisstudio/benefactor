@@ -10,9 +10,9 @@ import { useLanguage } from "@/context/LanguageContext"; // For legacy translati
 
 // Using some standard layout links mapped across
 const donateLinks = [
-  { label: "Categories", href: "#" },
-  { label: "Crisis relief", href: "#" },
-  { label: "Social Impact Funds", href: "#" },
+  { label: "Categories", href: "/campaigns/1" },
+  { label: "Crisis relief", href: "/campaigns/1" },
+  { label: "Social Impact Funds", href: "/campaigns/1" },
 ];
 
 const categoryLinks = [
@@ -40,10 +40,6 @@ export function GlobalFooter() {
       className="relative text-white overflow-hidden mt-0"
       style={{
         backgroundColor: "var(--primary-navy, #0E3347)",
-        backgroundImage: "url('/assets/footer2.svg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat"
       }}
     >
       <div className="max-w-container mx-auto px-[clamp(20px,5vw,80px)] pt-16 md:pt-24 pb-8 relative z-10">
