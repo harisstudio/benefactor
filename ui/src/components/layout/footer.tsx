@@ -39,18 +39,21 @@ const legalLinks = [
 export function Footer() {
   const { t } = useLanguage();
   return (
-    <footer 
-      className="relative text-white overflow-hidden mt-0"
-      style={{
-        backgroundColor: "var(--primary-navy, #0E3347)",
-        backgroundImage: "url('/assets/footer2.svg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat"
-      }}
-    >
-      {/* Main Content Area */}
-      <div className="max-w-container w-full mx-auto px-[clamp(20px,5vw,80px)] pt-16 md:pt-24 pb-12 md:pb-20 relative z-10">
+    <footer className="relative text-white overflow-hidden w-full">
+      {/* Decorative Yellow Wave Top */}
+      <div className="relative w-full h-[100px] md:h-[180px] lg:h-[240px] pointer-events-none overflow-hidden">
+        <Image 
+          src="/assets/footer.svg" 
+          alt="" 
+          fill 
+          className="object-top object-cover" 
+          priority
+        />
+      </div>
+
+      {/* Footer Main Body */}
+      <div className="bg-[#0E3347] relative z-10 -mt-2">
+        <div className="max-w-container w-full mx-auto px-[clamp(20px,5vw,80px)] pt-12 md:pt-16 pb-12 md:pb-20">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-16">
           
           {/* Brand & Contact Column */}
@@ -162,6 +165,7 @@ export function Footer() {
             </a>
           </div>
         </div>
+      </div>
       </div>
     </footer>
   );

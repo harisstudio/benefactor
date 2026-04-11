@@ -27,10 +27,10 @@ export function FullNavbar({ alwaysShowLogo = false }: FullNavbarProps) {
     <>
       <nav
         className={cn(
-          "sticky top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/[0.98] backdrop-blur-[10px]",
+          "sticky top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-[10px]",
           scrolled
-            ? "border-b border-[#f0f0f0] shadow-[0_4px_12px_rgba(0,0,0,0.05)] py-2"
-            : "py-4"
+            ? "bg-white/[0.98] border-b border-[#f0f0f0] shadow-[0_4px_12px_rgba(0,0,0,0.05)] py-2"
+            : "bg-transparent py-3 md:py-4"
         )}
       >
         <div
@@ -49,7 +49,7 @@ export function FullNavbar({ alwaysShowLogo = false }: FullNavbarProps) {
               {t("search")}
             </Link>
             <Link
-              href="#"
+              href="/campaigns/1"
               className="text-sm font-medium transition-colors min-h-[44px] flex items-center text-text-dark"
             >
               {t("donate")}
@@ -109,14 +109,14 @@ export function FullNavbar({ alwaysShowLogo = false }: FullNavbarProps) {
 
             <Link
               href="/signin"
-              className="hidden md:inline-flex items-center text-sm font-medium transition-colors min-h-[44px] text-text-dark"
+              className="hidden lg:inline-flex items-center text-sm font-medium transition-colors min-h-[44px] text-text-dark"
             >
               {t("signin")}
             </Link>
 
             <Link
               href="/start"
-              className="hidden md:inline-flex items-center justify-center h-10 px-6 rounded-[100px] text-[15px] font-bold transition-all border-2 border-primary-yellow bg-white text-primary-navy hover:bg-primary-yellow hover:text-primary-navy"
+              className="hidden lg:inline-flex items-center justify-center h-10 px-6 rounded-[100px] text-[15px] font-bold transition-all border-2 border-primary-yellow bg-white text-primary-navy hover:bg-primary-yellow hover:text-primary-navy"
             >
               {t("startBenefactor")}
             </Link>
