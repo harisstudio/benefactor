@@ -97,7 +97,7 @@ export function SigninForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@example.com"
+              placeholder="john.harris@example.com"
               className="w-full h-12 px-4 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
             />
           </div>
