@@ -1,8 +1,58 @@
 "use client";
 
-export function CardForm() {
+import { useStripe, useElements, CardElement, PaymentRequestButtonElement } from "@stripe/react-stripe-js";
+import { useState, useEffect } from "react";
+import type { PaymentRequest } from "@stripe/stripe-js";
+
+interface CardFormProps {
+  method?: "card" | "applepay" | "gpay";
+}
+
+export function CardForm({ method = "card" }: CardFormProps) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(null);
+
   const inputClasses =
     "w-full py-4 px-4 border-2 border-[#e0e0e0] rounded-xl text-[15px] text-text-dark bg-[#f8f9fa] transition-colors duration-200 outline-none focus:border-primary-navy focus:bg-white placeholder:text-[#999]";
+
+  useEffect(() => {
+    if (stripe && (method === "applepay" || method === "gpay")) {
+      const pr = stripe.paymentRequest({
+        country: 'GB',
+        currency: 'gbp',
+        total: {
+          label: 'Donation',
+          amount: 2500,
+        },
+        requestPayerName: true,
+        requestPayerEmail: true,
+      });
+
+      pr.canMakePayment().then(result => {
+        if (result) {
+          setPaymentRequest(pr);
+        }
+      });
+    }
+  }, [stripe, method]);
+
+  if (method === "applepay" || method === "gpay") {
+    return (
+      <div className="space-y-4 pt-5 animate-slideDown">
+        <div className="p-4 border-2 border-[#e0e0e0] rounded-xl bg-[#f8f9fa] flex flex-col items-center justify-center min-h-[100px]">
+          {paymentRequest ? (
+            <PaymentRequestButtonElement options={{ paymentRequest }} className="w-full" />
+          ) : (
+            <p className="text-sm text-text-gray text-center">
+              {method === "applepay" ? "Apple Pay" : "Google Pay"} is not available on this device/browser.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-3 pt-5 animate-slideDown">

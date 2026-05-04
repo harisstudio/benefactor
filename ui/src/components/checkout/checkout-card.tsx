@@ -9,7 +9,7 @@ import { TipSection } from "./tip-section";
 import { PaymentMethods } from "./payment-methods";
 import { DonationSummary } from "./donation-summary";
 
-type PaymentMethod = "paypal" | "gpay" | "card";
+type PaymentMethod = "paypal" | "applepay" | "gpay" | "card";
 
 interface CheckoutState {
   frequency: "once" | "monthly";
@@ -149,7 +149,7 @@ export function CheckoutCard() {
       {/* ──── Donate Button ──── */}
       <button
         className={`w-full h-14 rounded-[30px] font-bold text-base cursor-pointer transition-all duration-300 flex items-center justify-center gap-3 hover:opacity-90 hover:-translate-y-0.5 ${
-          state.paymentMethod === "gpay"
+          state.paymentMethod === "gpay" || state.paymentMethod === "applepay"
             ? "bg-black text-white"
             : "bg-primary-yellow text-primary-navy"
         }`}
@@ -161,6 +161,15 @@ export function CheckoutCard() {
             width={80}
             height={22}
             className="h-[22px] w-auto"
+          />
+        )}
+        {state.paymentMethod === "applepay" && (
+          <Image
+            src="/assets/apple-pay.png"
+            alt="Apple Pay"
+            width={60}
+            height={24}
+            className="h-6 w-auto brightness-0 invert"
           />
         )}
         {state.paymentMethod === "gpay" && (
