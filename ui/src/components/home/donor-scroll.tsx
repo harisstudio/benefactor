@@ -46,12 +46,6 @@ export function DonorScroll({ donors }: DonorScrollProps) {
         WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 90%, transparent 100%)",
       }}
     >
-      <style>{`
-        @keyframes scrollDonors {
-          0% { transform: translateY(0); }
-          100% { transform: translateY(-50%); }
-        }
-      `}</style>
       <div className="animate-[scrollDonors_14s_linear_infinite] group-hover:[animation-play-state:paused]">
         {doubled.map((donor, i) => (
           <DonorItem key={`${donor.id}-${i}`} donor={donor} />

@@ -43,6 +43,8 @@ export async function CampaignDiscovery() {
                   width={800}
                   height={450}
                   className="w-full h-full object-cover"
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                  priority
                 />
                 {/* Play button */}
                 <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
@@ -145,13 +147,6 @@ export async function CampaignDiscovery() {
         </div>
       </div>
 
-      {/* Shimmer animation */}
-      <style>{`
-        @keyframes shimmer {
-          0% { left: -100%; }
-          100% { left: 100%; }
-        }
-      `}</style>
     </section>
   );
 }

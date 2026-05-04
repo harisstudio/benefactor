@@ -23,12 +23,6 @@ const hearts = [
 export function FloatingHearts() {
   return (
     <>
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-12px) rotate(1deg); }
-        }
-      `}</style>
       <div className="absolute top-[-40px] left-0 w-full h-full pointer-events-none hidden md:block z-[5]" aria-hidden="true">
         {hearts.map((heart) => (
           <div key={heart.id} className={`absolute ${heart.className} drop-shadow-xl transition-transform duration-500 transform-origin-center`}>
@@ -38,7 +32,7 @@ export function FloatingHearts() {
               width={250}
               height={250}
               className="w-full h-full object-contain"
-              priority
+              loading="lazy"
             />
           </div>
         ))}

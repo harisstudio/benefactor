@@ -1,8 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { inter, manrope } from "@/lib/fonts";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { LocaleProvider } from "@/lib/i18n/LocaleContext";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0E3347",
+};
 
 export const metadata: Metadata = {
   title: "Benefactor — World Wide Fundraising Platform",

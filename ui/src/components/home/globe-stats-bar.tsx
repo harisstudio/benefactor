@@ -48,18 +48,9 @@ export function GlobeStatsBar() {
 
   return (
     <div className="relative z-10 w-full max-w-[1300px] mx-auto px-4 flex justify-center">
-      <style>{`
-        @keyframes rotate-360 {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .animate-rotate-360 {
-          animation: rotate-360 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-      `}</style>
       
       {/* Navy stats bar — responsive pill shape */}
-      <div className="bg-primary-navy rounded-full w-full md:w-[85%] lg:w-[432px] shadow-[0_10px_40px_rgba(0,0,0,0.2)] flex items-center justify-around py-4 md:py-0 md:h-[60px] px-6 md:px-8 overflow-hidden border border-white/5">
+      <div className="bg-primary-navy rounded-full w-full md:w-[85%] lg:w-[540px] shadow-[0_10px_40px_rgba(0,0,0,0.2)] flex items-center justify-around py-4 md:py-0 md:h-[60px] px-6 md:px-8 overflow-hidden border border-white/5">
         
         {/* Stats Section with Slot Machine Animation for all devices */}
         <div className="w-full flex items-center justify-center h-[32px] md:h-full overflow-hidden relative">
