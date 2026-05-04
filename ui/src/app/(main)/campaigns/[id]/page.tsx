@@ -64,6 +64,8 @@ export default async function CampaignPage({
                   width={800}
                   height={450}
                   className="w-full h-full object-cover"
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                  priority
                 />
                 <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
                   <div className="w-[80px] h-[80px] rounded-full bg-white/30 backdrop-blur-[4px] flex items-center justify-center hover:scale-110 transition-transform">
@@ -138,12 +140,6 @@ export default async function CampaignPage({
                   Share
                 </button>
               </div>
-              <style>{`
-                @keyframes shimmer {
-                  0% { left: -100%; }
-                  100% { left: 100%; }
-                }
-              `}</style>
             </div>
           </div>
 

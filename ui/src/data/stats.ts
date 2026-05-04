@@ -1,28 +1,28 @@
 export const impactStats = [
-  { value: "$30B+", label: "Raised worldwide" },
-  { value: "150M+", label: "Donations made" },
-  { value: "19", label: "Countries served" },
-  { value: "8K+", label: "Fundraisers daily" },
+  { value: "0%", label: "Platform fee" },
+  { value: "24h", label: "Campaign review" },
+  { value: "🔒", label: "Encrypted payments" },
+  { value: "✓", label: "Verified campaigns" },
 ] as const;
 
 export const values = [
   {
     emoji: "\u{1F91D}",
-    title: "Trust & Transparency",
+    title: "Radical Transparency",
     description:
-      "We build trust through transparency in every fundraiser and every transaction.",
+      "Every campaign is reviewed. Every transaction is traceable. Trust isn\u2019t claimed \u2014 it\u2019s earned.",
   },
   {
-    emoji: "\u{1F4A1}",
-    title: "Innovation",
+    emoji: "\u26A1",
+    title: "Simplicity First",
     description:
-      "We continuously improve our platform to make fundraising easier and more effective.",
+      "We obsess over removing friction. If something feels complicated, we haven\u2019t finished building it.",
   },
   {
     emoji: "\u{1F30D}",
-    title: "Global Impact",
+    title: "Borderless Compassion",
     description:
-      "We believe compassion knows no borders and strive to connect people across the world.",
+      "A good cause doesn\u2019t have a nationality. We\u2019re building so generosity can flow freely, wherever it\u2019s needed.",
   },
 ] as const;
 
@@ -31,7 +31,7 @@ export const perks = [
     emoji: "\u{1F680}",
     title: "Meaningful Impact",
     description:
-      "Your work helps millions of people raise funds for causes that matter most to them.",
+      "Your work directly helps people raise funds for the causes that matter most to them.",
   },
   {
     emoji: "\u{1F3E0}",
@@ -86,9 +86,9 @@ export const features = [
   },
   {
     emoji: "\u{1F30D}",
-    title: "Trusted Worldwide",
+    title: "Available Across Europe",
     description:
-      "Join millions of people across 19 countries who use Benefactor to raise money every day.",
+      "Raise and donate from anywhere in Europe. We\u2019re expanding globally \u2014 with security and compliance built in from day one.",
   },
 ] as const;
 
