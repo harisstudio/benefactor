@@ -6,13 +6,9 @@ import { useLocale } from "@/lib/i18n/LocaleContext";
 import { TranslationKey } from "@/lib/i18n/translations";
 
 const links: { key: TranslationKey; href: string }[] = [
-  { key: 'footer.legal.terms', href: '/terms' },
-  { key: 'footer.legal.privacy', href: '/privacy' },
-  { key: 'footer.legal.cookie', href: '/cookie-policy' },
-  { key: 'footer.legal.fees', href: '/pricing' },
-  { key: 'footer.legal.safety', href: '/safety' },
-  { key: 'footer.legal.help', href: '/help' },
-  { key: 'footer.legal.contact', href: '/contact' },
+  { key: 'footer.legal.terms', href: '#' },
+  { key: 'footer.legal.privacy', href: '#' },
+  { key: 'footer.legal.contact', href: '#' },
 ];
 
 export function LegalLinks() {

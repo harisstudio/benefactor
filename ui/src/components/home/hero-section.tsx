@@ -13,8 +13,15 @@ export function HeroSection() {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrollY(window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -75,15 +82,6 @@ export function HeroSection() {
 
 
       {/* Down Arrow — fills space and encourages scroll */}
-      <style>{`
-        @keyframes slow-bounce {
-          0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
-          50% { transform: translateY(0); animation-timing-function: cubic-bezier(0,0,0.2,1); }
-        }
-        .animate-slow-bounce {
-          animation: slow-bounce 2s infinite;
-        }
-      `}</style>
       <div className="mt-8 md:mt-12 mb-10 animate-slow-bounce flex flex-col items-center opacity-30">
         <svg 
           className="w-10 h-10 text-primary-navy" 

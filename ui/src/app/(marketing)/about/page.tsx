@@ -5,7 +5,7 @@ import { getImpactStats, getValues } from "@/lib/api";
 export const metadata: Metadata = {
   title: "About Benefactor",
   description:
-    "Learn about Benefactor's mission to help people help each other. The world's most trusted fundraising platform.",
+    "Benefactor is a fundraising platform built on transparency, simplicity, and trust. No platform fees. Every campaign verified. Learn our story.",
 };
 
 export default async function AboutPage() {
@@ -18,8 +18,8 @@ export default async function AboutPage() {
         <div className="max-w-container mx-auto px-5 text-center">
           <h1 className="text-heading text-white">About Benefactor</h1>
           <p className="mt-4 text-subtext text-gray-300 max-w-2xl mx-auto">
-            We&rsquo;re on a mission to help people help each other. Benefactor
-            is the world&rsquo;s most trusted fundraising platform.
+            We exist to make generosity simple. Benefactor is a fundraising
+            platform built on transparency, trust, and zero platform fees.
           </p>
         </div>
       </section>
@@ -30,26 +30,27 @@ export default async function AboutPage() {
           <div>
             <h2 className="text-2xl md:text-[2.5rem] mb-4">Our Story</h2>
             <p className="text-base text-text-gray leading-relaxed">
-              Benefactor was founded with a simple belief: that the generosity of
-              everyday people has the power to change lives. Since our founding,
-              we have helped millions of people raise billions for the causes and
-              people that matter most to them.
+              Benefactor started with a question we couldn&rsquo;t ignore: why is
+              it still so hard for good people to raise money for good causes? We
+              saw the friction firsthand &mdash; the distrust, the fees, the
+              platforms that took too much and gave too little back. So we built
+              something different.
             </p>
             <p className="mt-4 text-base text-text-gray leading-relaxed">
-              Whether it&rsquo;s a community coming together to rebuild after a
-              disaster, a family rallying support for medical bills, or a student
-              raising funds for education &mdash; Benefactor is the platform that
-              connects compassion with action.
+              Whether it&rsquo;s a family facing unexpected costs, a community
+              rebuilding after a crisis, or a student chasing an opportunity they
+              can&rsquo;t afford alone &mdash; Benefactor exists to close the gap
+              between compassion and action.
             </p>
           </div>
 
           <div>
             <h2 className="text-2xl md:text-[2.5rem] mb-4">What We Do</h2>
             <p className="text-base text-text-gray leading-relaxed">
-              Benefactor provides the tools, technology, and trust to make online
-              fundraising accessible to everyone. With a 0% platform fee,
-              industry-leading donor protections, and a global reach spanning 19
-              countries, we make it easy for anyone to make a meaningful impact.
+              We give people the simplest, most transparent way to raise and
+              donate money online. No platform fees. Verified campaigns.
+              Bank-grade security. And a team that reviews every fundraiser
+              before it goes live.
             </p>
           </div>
         </div>
@@ -58,10 +59,10 @@ export default async function AboutPage() {
       {/* Impact Stats */}
       <section className="bg-bg-off-white py-16 md:py-20">
         <div className="max-w-container mx-auto px-5 text-center">
-          <h2 className="text-2xl md:text-[2.5rem] mb-3">Our Impact</h2>
+          <h2 className="text-2xl md:text-[2.5rem] mb-3">Our Commitment</h2>
           <p className="text-base text-text-gray max-w-2xl mx-auto mb-12">
-            Every day, thousands of people use Benefactor to turn compassion into
-            action. Here&rsquo;s the impact our community has made together.
+            We measure ourselves not by vanity metrics, but by the promises we
+            keep to every fundraiser and every donor.
           </p>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {impactStats.map((stat) => (

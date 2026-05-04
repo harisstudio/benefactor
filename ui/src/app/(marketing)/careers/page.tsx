@@ -98,7 +98,7 @@ export default async function CareersPage() {
             Benefactor&rsquo;s mission.
           </p>
           <a
-            href="mailto:careers@benefactor.com"
+            href="mailto:careers@benefactorteam.com"
             className="inline-flex items-center justify-center h-12 px-8 rounded-btn font-bold bg-primary-yellow text-primary-navy shadow-sm hover:shadow-md hover:translate-y-[-2px] transition-all"
           >
             Get in Touch

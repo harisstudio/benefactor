@@ -58,3 +58,37 @@
     color: var(--color-primary-navy);
   }
 }
+
+/* Shared keyframe animations — consolidated from inline <style> tags */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes scrollDonors {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes slow-bounce {
+  0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
+  50% { transform: translateY(0); animation-timing-function: cubic-bezier(0,0,0.2,1); }
+}
+
+@keyframes rotate-360 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-slow-bounce {
+  animation: slow-bounce 2s infinite;
+}
+
+.animate-rotate-360 {
+  animation: rotate-360 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}

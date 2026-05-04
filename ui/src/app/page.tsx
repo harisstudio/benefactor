@@ -10,7 +10,7 @@ import { getFeaturedFundraisers, getTopicLabels, getTopicCards } from "@/lib/api
 export const metadata: Metadata = {
   title: "Benefactor — World Wide Fundraising Platform",
   description:
-    "Start your fundraiser in minutes. Raise money for yourself, a loved one, or a charity. Trusted by millions worldwide.",
+    "Start your fundraiser in minutes. Raise money for yourself, a loved one, or a cause you believe in. Transparent, verified, and fee-free.",
 };
 
 export default async function HomePage() {
