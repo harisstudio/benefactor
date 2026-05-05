@@ -29,5 +29,13 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vercel": "^53.1.1"
+  },
+  "overrides": {
+    "next": "$next",
+    "vercel": "$vercel",
+    "@cloudflare/next-on-pages": {
+      "next": "$next",
+      "vercel": "$vercel"
+    }
   }
 }
