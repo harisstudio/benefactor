@@ -16,7 +16,7 @@ donationsRouter.post('/create-intent', async (c) => {
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   
   const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2024-12-18.acacia',
+    apiVersion: '2026-04-22.dahlia' as any,
   });
 
   try {

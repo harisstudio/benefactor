@@ -10,7 +10,7 @@ import donationsRouter from './routes/donations';
 import webhooksRouter from './routes/webhooks';
 import adminRouter from './routes/admin';
 
-const app = new Hono();
+const app = new Hono<{ Bindings: { DATABASE_URL: string } }>();
 
 app.use('*', cors());
 

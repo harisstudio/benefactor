@@ -8,7 +8,7 @@ const webhooksRouter = new Hono<{ Bindings: { STRIPE_SECRET_KEY: string; STRIPE_
 
 webhooksRouter.post('/stripe', async (c) => {
   const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2024-12-18.acacia',
+    apiVersion: '2026-04-22.dahlia' as any,
   });
 
   const sig = c.req.header('stripe-signature');
