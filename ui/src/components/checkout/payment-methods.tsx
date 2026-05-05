@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { CardForm } from "./card-form";
 
-type PaymentMethod = "paypal" | "gpay" | "card";
+type PaymentMethod = "paypal" | "applepay" | "gpay" | "card";
 
 interface PaymentMethodsProps {
   selected: PaymentMethod;
@@ -22,6 +22,13 @@ const methods: { key: PaymentMethod; label: string; icon: React.ReactNode }[] = 
     ),
   },
   {
+    key: "applepay",
+    label: "Apple Pay",
+    icon: (
+      <img src="/assets/apple-pay.png" alt="Apple Pay" className="h-5 w-auto" />
+    ),
+  },
+  {
     key: "gpay",
     label: "Google Pay",
     icon: (
@@ -30,18 +37,9 @@ const methods: { key: PaymentMethod; label: string; icon: React.ReactNode }[] = 
   },
   {
     key: "card",
-    label: "Credit or debit",
+    label: "Stripe",
     icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        className="w-6 h-6 text-text-gray"
-      >
-        <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
-        <line x1="1" y1="10" x2="23" y2="10" />
-      </svg>
+      <img src="/assets/stripe-logo.png" alt="Stripe" className="h-5 w-auto" />
     ),
   },
 ];
@@ -82,8 +80,10 @@ export function PaymentMethods({ selected, onChange }: PaymentMethodsProps) {
         ))}
       </div>
 
-      {/* Card form - shown when credit/debit is selected */}
-      {selected === "card" && <CardForm />}
+      {/* Stripe payment forms */}
+      {(selected === "card" || selected === "applepay" || selected === "gpay") && (
+        <CardForm method={selected as any} />
+      )}
     </div>
   );
 }

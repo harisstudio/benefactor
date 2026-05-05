@@ -49,6 +49,7 @@ export function DetailGallery({ images }: DetailGalleryProps) {
               i === activeIndex ? "opacity-100" : "opacity-0"
             )}
             sizes="(max-width: 768px) 100vw, 60vw"
+            loading={i === 0 ? "eager" : "lazy"}
           />
         ))}
       </div>

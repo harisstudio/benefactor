@@ -3,22 +3,24 @@ import { FullNavbar } from "@/components/layout/full-navbar";
 import { GlobalFooter } from "@/components/layout/footer/index";
 import { HeroSection } from "@/components/home/hero-section";
 import { CampaignDiscovery } from "@/components/home/campaign-discovery";
-import { TopicFilter } from "@/components/home/topic-filter";
-import { FeaturedFundraisers } from "@/components/home/featured-fundraisers";
-import { getFeaturedFundraisers, getTopicLabels, getTopicCards } from "@/lib/api";
+// import { TopicFilter } from "@/components/home/topic-filter";
+// import { FeaturedFundraisers } from "@/components/home/featured-fundraisers";
+// import { getTopicLabels, getTopicCards, getFeaturedFundraisers } from "@/lib/api";
 
 export const metadata: Metadata = {
   title: "Benefactor — World Wide Fundraising Platform",
   description:
-    "Start your fundraiser in minutes. Raise money for yourself, a loved one, or a charity. Trusted by millions worldwide.",
+    "Start your fundraiser in minutes. Raise money for yourself, a loved one, or a cause you believe in. Transparent, verified, and fee-free.",
 };
 
 export default async function HomePage() {
-  const [featuredFundraisers, topicLabels, topicCards] = await Promise.all([
-    getFeaturedFundraisers(),
+  /*
+  const [topicLabels, topicCards, featuredFundraisers] = await Promise.all([
     getTopicLabels(),
     getTopicCards(),
+    getFeaturedFundraisers(),
   ]);
+  */
   return (
     <>
       <FullNavbar />
@@ -36,13 +38,14 @@ export default async function HomePage() {
         <HeroSection />
         <CampaignDiscovery />
 
-        {/* Topics + Featured Fundraisers */}
+        {/* Topics + Featured Fundraisers Section (Temporarily disabled)
         <section className="bg-bg-off-white py-12 md:py-20">
           <div className="max-w-container mx-auto px-[clamp(20px,5vw,100px)] space-y-16">
             <TopicFilter labels={topicLabels} cards={topicCards} />
             <FeaturedFundraisers fundraisers={featuredFundraisers} />
           </div>
         </section>
+        */}
       </main>
 
       <GlobalFooter />

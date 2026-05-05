@@ -5,9 +5,9 @@ import { CampaignHeader } from "@/components/campaign/campaign-header";
 import { DetailGallery } from "@/components/campaign/detail-gallery";
 import { CampaignStory } from "@/components/campaign/campaign-story";
 import { DonationSidebar } from "@/components/campaign/donation-sidebar";
-import { RelatedFundraisers } from "@/components/campaign/related-fundraisers";
+// import { RelatedFundraisers } from "@/components/campaign/related-fundraisers";
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { getCampaign, getDonors, getRelatedFundraisers } from "@/lib/api";
+import { getCampaign, getDonors /*, getRelatedFundraisers */ } from "@/lib/api";
 
 export async function generateMetadata({
   params,
@@ -37,7 +37,7 @@ export default async function CampaignPage({
 
   const campaign = await getCampaign(id);
   const donors = await getDonors(id);
-  const featuredFundraisers = await getRelatedFundraisers(id);
+  // const featuredFundraisers = await getRelatedFundraisers(id);
   const percent = Math.round(
     (campaign.raisedAmount / campaign.goalAmount) * 100
   );
@@ -64,6 +64,8 @@ export default async function CampaignPage({
                   width={800}
                   height={450}
                   className="w-full h-full object-cover"
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                  priority
                 />
                 <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
                   <div className="w-[80px] h-[80px] rounded-full bg-white/30 backdrop-blur-[4px] flex items-center justify-center hover:scale-110 transition-transform">
@@ -138,12 +140,6 @@ export default async function CampaignPage({
                   Share
                 </button>
               </div>
-              <style>{`
-                @keyframes shimmer {
-                  0% { left: -100%; }
-                  100% { left: 100%; }
-                }
-              `}</style>
             </div>
           </div>
 
@@ -153,10 +149,11 @@ export default async function CampaignPage({
           </div>
         </div>
 
-        {/* Related Fundraisers */}
+        {/* Related Fundraisers (Temporarily disabled)
         <div className="mt-16">
           <RelatedFundraisers fundraisers={featuredFundraisers} />
         </div>
+        */}
       </div>
     </div>
   );

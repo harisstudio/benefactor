@@ -48,7 +48,7 @@ export function MobileHeartSlider() {
                 width={235}
                 height={235}
                 className="object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.22)]"
-                priority
+                loading={idx === 0 ? "eager" : "lazy"}
               />
             </div>
           </div>
