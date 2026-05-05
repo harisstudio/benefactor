@@ -4,11 +4,10 @@ import Stripe from 'stripe';
 
 @Injectable()
 export class PaymentsService {
-  private stripe: Stripe;
+  private stripe: InstanceType<typeof Stripe>;
 
   constructor(private configService: ConfigService) {
     this.stripe = new Stripe(this.configService.get<string>('STRIPE_SECRET_KEY')!, {
-      apiVersion: '2025-01-27-acacia' as any,
     });
   }
 
