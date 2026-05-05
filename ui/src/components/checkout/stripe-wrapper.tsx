@@ -3,33 +3,41 @@
 import { useEffect, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { getStripe } from "@/lib/stripe";
-import { CheckoutCard } from "./checkout-card";
 
-export function StripeCheckoutWrapper() {
+export function StripeWrapper({ 
+  children, 
+  amount 
+}: { 
+  children: React.ReactNode, 
+  amount: number 
+}) {
   const [stripePromise, setStripePromise] = useState<any>(null);
 
   useEffect(() => {
-    const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
-    if (key) {
-      getStripe().then(setStripePromise);
-    }
+    getStripe().then(setStripePromise);
   }, []);
 
-  // We wrap it anyway, but if stripePromise is null, Stripe components will just not render 
-  // or we can handle it inside CardForm to show classic fields.
   return (
     <Elements 
       stripe={stripePromise} 
-      options={{
+      options={{ 
+        mode: 'payment',
+        amount: Math.max(100, Math.round(amount * 100)), // Minimum amount is $1.00 usually, represented in cents
+        currency: 'usd',
         appearance: {
           theme: 'stripe',
           variables: {
             colorPrimary: '#0E3347',
-          },
-        },
+            colorBackground: '#f8f9fa',
+            colorText: '#002538',
+            colorDanger: '#df1b41',
+            fontFamily: 'system-ui, sans-serif',
+            borderRadius: '12px',
+          }
+        }
       }}
     >
-      <CheckoutCard />
+      {children}
     </Elements>
   );
 }

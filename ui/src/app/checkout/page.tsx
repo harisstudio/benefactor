@@ -3,9 +3,9 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 
-const StripeCheckoutWrapper = dynamic(
+const CheckoutCard = dynamic(
   () =>
-    import("@/components/checkout/stripe-wrapper").then((m) => m.StripeCheckoutWrapper)
+    import("@/components/checkout/checkout-card").then((m) => m.CheckoutCard)
 );
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export default function CheckoutPage() {
     <>
       <div className="py-6 md:py-10 min-h-[calc(100vh_-_200px)]">
         <div className="max-w-[648px] mx-auto px-3 md:px-5">
-          <StripeCheckoutWrapper />
+          <CheckoutCard />
         </div>
       </div>
 

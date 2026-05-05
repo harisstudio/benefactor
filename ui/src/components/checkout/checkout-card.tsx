@@ -11,7 +11,7 @@ import { TipSection } from "./tip-section";
 import { PaymentMethods } from "./payment-methods";
 import { DonationSummary } from "./donation-summary";
 
-type PaymentMethod = "paypal" | "gpay" | "card";
+type PaymentMethod = "paypal" | "applepay" | "gpay" | "card";
 
 interface CheckoutState {
   frequency: "once" | "monthly";

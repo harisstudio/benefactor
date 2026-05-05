@@ -2,7 +2,7 @@
 
 import { PaymentElement } from "@stripe/react-stripe-js";
 
-export function CardForm() {
+export function CardForm({ method }: { method?: string }) {
   return (
     <div className="space-y-3 pt-5 animate-slideDown">
       <PaymentElement 
