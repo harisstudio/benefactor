@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import Image from "next/image";
 import { ProgressCircle } from "@/components/ui/progress-circle";
 import { DonationTabs } from "./donation-tabs";
@@ -8,6 +8,8 @@ import { AmountGrid } from "./amount-grid";
 import { TipSection } from "./tip-section";
 import { PaymentMethods } from "./payment-methods";
 import { DonationSummary } from "./donation-summary";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { createPaymentIntent } from "@/lib/api";
 
 type PaymentMethod = "paypal" | "applepay" | "gpay" | "card";
 
@@ -67,11 +69,58 @@ const presetAmounts = [25, 50, 100, 150, 200, 500];
 
 export function CheckoutCard() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const stripe = useStripe();
+  const elements = useElements();
+  const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const donationAmount =
     state.selectedAmount ?? (parseFloat(state.customAmount) || 0);
   const tipAmount = donationAmount * (state.tipPercent / 100);
   const total = donationAmount + tipAmount;
+
+  const handleDonate = async () => {
+    if (state.paymentMethod !== "card") {
+      alert("This payment method is not yet connected to the test backend. Please use 'Stripe' (Card) for testing.");
+      return;
+    }
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setProcessing(true);
+    setError(null);
+
+    try {
+      // 1. Create Payment Intent
+      const { clientSecret } = await createPaymentIntent(total);
+      
+      // 2. Get Card Element
+      const cardElement = elements.getElement(CardElement);
+      if (!cardElement) throw new Error("Card element not found");
+
+      // 3. Confirm Payment
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+        },
+      });
+
+      if (result.error) {
+        setError(result.error.message ?? "Payment failed");
+      } else {
+        if (result.paymentIntent.status === "succeeded") {
+          alert("Success! Thank you for your donation.");
+          window.location.href = "/";
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred.");
+    } finally {
+      setProcessing(false);
+    }
+  };
 
   return (
     <div className="bg-white rounded-2xl p-5 sm:p-7 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-6">
@@ -147,41 +196,52 @@ export function CheckoutCard() {
       <DonationSummary donation={donationAmount} tip={tipAmount} total={total} />
 
       {/* ──── Donate Button ──── */}
+      {error && (
+        <p className="text-red-500 text-sm font-medium text-center">{error}</p>
+      )}
       <button
-        className={`w-full h-14 rounded-[30px] font-bold text-base cursor-pointer transition-all duration-300 flex items-center justify-center gap-3 hover:opacity-90 hover:-translate-y-0.5 ${
+        onClick={handleDonate}
+        disabled={processing}
+        className={`w-full h-14 rounded-[30px] font-bold text-base cursor-pointer transition-all duration-300 flex items-center justify-center gap-3 hover:opacity-90 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed ${
           state.paymentMethod === "gpay" || state.paymentMethod === "applepay"
             ? "bg-black text-white"
             : "bg-primary-yellow text-primary-navy"
         }`}
       >
-        {state.paymentMethod === "paypal" && (
-          <Image
-            src="/assets/paypal-logo.svg"
-            alt="PayPal"
-            width={80}
-            height={22}
-            className="h-[22px] w-auto"
-          />
+        {processing ? (
+          <div className="w-6 h-6 border-3 border-primary-navy border-t-transparent rounded-full animate-spin"></div>
+        ) : (
+          <>
+            {state.paymentMethod === "paypal" && (
+              <Image
+                src="/assets/paypal-logo.svg"
+                alt="PayPal"
+                width={80}
+                height={22}
+                className="h-[22px] w-auto"
+              />
+            )}
+            {state.paymentMethod === "applepay" && (
+              <Image
+                src="/assets/apple-pay.png"
+                alt="Apple Pay"
+                width={60}
+                height={24}
+                className="h-6 w-auto brightness-0 invert"
+              />
+            )}
+            {state.paymentMethod === "gpay" && (
+              <Image
+                src="/assets/google-pay-mark.svg"
+                alt="Google Pay"
+                width={60}
+                height={36}
+                className="h-9 w-auto"
+              />
+            )}
+            {state.paymentMethod === "card" && "Donate now"}
+          </>
         )}
-        {state.paymentMethod === "applepay" && (
-          <Image
-            src="/assets/apple-pay.png"
-            alt="Apple Pay"
-            width={60}
-            height={24}
-            className="h-6 w-auto brightness-0 invert"
-          />
-        )}
-        {state.paymentMethod === "gpay" && (
-          <Image
-            src="/assets/google-pay-mark.svg"
-            alt="Google Pay"
-            width={60}
-            height={36}
-            className="h-9 w-auto"
-          />
-        )}
-        {state.paymentMethod === "card" && "Donate now"}
       </button>
 
       {/* ──── Terms ──── */}

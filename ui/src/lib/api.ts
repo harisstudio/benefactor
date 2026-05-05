@@ -103,3 +103,16 @@ export async function getPerks() {
 export async function getRoles() {
   return mockRoles;
 }
+
+// ─── Payments ─────────────────────────────────────────────
+
+export async function createPaymentIntent(amount: number, currency: string = "gbp") {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+  const res = await fetch(`${baseUrl}/payments/create-intent`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ amount, currency }),
+  });
+  if (!res.ok) throw new Error("Failed to create payment intent");
+  return res.json() as Promise<{ clientSecret: string }>;
+}
