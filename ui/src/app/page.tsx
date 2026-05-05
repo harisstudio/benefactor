@@ -7,6 +7,8 @@ import { CampaignDiscovery } from "@/components/home/campaign-discovery";
 // import { FeaturedFundraisers } from "@/components/home/featured-fundraisers";
 // import { getTopicLabels, getTopicCards, getFeaturedFundraisers } from "@/lib/api";
 
+export const runtime = 'edge';
+
 export const metadata: Metadata = {
   title: "Benefactor — World Wide Fundraising Platform",
   description:

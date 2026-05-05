@@ -9,6 +9,8 @@ import { DonationSidebar } from "@/components/campaign/donation-sidebar";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { getCampaign, getDonors /*, getRelatedFundraisers */ } from "@/lib/api";
 
+export const runtime = 'edge';
+
 export async function generateMetadata({
   params,
 }: {
