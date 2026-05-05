@@ -1,6 +1,8 @@
 "use client";
 
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
+import { useStripe, useElements } from "@stripe/react-stripe-js";
+import { StripeWrapper } from "./stripe-wrapper";
 import Image from "next/image";
 import { ProgressCircle } from "@/components/ui/progress-circle";
 import { DonationTabs } from "./donation-tabs";
@@ -72,6 +74,62 @@ export function CheckoutCard() {
     state.selectedAmount ?? (parseFloat(state.customAmount) || 0);
   const tipAmount = donationAmount * (state.tipPercent / 100);
   const total = donationAmount + tipAmount;
+
+  return (
+    <StripeWrapper amount={total}>
+      <CheckoutInner 
+        state={state} 
+        dispatch={dispatch} 
+        donationAmount={donationAmount} 
+        tipAmount={tipAmount} 
+        total={total} 
+      />
+    </StripeWrapper>
+  );
+}
+
+function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
+  state: CheckoutState, dispatch: React.Dispatch<CheckoutAction>, donationAmount: number, tipAmount: number, total: number
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleDonate = async () => {
+    if (state.paymentMethod !== "card" || !stripe || !elements) return;
+    
+    setIsProcessing(true);
+    try {
+      const res = await fetch("http://127.0.0.1:8787/api/donations/create-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: total,
+          // Replace with real campaign ID when dynamic
+          campaignId: "00000000-0000-0000-0000-000000000000", 
+        }),
+      });
+      const { clientSecret, error: apiError } = await res.json();
+      if (apiError || !clientSecret) throw new Error(apiError || "Failed to get client secret");
+
+      const { error: submitError } = await elements.submit();
+      if (submitError) throw submitError;
+
+      const { error } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/dashboard`,
+        },
+      });
+
+      if (error) alert(error.message);
+    } catch (err: any) {
+      alert(err.message || "Payment failed");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <div className="bg-white rounded-2xl p-5 sm:p-7 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-6">
@@ -148,31 +206,39 @@ export function CheckoutCard() {
 
       {/* ──── Donate Button ──── */}
       <button
+        onClick={handleDonate}
+        disabled={isProcessing}
         className={`w-full h-14 rounded-[30px] font-bold text-base cursor-pointer transition-all duration-300 flex items-center justify-center gap-3 hover:opacity-90 hover:-translate-y-0.5 ${
           state.paymentMethod === "gpay"
             ? "bg-black text-white"
             : "bg-primary-yellow text-primary-navy"
-        }`}
+        } disabled:opacity-70`}
       >
-        {state.paymentMethod === "paypal" && (
-          <Image
-            src="/assets/paypal-logo.svg"
-            alt="PayPal"
-            width={80}
-            height={22}
-            className="h-[22px] w-auto"
-          />
+        {isProcessing ? (
+          <div className="w-5 h-5 border-2 border-primary-navy border-t-transparent rounded-full animate-spin" />
+        ) : (
+          <>
+            {state.paymentMethod === "paypal" && (
+              <Image
+                src="/assets/paypal-logo.svg"
+                alt="PayPal"
+                width={80}
+                height={22}
+                className="h-[22px] w-auto"
+              />
+            )}
+            {state.paymentMethod === "gpay" && (
+              <Image
+                src="/assets/google-pay-mark.svg"
+                alt="Google Pay"
+                width={60}
+                height={36}
+                className="h-9 w-auto"
+              />
+            )}
+            {state.paymentMethod === "card" && "Donate now"}
+          </>
         )}
-        {state.paymentMethod === "gpay" && (
-          <Image
-            src="/assets/google-pay-mark.svg"
-            alt="Google Pay"
-            width={60}
-            height={36}
-            className="h-9 w-auto"
-          />
-        )}
-        {state.paymentMethod === "card" && "Donate now"}
       </button>
 
       {/* ──── Terms ──── */}

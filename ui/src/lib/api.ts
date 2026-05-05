@@ -16,37 +16,51 @@ import { roles as mockRoles } from "@/data/roles";
 
 // ─── Helpers ──────────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000/api";
+const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8787/api";
 
 /**
- * Placeholder for future `fetch()` wrapper.
- * Will handle base URL, auth headers, error mapping, etc.
+ * Fetch wrapper that talks to our Cloudflare Worker backend.
  */
-// async function apiFetch<T>(path: string): Promise<T> {
-//   const res = await fetch(`${baseUrl}${path}`, { next: { revalidate: 60 } });
-//   if (!res.ok) throw new Error(`API ${res.status}: ${path}`);
-//   return res.json() as Promise<T>;
-// }
+async function apiFetch<T>(path: string): Promise<T> {
+  const res = await fetch(`${baseUrl}${path}`, {
+    next: { revalidate: 0 }, // Disable caching for now
+  });
+  if (!res.ok) throw new Error(`API ${res.status}: ${path}`);
+  return res.json() as Promise<T>;
+}
 
 // ─── Campaigns ────────────────────────────────────────────
 
 export async function getCampaign(id: string): Promise<Campaign> {
-  // Future: return apiFetch<Campaign>(`/campaigns/${id}`);
-  void id;
+  try {
+    const campaign = await apiFetch<Campaign>(`/campaigns/${id}`);
+    if (campaign) return campaign;
+  } catch (err) {
+    console.warn('API fetch failed, falling back to mock data:', err);
+  }
   return featuredCampaign;
 }
 
 export async function getFeaturedCampaign(): Promise<Campaign> {
+  try {
+    const campaigns = await apiFetch<Campaign[]>('/campaigns');
+    if (campaigns && campaigns.length > 0) return campaigns[0];
+  } catch (err) {
+    console.warn('API fetch failed, falling back to mock data:', err);
+  }
   return featuredCampaign;
 }
 
 // ─── Donors ───────────────────────────────────────────────
 
 export async function getDonors(campaignId: string): Promise<Donor[]> {
-  // Future: return apiFetch<Donor[]>(`/campaigns/${campaignId}/donors`);
-  void campaignId;
-  return mockDonors;
+  try {
+    // Assuming backend returns donors nested under campaign or a separate endpoint
+    return await apiFetch<Donor[]>(`/campaigns/${campaignId}/donors`);
+  } catch (err) {
+    console.warn('API fetch failed, falling back to mock data:', err);
+    return mockDonors;
+  }
 }
 
 // ─── Fundraisers ──────────────────────────────────────────
@@ -67,7 +81,24 @@ export async function getRelatedFundraisers(
 // ─── Topics ───────────────────────────────────────────────
 
 export async function getTopicLabels(): Promise<readonly string[]> {
+  try {
+    const categories = await apiFetch<{ name: string }[]>('/categories');
+    if (categories && categories.length > 0) {
+      return categories.map((c) => c.name);
+    }
+  } catch (err) {
+    console.warn('API fetch failed, falling back to mock data:', err);
+  }
   return mockTopicLabels;
+}
+
+export async function getCountries(): Promise<{ code: string; name: string }[]> {
+  try {
+    return await apiFetch<{ code: string; name: string }[]>('/countries');
+  } catch (err) {
+    console.warn('API fetch failed:', err);
+    return [];
+  }
 }
 
 export async function getTopicCards(): Promise<

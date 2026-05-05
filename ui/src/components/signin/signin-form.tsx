@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 type AuthMode = "signin" | "signup";
 type AuthStep = "email" | "credentials";
@@ -29,11 +30,27 @@ export function SigninForm() {
 
   const handleAuth = async () => {
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      if (mode === "signup") {
+        const { error } = await authClient.signUp.email({
+          email,
+          password,
+          name,
+        });
+        if (error) throw new Error(error.message);
+      } else {
+        const { error } = await authClient.signIn.email({
+          email,
+          password,
+        });
+        if (error) throw new Error(error.message);
+      }
       router.push("/dashboard");
-    }, 1500);
+    } catch (err: any) {
+      alert(err.message || "Authentication failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const toggleMode = () => {
