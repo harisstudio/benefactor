@@ -74,6 +74,9 @@ jobs:
       - name: Build Next.js app for Pages
         run: npx @cloudflare/next-on-pages@1
         working-directory: ui
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
 
       - name: Ensure Pages project exists
         run: npx wrangler pages project create benefactor-ui --production-branch main || true
