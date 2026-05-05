@@ -22,11 +22,24 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8787/api";
  * Fetch wrapper that talks to our Cloudflare Worker backend.
  */
 async function apiFetch<T>(path: string): Promise<T> {
-  const res = await fetch(`${baseUrl}${path}`, {
-    next: { revalidate: 0 }, // Disable caching for now
-  });
-  if (!res.ok) throw new Error(`API ${res.status}: ${path}`);
-  return res.json() as Promise<T>;
+  const url = `${baseUrl}${path}`;
+  console.log(`[API Fetch] ${url}`);
+  
+  try {
+    const res = await fetch(url, {
+      next: { revalidate: 0 },
+    });
+    
+    if (!res.ok) {
+      console.error(`[API Error] ${res.status} for ${path}`);
+      throw new Error(`API ${res.status}: ${path}`);
+    }
+    
+    return await res.json() as T;
+  } catch (err) {
+    console.error(`[API Network Error] Failed to fetch ${url}:`, err);
+    throw err;
+  }
 }
 
 // ─── Campaigns ────────────────────────────────────────────
