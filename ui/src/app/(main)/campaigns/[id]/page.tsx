@@ -5,9 +5,9 @@ import { CampaignHeader } from "@/components/campaign/campaign-header";
 import { DetailGallery } from "@/components/campaign/detail-gallery";
 import { CampaignStory } from "@/components/campaign/campaign-story";
 import { DonationSidebar } from "@/components/campaign/donation-sidebar";
-import { RelatedFundraisers } from "@/components/campaign/related-fundraisers";
+// import { RelatedFundraisers } from "@/components/campaign/related-fundraisers";
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { getCampaign, getDonors, getRelatedFundraisers } from "@/lib/api";
+import { getCampaign, getDonors /*, getRelatedFundraisers */ } from "@/lib/api";
 
 export async function generateMetadata({
   params,
@@ -37,7 +37,7 @@ export default async function CampaignPage({
 
   const campaign = await getCampaign(id);
   const donors = await getDonors(id);
-  const featuredFundraisers = await getRelatedFundraisers(id);
+  // const featuredFundraisers = await getRelatedFundraisers(id);
   const percent = Math.round(
     (campaign.raisedAmount / campaign.goalAmount) * 100
   );
@@ -149,10 +149,11 @@ export default async function CampaignPage({
           </div>
         </div>
 
-        {/* Related Fundraisers */}
+        {/* Related Fundraisers (Temporarily disabled)
         <div className="mt-16">
           <RelatedFundraisers fundraisers={featuredFundraisers} />
         </div>
+        */}
       </div>
     </div>
   );

@@ -37,22 +37,10 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
     if (savedLang && SUPPORTED_LANGUAGES.some(l => l.code === savedLang)) {
       setLanguageState(savedLang);
-    } else {
-      // Auto-detect browser language
-      const browserLang = navigator.language?.split('-')[0].toLowerCase();
-      if (browserLang && SUPPORTED_LANGUAGES.some(l => l.code === browserLang)) {
-        setLanguageState(browserLang as LanguageCode);
-      }
     }
 
     if (savedCountry && SUPPORTED_COUNTRIES.some(c => c.code === savedCountry)) {
       setCountryState(savedCountry);
-    } else {
-      // Attempt to read region from browser language like "en-GB", "en-US"
-      const browserRegion = navigator.language?.split('-')[1]?.toUpperCase();
-      if (browserRegion && SUPPORTED_COUNTRIES.some(c => c.code === browserRegion)) {
-        setCountryState(browserRegion as CountryCode);
-      }
     }
   }, []);
 

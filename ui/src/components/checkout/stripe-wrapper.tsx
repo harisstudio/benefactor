@@ -21,9 +21,6 @@ export function StripeCheckoutWrapper() {
     <Elements 
       stripe={stripePromise} 
       options={{
-        mode: 'payment',
-        amount: 2500,
-        currency: 'gbp',
         appearance: {
           theme: 'stripe',
           variables: {

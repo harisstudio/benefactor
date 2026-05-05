@@ -26,9 +26,9 @@ export function TopicFilter({ labels, cards }: TopicFilterProps) {
 
   return (
     <div>
-      <h3 className="text-xl font-bold text-primary-navy mb-4">
+      <h2 className="text-xl md:text-2xl font-bold text-primary-navy mb-4">
         {t("featuredTopics") || "Featured topics"}
-      </h3>
+      </h2>
 
       {/* Pills */}
       <div className="flex flex-wrap gap-2 mb-8">
