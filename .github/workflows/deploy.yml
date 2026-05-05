@@ -52,6 +52,13 @@ jobs:
         run: npx @cloudflare/next-on-pages@1
         working-directory: ui
 
+      - name: Ensure Pages project exists
+        run: npx wrangler pages project create benefactor-ui --production-branch main || true
+        working-directory: ui
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
