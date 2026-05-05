@@ -137,12 +137,11 @@ export async function getRoles() {
 
 // ─── Payments ─────────────────────────────────────────────
 
-export async function createPaymentIntent(amount: number, currency: string = "gbp") {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
-  const res = await fetch(`${baseUrl}/payments/create-intent`, {
+export async function createPaymentIntent(amount: number, campaignId: string = "00000000-0000-0000-0000-000000000000") {
+  const res = await fetch(`${baseUrl}/donations/create-intent`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount, currency }),
+    body: JSON.stringify({ amount, campaignId }),
   });
   if (!res.ok) throw new Error("Failed to create payment intent");
   return res.json() as Promise<{ clientSecret: string }>;

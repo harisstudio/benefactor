@@ -1,0 +1,55 @@
+import { Hono } from 'hono';
+import { getAuth } from '../auth';
+import { getDb } from '../db';
+import { users, campaigns } from '../db/schema';
+import { eq } from 'drizzle-orm';
+
+const adminRouter = new Hono<{ Bindings: { DATABASE_URL: string } }>();
+
+adminRouter.use('*', async (c, next) => {
+  const auth = getAuth(c.env.DATABASE_URL);
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  
+  if (!session) return c.json({ error: 'Unauthorized' }, 401);
+
+  const db = getDb(c.env.DATABASE_URL);
+  const dbUser = await db.query.users.findFirst({
+    where: eq(users.id, session.user.id),
+  });
+
+  if (!dbUser || dbUser.role !== 'admin') {
+    return c.json({ error: 'Forbidden: Admin access required' }, 403);
+  }
+
+  await next();
+});
+
+adminRouter.get('/users', async (c) => {
+  const db = getDb(c.env.DATABASE_URL);
+  const allUsers = await db.query.users.findMany({
+    orderBy: (users, { desc }) => [desc(users.createdAt)],
+  });
+  return c.json(allUsers);
+});
+
+adminRouter.post('/campaigns', async (c) => {
+  const db = getDb(c.env.DATABASE_URL);
+  const body = await c.req.json();
+
+  const newCampaign = await db.insert(campaigns)
+    .values({
+      title: body.title,
+      description: body.description,
+      goalAmount: body.goalAmount,
+      categoryId: body.categoryId,
+      beneficiaryId: body.beneficiaryId,
+      countryCode: body.countryCode,
+      imageUrl: body.imageUrl,
+      status: body.status || 'active',
+    })
+    .returning();
+
+  return c.json(newCampaign[0]);
+});
+
+export default adminRouter;
