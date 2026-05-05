@@ -18,6 +18,10 @@ export const getAuth = (databaseUrl: string) => {
     emailAndPassword: {
       enabled: true
     },
+    trustedOrigins: [
+      "https://benefactorteam.com",
+      "https://benefactor-ui.pages.dev"
+    ],
     user: {
       additionalFields: {
         role: {

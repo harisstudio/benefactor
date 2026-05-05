@@ -12,7 +12,19 @@ import adminRouter from './routes/admin';
 
 const app = new Hono<{ Bindings: { DATABASE_URL: string } }>();
 
-app.use('*', cors());
+app.use('*', cors({
+  origin: (origin) => {
+    // Allow any origin ending with benefactor-ui.pages.dev or exactly benefactorteam.com
+    if (origin.endsWith('benefactor-ui.pages.dev') || origin === 'https://benefactorteam.com') {
+      return origin;
+    }
+    return 'https://benefactorteam.com'; // Default
+  },
+  credentials: true,
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization', 'x-better-auth-agent'],
+  exposeHeaders: ['set-cookie'],
+}));
 
 app.get('/', (c) => {
   return c.text('Benefactor API is running');
