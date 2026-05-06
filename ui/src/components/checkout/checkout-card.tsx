@@ -10,6 +10,7 @@ import { AmountGrid } from "./amount-grid";
 import { TipSection } from "./tip-section";
 import { PaymentMethods } from "./payment-methods";
 import { DonationSummary } from "./donation-summary";
+import { createPaymentIntent } from "@/lib/api";
 
 type PaymentMethod = "paypal" | "applepay" | "gpay" | "card";
 
@@ -100,17 +101,8 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
     
     setIsProcessing(true);
     try {
-      const res = await fetch("http://127.0.0.1:8787/api/donations/create-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: total,
-          // Replace with real campaign ID when dynamic
-          campaignId: "00000000-0000-0000-0000-000000000000", 
-        }),
-      });
-      const { clientSecret, error: apiError } = await res.json();
-      if (apiError || !clientSecret) throw new Error(apiError || "Failed to get client secret");
+      const { clientSecret } = await createPaymentIntent(total);
+      if (!clientSecret) throw new Error("Failed to get client secret");
 
       const { error: submitError } = await elements.submit();
       if (submitError) throw submitError;
