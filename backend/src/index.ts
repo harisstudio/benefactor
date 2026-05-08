@@ -12,6 +12,16 @@ import adminRouter from './routes/admin';
 
 const app = new Hono<{ Bindings: { DATABASE_URL: string; BETTER_AUTH_SECRET?: string } }>();
 
+app.onError((err, c) => {
+  console.error('GLOBAL ERROR:', err);
+  return c.json({ 
+    success: false, 
+    error: err.message, 
+    stack: err.stack,
+    cause: err.cause 
+  }, 500);
+});
+
 app.use('*', cors({
   origin: (origin) => {
     // Allow any origin ending with benefactor-ui.pages.dev or exactly benefactorteam.com
