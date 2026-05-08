@@ -7,7 +7,9 @@ import { eq } from 'drizzle-orm';
 const adminRouter = new Hono<{ Bindings: { DATABASE_URL: string } }>();
 
 adminRouter.use('*', async (c, next) => {
-  const auth = getAuth(c.env.DATABASE_URL);
+  const url = new URL(c.req.url);
+  const baseURL = `${url.protocol}//${url.host}/api/auth`;
+  const auth = getAuth(c.env.DATABASE_URL, baseURL);
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   
   if (!session) return c.json({ error: 'Unauthorized' }, 401);

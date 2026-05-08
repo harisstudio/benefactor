@@ -7,14 +7,18 @@ import { eq } from 'drizzle-orm';
 const usersRouter = new Hono<{ Bindings: { DATABASE_URL: string } }>();
 
 usersRouter.get('/me', async (c) => {
-  const auth = getAuth(c.env.DATABASE_URL);
+  const url = new URL(c.req.url);
+  const baseURL = `${url.protocol}//${url.host}/api/auth`;
+  const auth = getAuth(c.env.DATABASE_URL, baseURL);
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   if (!session) return c.json({ error: 'Unauthorized' }, 401);
   return c.json(session.user);
 });
 
 usersRouter.get('/me/campaigns', async (c) => {
-  const auth = getAuth(c.env.DATABASE_URL);
+  const url = new URL(c.req.url);
+  const baseURL = `${url.protocol}//${url.host}/api/auth`;
+  const auth = getAuth(c.env.DATABASE_URL, baseURL);
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   if (!session) return c.json({ error: 'Unauthorized' }, 401);
 

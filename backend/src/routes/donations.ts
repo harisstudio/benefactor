@@ -12,7 +12,10 @@ donationsRouter.post('/create-intent', async (c) => {
     return c.json({ error: 'Missing amount or campaignId' }, 400);
   }
 
-  const auth = getAuth(c.env.DATABASE_URL);
+  const url = new URL(c.req.url);
+  const baseURL = `${url.protocol}//${url.host}/api/auth`;
+  const auth = getAuth(c.env.DATABASE_URL, baseURL);
+  
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   
   const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, {
