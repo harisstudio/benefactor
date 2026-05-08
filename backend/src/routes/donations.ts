@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import Stripe from 'stripe';
 import { getAuth } from '../auth';
 
-const donationsRouter = new Hono<{ Bindings: { STRIPE_SECRET_KEY: string; DATABASE_URL: string } }>();
+const donationsRouter = new Hono<{ Bindings: { STRIPE_SECRET_KEY: string; DATABASE_URL: string; BETTER_AUTH_SECRET?: string } }>();
 
 donationsRouter.post('/create-intent', async (c) => {
   const body = await c.req.json();
@@ -14,7 +14,7 @@ donationsRouter.post('/create-intent', async (c) => {
 
   const url = new URL(c.req.url);
   const baseURL = `${url.protocol}//${url.host}/api/auth`;
-  const auth = getAuth(c.env.DATABASE_URL, baseURL);
+  const auth = getAuth(c.env.DATABASE_URL, baseURL, c.env.BETTER_AUTH_SECRET);
   
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   

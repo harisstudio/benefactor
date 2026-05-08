@@ -3,9 +3,10 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { getDb } from "./db";
 import * as schema from "./db/schema";
 
-export const getAuth = (databaseUrl: string, baseURL: string = "https://api.benefactorteam.com/api/auth") => {
+export const getAuth = (databaseUrl: string, baseURL: string = "https://api.benefactorteam.com/api/auth", secret: string = "fallback-secret-benefactor-team-auth-2024") => {
   const db = getDb(databaseUrl);
   return betterAuth({
+    secret,
     baseURL,
     database: drizzleAdapter(db, {
       provider: "pg",

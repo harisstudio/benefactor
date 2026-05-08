@@ -10,7 +10,7 @@ import donationsRouter from './routes/donations';
 import webhooksRouter from './routes/webhooks';
 import adminRouter from './routes/admin';
 
-const app = new Hono<{ Bindings: { DATABASE_URL: string } }>();
+const app = new Hono<{ Bindings: { DATABASE_URL: string; BETTER_AUTH_SECRET?: string } }>();
 
 app.use('*', cors({
   origin: (origin) => {
@@ -34,7 +34,7 @@ app.get('/', (c) => {
 app.on(['POST', 'GET'], '/api/auth/**', (c) => {
   const url = new URL(c.req.url);
   const baseURL = `${url.protocol}//${url.host}/api/auth`;
-  const auth = getAuth(c.env.DATABASE_URL, baseURL);
+  const auth = getAuth(c.env.DATABASE_URL, baseURL, c.env.BETTER_AUTH_SECRET);
   return auth.handler(c.req.raw);
 });
 
