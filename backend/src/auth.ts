@@ -22,6 +22,7 @@ export const getAuth = (databaseUrl: string, baseURL: string = "https://api.bene
     },
     trustedOrigins: [
       "https://benefactorteam.com",
+      "https://api.benefactorteam.com",
       "https://benefactor-ui.pages.dev"
     ],
     user: {

@@ -36,17 +36,15 @@ import { sql } from 'drizzle-orm';
 
 app.get('/api/test-db', async (c) => {
   try {
-    const queryClient = postgres(c.env.DATABASE_URL, { prepare: false, ssl: 'require', connect_timeout: 5 });
-    const result = await queryClient`SELECT 1`;
-    return c.json({ success: true, result });
+    const db = getDb(c.env.DATABASE_URL);
+    // Check if user table exists by querying it
+    const result = await db.select().from(schema.users).limit(1);
+    return c.json({ success: true, message: "Database connected and users table exists", count: result.length });
   } catch (err: any) {
-    console.error('DB Test Error:', err);
     return c.json({ 
       success: false, 
-      error: err.message, 
-      code: err.code,
-      name: err.name,
-      stack: err.stack 
+      error: err.message,
+      hint: "Check if you have run 'npm run db:push' in the backend directory to create the tables in Supabase."
     }, 500);
   }
 });
