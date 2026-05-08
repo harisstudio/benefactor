@@ -1,7 +1,8 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { getAuth } from './auth';
-import { getDb } from './db';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
 import categoriesRouter from './routes/categories';
 import countriesRouter from './routes/countries';
@@ -45,7 +46,8 @@ import * as schema from './db/schema';
 
 app.get('/api/test-db', async (c) => {
   try {
-    const db = getDb(c.env.DATABASE_URL);
+    const queryClient = postgres(c.env.DATABASE_URL, { prepare: false, ssl: 'require' });
+    const db = drizzle(queryClient, { schema });
     const result = await db.select().from(schema.users).limit(1);
     return c.json({ success: true, message: "Connected!", data: result });
   } catch (err: any) {
