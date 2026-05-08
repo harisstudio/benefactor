@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import postgres from 'postgres';
 import { getAuth } from './auth';
 
 import categoriesRouter from './routes/categories';
