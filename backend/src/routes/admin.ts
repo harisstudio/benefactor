@@ -9,7 +9,7 @@ const adminRouter = new Hono<{ Bindings: { DATABASE_URL: string; BETTER_AUTH_SEC
 adminRouter.use('*', async (c, next) => {
   const url = new URL(c.req.url);
   const baseURL = `${url.protocol}//${url.host}/api/auth`;
-  const auth = getAuth(c.env.DATABASE_URL, baseURL, c.env.BETTER_AUTH_SECRET);
+  const auth = getAuth(c.env.DATABASE_URL, baseURL, c.env.BETTER_AUTH_SECRET || "fallback-secret-benefactor-team-auth-2024");
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
   
   if (!session) return c.json({ error: 'Unauthorized' }, 401);
