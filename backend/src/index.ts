@@ -35,11 +35,18 @@ import { sql } from 'drizzle-orm';
 
 app.get('/api/test-db', async (c) => {
   try {
-    const db = getDb(c.env.DATABASE_URL);
-    const result = await db.execute(sql`SELECT 1`);
+    const queryClient = postgres(c.env.DATABASE_URL, { prepare: false, ssl: 'require', connect_timeout: 5 });
+    const result = await queryClient`SELECT 1`;
     return c.json({ success: true, result });
   } catch (err: any) {
-    return c.json({ success: false, error: err.message, stack: err.stack }, 500);
+    console.error('DB Test Error:', err);
+    return c.json({ 
+      success: false, 
+      error: err.message, 
+      code: err.code,
+      name: err.name,
+      stack: err.stack 
+    }, 500);
   }
 });
 
