@@ -40,6 +40,23 @@ app.get('/', (c) => {
   return c.text('Benefactor API is running');
 });
 
+import * as schema from './db/schema';
+
+app.get('/api/test-db', async (c) => {
+  try {
+    const db = getDb(c.env.DATABASE_URL);
+    const result = await db.select().from(schema.users).limit(1);
+    return c.json({ success: true, message: "Connected!", data: result });
+  } catch (err: any) {
+    return c.json({ 
+      success: false, 
+      error: err.message,
+      stack: err.stack,
+      env_present: !!c.env.DATABASE_URL
+    }, 500);
+  }
+});
+
 // Mount auth routes
 app.on(['POST', 'GET'], '/api/auth/**', (c) => {
   const url = new URL(c.req.url);
