@@ -3,6 +3,42 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { getDb } from "./db";
 import * as schema from "./db/schema";
 
+const toHex = (arr: Uint8Array) =>
+  Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
+
+const fromHex = (hex: string) =>
+  new Uint8Array(hex.match(/.{2}/g)!.map(b => parseInt(b, 16)));
+
+// Uses crypto.subtle (Web Crypto) which runs natively off-thread in Cloudflare
+// Workers and does NOT count toward the 10ms CPU time limit.
+const hashPassword = async (password: string): Promise<string> => {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const key = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']
+  );
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 100000 }, key, 256
+  );
+  return `pbkdf2:${toHex(salt)}:${toHex(new Uint8Array(bits))}`;
+};
+
+const verifyPassword = async ({ hash: stored, password }: { hash: string; password: string }): Promise<boolean> => {
+  if (!stored.startsWith('pbkdf2:')) return false;
+  const [, saltHex, hashHex] = stored.split(':');
+  const salt = fromHex(saltHex);
+  const expected = fromHex(hashHex);
+  const key = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']
+  );
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 100000 }, key, 256
+  );
+  const derived = new Uint8Array(bits);
+  let diff = 0;
+  for (let i = 0; i < derived.length; i++) diff |= derived[i] ^ expected[i];
+  return diff === 0;
+};
+
 export const getAuth = (databaseUrl: string, baseURL: string = "https://api.benefactorteam.com/api/auth", secret: string = "fallback-secret-benefactor-team-auth-2024") => {
   const db = getDb(databaseUrl);
   return betterAuth({
@@ -18,7 +54,11 @@ export const getAuth = (databaseUrl: string, baseURL: string = "https://api.bene
       }
     }),
     emailAndPassword: {
-      enabled: true
+      enabled: true,
+      password: {
+        hash: hashPassword,
+        verify: verifyPassword,
+      }
     },
     trustedOrigins: [
       "https://benefactorteam.com",
@@ -27,14 +67,8 @@ export const getAuth = (databaseUrl: string, baseURL: string = "https://api.bene
     ],
     user: {
       additionalFields: {
-        role: {
-          type: "string",
-          defaultValue: "user"
-        },
-        status: {
-          type: "string",
-          defaultValue: "active"
-        }
+        role: { type: "string", defaultValue: "user" },
+        status: { type: "string", defaultValue: "active" }
       }
     }
   });
