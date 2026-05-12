@@ -4,7 +4,7 @@ import { getDb } from '../db';
 import { donations, campaigns } from '../db/schema';
 import { eq, sql } from 'drizzle-orm';
 
-const webhooksRouter = new Hono<{ Bindings: { STRIPE_SECRET_KEY: string; STRIPE_WEBHOOK_SECRET: string; DATABASE_URL: string } }>();
+const webhooksRouter = new Hono<{ Bindings: { STRIPE_SECRET_KEY: string; STRIPE_WEBHOOK_SECRET: string; HYPERDRIVE: { connectionString: string } } }>();
 
 webhooksRouter.post('/stripe', async (c) => {
   const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, {
@@ -24,7 +24,7 @@ webhooksRouter.post('/stripe', async (c) => {
     return c.json({ error: `Webhook Error: ${err.message}` }, 400);
   }
 
-  const db = getDb(c.env.DATABASE_URL);
+  const db = getDb(c.env.HYPERDRIVE.connectionString);
 
   if (event.type === 'payment_intent.succeeded') {
     const paymentIntent = event.data.object as Stripe.PaymentIntent;

@@ -4,17 +4,17 @@ import { getDb } from '../db';
 import { users, campaigns } from '../db/schema';
 import { eq } from 'drizzle-orm';
 
-const adminRouter = new Hono<{ Bindings: { DATABASE_URL: string; BETTER_AUTH_SECRET?: string } }>();
+const adminRouter = new Hono<{ Bindings: { HYPERDRIVE: { connectionString: string }; BETTER_AUTH_SECRET?: string } }>();
 
 adminRouter.use('*', async (c, next) => {
   const url = new URL(c.req.url);
   const baseURL = `${url.protocol}//${url.host}/api/auth`;
-  const auth = getAuth(c.env.DATABASE_URL, baseURL, c.env.BETTER_AUTH_SECRET || "fallback-secret-benefactor-team-auth-2024");
+  const auth = getAuth(c.env.HYPERDRIVE.connectionString, baseURL, c.env.BETTER_AUTH_SECRET || "fallback-secret-benefactor-team-auth-2024");
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
-  
+
   if (!session) return c.json({ error: 'Unauthorized' }, 401);
 
-  const db = getDb(c.env.DATABASE_URL);
+  const db = getDb(c.env.HYPERDRIVE.connectionString);
   const dbUser = await db.query.users.findFirst({
     where: eq(users.id, session.user.id),
   });
@@ -27,7 +27,7 @@ adminRouter.use('*', async (c, next) => {
 });
 
 adminRouter.get('/users', async (c) => {
-  const db = getDb(c.env.DATABASE_URL);
+  const db = getDb(c.env.HYPERDRIVE.connectionString);
   const allUsers = await db.query.users.findMany({
     orderBy: (users, { desc }) => [desc(users.createdAt)],
   });
@@ -35,7 +35,7 @@ adminRouter.get('/users', async (c) => {
 });
 
 adminRouter.post('/campaigns', async (c) => {
-  const db = getDb(c.env.DATABASE_URL);
+  const db = getDb(c.env.HYPERDRIVE.connectionString);
   const body = await c.req.json();
 
   const newCampaign = await db.insert(campaigns)

@@ -3,10 +3,10 @@ import { getDb } from '../db';
 import { campaigns, users, donations } from '../db/schema';
 import { eq, desc } from 'drizzle-orm';
 
-const campaignsRouter = new Hono<{ Bindings: { DATABASE_URL: string } }>();
+const campaignsRouter = new Hono<{ Bindings: { HYPERDRIVE: { connectionString: string } } }>();
 
 campaignsRouter.get('/', async (c) => {
-  const db = getDb(c.env.DATABASE_URL);
+  const db = getDb(c.env.HYPERDRIVE.connectionString);
   const allCampaigns = await db.query.campaigns.findMany({
     where: eq(campaigns.status, 'active'),
     orderBy: [desc(campaigns.createdAt)],
@@ -15,7 +15,7 @@ campaignsRouter.get('/', async (c) => {
 });
 
 campaignsRouter.get('/:id', async (c) => {
-  const db = getDb(c.env.DATABASE_URL);
+  const db = getDb(c.env.HYPERDRIVE.connectionString);
   const id = c.req.param('id');
   const campaign = await db.query.campaigns.findFirst({
     where: eq(campaigns.id, id),
@@ -25,7 +25,7 @@ campaignsRouter.get('/:id', async (c) => {
 });
 
 campaignsRouter.get('/:id/donors', async (c) => {
-  const db = getDb(c.env.DATABASE_URL);
+  const db = getDb(c.env.HYPERDRIVE.connectionString);
   const id = c.req.param('id');
   
   const campaignDonations = await db.select({

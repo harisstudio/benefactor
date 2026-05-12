@@ -12,7 +12,7 @@ import donationsRouter from './routes/donations';
 import webhooksRouter from './routes/webhooks';
 import adminRouter from './routes/admin';
 
-const app = new Hono<{ Bindings: { DATABASE_URL: string; BETTER_AUTH_SECRET?: string } }>();
+const app = new Hono<{ Bindings: { HYPERDRIVE: { connectionString: string }; BETTER_AUTH_SECRET?: string } }>();
 
 app.onError((err, c) => {
   console.error('GLOBAL ERROR:', err);
@@ -46,17 +46,12 @@ import * as schema from './db/schema';
 
 app.get('/api/test-db', async (c) => {
   try {
-    const queryClient = postgres(c.env.DATABASE_URL, { prepare: false, ssl: 'require' });
+    const queryClient = postgres(c.env.HYPERDRIVE.connectionString, { prepare: false });
     const db = drizzle(queryClient, { schema });
     const result = await db.select().from(schema.users).limit(1);
-    return c.json({ success: true, message: "Connected!", data: result });
+    return c.json({ success: true, message: "Connected!" });
   } catch (err: any) {
-    return c.json({ 
-      success: false, 
-      error: err.message,
-      stack: err.stack,
-      env_present: !!c.env.DATABASE_URL
-    }, 500);
+    return c.json({ success: false, error: err.message }, 500);
   }
 });
 
@@ -64,7 +59,7 @@ app.get('/api/test-db', async (c) => {
 app.on(['POST', 'GET'], '/api/auth/**', (c) => {
   const url = new URL(c.req.url);
   const baseURL = `${url.protocol}//${url.host}/api/auth`;
-  const auth = getAuth(c.env.DATABASE_URL, baseURL, c.env.BETTER_AUTH_SECRET || "fallback-secret-benefactor-team-auth-2024");
+  const auth = getAuth(c.env.HYPERDRIVE.connectionString, baseURL, c.env.BETTER_AUTH_SECRET || "fallback-secret-benefactor-team-auth-2024");
   return auth.handler(c.req.raw);
 });
 
