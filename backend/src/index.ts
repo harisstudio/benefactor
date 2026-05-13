@@ -16,11 +16,12 @@ const app = new Hono<{ Bindings: { HYPERDRIVE: { connectionString: string }; BET
 
 app.onError((err, c) => {
   console.error('GLOBAL ERROR:', err);
-  return c.json({ 
-    success: false, 
-    error: err.message, 
-    stack: err.stack,
-    cause: err.cause 
+  let cause: unknown;
+  try { cause = JSON.parse(JSON.stringify(err.cause)); } catch { cause = String(err.cause); }
+  return c.json({
+    success: false,
+    error: err.message,
+    cause,
   }, 500);
 });
 
@@ -51,7 +52,7 @@ app.get('/api/test-db', async (c) => {
     const result = await db.select().from(schema.users).limit(1);
     return c.json({ success: true, message: "Connected!" });
   } catch (err: any) {
-    return c.json({ success: false, error: err.message }, 500);
+    return c.json({ success: false, error: err.message, cause: err.cause, code: err.code, detail: err.detail }, 500);
   }
 });
 
