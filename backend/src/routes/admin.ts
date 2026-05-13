@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { getAuth } from '../auth';
 import { getDb } from '../db';
 import { users, campaigns } from '../db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 
 const adminRouter = new Hono<{ Bindings: { HYPERDRIVE: { connectionString: string }; BETTER_AUTH_SECRET?: string } }>();
 
@@ -15,9 +15,8 @@ adminRouter.use('*', async (c, next) => {
   if (!session) return c.json({ error: 'Unauthorized' }, 401);
 
   const db = getDb(c.env.HYPERDRIVE.connectionString);
-  const dbUser = await db.query.users.findFirst({
-    where: eq(users.id, session.user.id),
-  });
+  const result = await db.select().from(users).where(eq(users.id, session.user.id)).limit(1);
+  const dbUser = result[0];
 
   if (!dbUser || dbUser.role !== 'admin') {
     return c.json({ error: 'Forbidden: Admin access required' }, 403);
@@ -28,9 +27,7 @@ adminRouter.use('*', async (c, next) => {
 
 adminRouter.get('/users', async (c) => {
   const db = getDb(c.env.HYPERDRIVE.connectionString);
-  const allUsers = await db.query.users.findMany({
-    orderBy: (users, { desc }) => [desc(users.createdAt)],
-  });
+  const allUsers = await db.select().from(users).orderBy(desc(users.createdAt));
   return c.json(allUsers);
 });
 

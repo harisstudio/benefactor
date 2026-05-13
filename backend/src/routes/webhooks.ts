@@ -31,9 +31,8 @@ webhooksRouter.post('/stripe', async (c) => {
     const { campaignId, donorId, message } = paymentIntent.metadata;
 
     if (campaignId) {
-      const existing = await db.query.donations.findFirst({
-        where: eq(donations.stripeTransactionId, paymentIntent.id)
-      });
+      const existingResult = await db.select().from(donations).where(eq(donations.stripeTransactionId, paymentIntent.id)).limit(1);
+      const existing = existingResult[0];
 
       if (!existing) {
         await db.insert(donations).values({
