@@ -11,6 +11,7 @@ import { StepStory } from "./step-story";
 import { StepReview } from "./step-review";
 import { StepShare } from "./step-share";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
 
 interface WizardState {
   currentStep: number;
@@ -125,6 +126,7 @@ function canContinue(state: WizardState): boolean {
 
 export function CampaignWizard() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { data: session } = authClient.useSession();
 
   const next = useCallback(() => dispatch({ type: "NEXT" }), []);
   const prev = useCallback(() => dispatch({ type: "PREV" }), []);
@@ -148,9 +150,15 @@ export function CampaignWizard() {
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Header */}
         <div className="flex justify-end p-5">
-          <Link href="/signin" className="text-sm text-text-gray hover:text-text-dark transition-colors min-h-[44px] flex items-center">
-            Sign in
-          </Link>
+          {session ? (
+            <Link href="/dashboard" className="text-sm text-text-gray hover:text-text-dark transition-colors min-h-[44px] flex items-center">
+              {session.user.name || "Dashboard"}
+            </Link>
+          ) : (
+            <Link href="/signin" className="text-sm text-text-gray hover:text-text-dark transition-colors min-h-[44px] flex items-center">
+              Sign in
+            </Link>
+          )}
         </div>
 
         {/* Step content */}

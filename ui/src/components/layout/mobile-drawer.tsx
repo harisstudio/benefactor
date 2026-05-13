@@ -8,9 +8,10 @@ import { cn } from "@/lib/utils";
 interface MobileDrawerProps {
   open: boolean;
   onClose: () => void;
+  session: { user: { name?: string | null } } | null;
 }
 
-export function MobileDrawer({ open, onClose }: MobileDrawerProps) {
+export function MobileDrawer({ open, onClose, session }: MobileDrawerProps) {
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -74,7 +75,9 @@ export function MobileDrawer({ open, onClose }: MobileDrawerProps) {
             { href: "/how", label: "How Benefactor Works" },
             { href: "/about", label: "About Benefactor" },
             { href: "/careers", label: "Careers" },
-            { href: "/signin", label: "Sign in" },
+            ...(session
+              ? [{ href: "/dashboard", label: session.user.name || "Dashboard" }]
+              : [{ href: "/signin", label: "Sign in" }]),
           ].map((link) => (
             <Link
               key={link.label}

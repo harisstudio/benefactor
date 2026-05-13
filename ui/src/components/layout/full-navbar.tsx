@@ -6,6 +6,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
 import { MobileDrawer } from "./mobile-drawer";
+import { authClient } from "@/lib/auth-client";
 
 interface FullNavbarProps {
   alwaysShowLogo?: boolean;
@@ -13,6 +14,7 @@ interface FullNavbarProps {
 
 export function FullNavbar({ alwaysShowLogo = false }: FullNavbarProps) {
   const { t } = useLanguage();
+  const { data: session } = authClient.useSession();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -116,12 +118,21 @@ export function FullNavbar({ alwaysShowLogo = false }: FullNavbarProps) {
               )}
             </div>
 
-            <Link
-              href="/signin"
-              className="hidden lg:inline-flex items-center text-sm font-medium transition-colors min-h-[44px] text-text-dark"
-            >
-              {t("signin")}
-            </Link>
+            {session ? (
+              <Link
+                href="/dashboard"
+                className="hidden lg:inline-flex items-center text-sm font-medium transition-colors min-h-[44px] text-text-dark"
+              >
+                {session.user.name || "Dashboard"}
+              </Link>
+            ) : (
+              <Link
+                href="/signin"
+                className="hidden lg:inline-flex items-center text-sm font-medium transition-colors min-h-[44px] text-text-dark"
+              >
+                {t("signin")}
+              </Link>
+            )}
 
             <Link
               href="/start"
@@ -145,7 +156,7 @@ export function FullNavbar({ alwaysShowLogo = false }: FullNavbarProps) {
         </div>
       </nav>
 
-      <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
+      <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} session={session ?? null} />
     </>
   );
 }
