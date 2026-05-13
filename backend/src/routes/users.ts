@@ -23,9 +23,7 @@ usersRouter.get('/me/campaigns', async (c) => {
   if (!session) return c.json({ error: 'Unauthorized' }, 401);
 
   const db = getDb(c.env.HYPERDRIVE.connectionString);
-  const userCampaigns = await db.query.campaigns.findMany({
-    where: eq(campaigns.beneficiaryId, session.user.id),
-  });
+  const userCampaigns = await db.select().from(campaigns).where(eq(campaigns.beneficiaryId, session.user.id));
   return c.json(userCampaigns);
 });
 

@@ -7,21 +7,18 @@ const campaignsRouter = new Hono<{ Bindings: { HYPERDRIVE: { connectionString: s
 
 campaignsRouter.get('/', async (c) => {
   const db = getDb(c.env.HYPERDRIVE.connectionString);
-  const allCampaigns = await db.query.campaigns.findMany({
-    where: eq(campaigns.status, 'active'),
-    orderBy: [desc(campaigns.createdAt)],
-  });
+  const allCampaigns = await db.select().from(campaigns)
+    .where(eq(campaigns.status, 'active'))
+    .orderBy(desc(campaigns.createdAt));
   return c.json(allCampaigns);
 });
 
 campaignsRouter.get('/:id', async (c) => {
   const db = getDb(c.env.HYPERDRIVE.connectionString);
   const id = c.req.param('id');
-  const campaign = await db.query.campaigns.findFirst({
-    where: eq(campaigns.id, id),
-  });
-  if (!campaign) return c.json({ error: 'Campaign not found' }, 404);
-  return c.json(campaign);
+  const result = await db.select().from(campaigns).where(eq(campaigns.id, id)).limit(1);
+  if (!result.length) return c.json({ error: 'Campaign not found' }, 404);
+  return c.json(result[0]);
 });
 
 campaignsRouter.get('/:id/donors', async (c) => {

@@ -9,14 +9,14 @@ const toHex = (arr: Uint8Array) =>
 const fromHex = (hex: string) =>
   new Uint8Array(hex.match(/.{2}/g)!.map(b => parseInt(b, 16)));
 
-// Uses crypto.subtle (Web Crypto) which runs natively off-thread in Cloudflare
+// Uses globalThis.crypto.subtle (Web Crypto) which runs natively off-thread in Cloudflare
 // Workers and does NOT count toward the 10ms CPU time limit.
 const hashPassword = async (password: string): Promise<string> => {
-  const salt = crypto.getRandomValues(new Uint8Array(16));
-  const key = await crypto.subtle.importKey(
+  const salt = globalThis.crypto.getRandomValues(new Uint8Array(16));
+  const key = await globalThis.crypto.subtle.importKey(
     'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']
   );
-  const bits = await crypto.subtle.deriveBits(
+  const bits = await globalThis.crypto.subtle.deriveBits(
     { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 100000 }, key, 256
   );
   return `pbkdf2:${toHex(salt)}:${toHex(new Uint8Array(bits))}`;
@@ -27,10 +27,10 @@ const verifyPassword = async ({ hash: stored, password }: { hash: string; passwo
   const [, saltHex, hashHex] = stored.split(':');
   const salt = fromHex(saltHex);
   const expected = fromHex(hashHex);
-  const key = await crypto.subtle.importKey(
+  const key = await globalThis.crypto.subtle.importKey(
     'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']
   );
-  const bits = await crypto.subtle.deriveBits(
+  const bits = await globalThis.crypto.subtle.deriveBits(
     { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 100000 }, key, 256
   );
   const derived = new Uint8Array(bits);
