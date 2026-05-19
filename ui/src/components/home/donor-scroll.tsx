@@ -8,10 +8,10 @@ interface DonorScrollProps {
 
 function DonorItem({ donor }: { donor: Donor }) {
   return (
-    <div className="flex items-center py-4 border-b border-[#f5f5f5] last:border-b-0">
+    <div className="flex items-center py-4 border-b border-surface-muted last:border-b-0">
       {/* Heart icon in circular background */}
-      <div className="w-10 h-10 rounded-full bg-[#FFFCF0] flex items-center justify-center mr-4 flex-shrink-0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#FFC800" strokeWidth="2" className="w-5 h-5">
+      <div className="w-10 h-10 rounded-full bg-primary-yellow/15 flex items-center justify-center mr-4 flex-shrink-0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5 text-primary-yellow">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
         </svg>
       </div>
@@ -20,12 +20,12 @@ function DonorItem({ donor }: { donor: Donor }) {
         <div className="text-[15px] font-normal text-primary-navy mb-0.5 truncate">
           {donor.name}
         </div>
-        <div className="flex items-center gap-1.5 text-[14px] text-[#666]">
+        <div className="flex items-center gap-1.5 text-[14px] text-text-gray">
           <span className="text-[17px] font-bold text-primary-navy">
             {donor.currency}{donor.amount}
           </span>
-          <span className="font-normal text-[#666]">&middot;</span>
-          <span className="text-[12px] font-normal text-[#666]">
+          <span className="font-normal text-text-gray">&middot;</span>
+          <span className="text-[12px] font-normal text-text-gray">
             {donor.timeAgo}
           </span>
         </div>

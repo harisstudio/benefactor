@@ -1,9 +1,12 @@
 export default function Loading() {
   return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-10 h-10 border-4 border-primary-yellow border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm text-text-gray">Loading...</p>
+    <div className="min-h-[70vh] flex items-center justify-center bg-bg-off-white px-4">
+      <div className="flex flex-col items-center gap-5 rounded-2xl bg-bg-light px-10 py-8 shadow-md border border-surface-muted">
+        <div
+          className="w-11 h-11 border-[3px] border-surface-muted border-t-primary-yellow rounded-full animate-spin"
+          aria-hidden
+        />
+        <p className="text-sm font-medium text-text-gray">Loading…</p>
       </div>
     </div>
   );

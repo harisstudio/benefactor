@@ -1,4 +1,7 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface DonationTabsProps {
   frequency: "once" | "monthly";
@@ -6,34 +9,37 @@ interface DonationTabsProps {
 }
 
 export function DonationTabs({ frequency, onChange }: DonationTabsProps) {
+  const { t } = useLanguage();
   return (
     <div>
-      <div className="flex bg-[#f5f5f5] rounded-[30px] p-1">
+      <div className="flex bg-bg-off-white border border-surface-muted rounded-[100px] p-1">
         <button
+          type="button"
           onClick={() => onChange("once")}
           className={cn(
-            "flex-1 py-3.5 px-5 rounded-[26px] text-[15px] font-semibold text-primary-navy cursor-pointer transition-all duration-300 min-h-[44px]",
+            "flex-1 h-11 px-5 rounded-[100px] text-[14px] font-bold transition-all min-h-[44px]",
             frequency === "once"
-              ? "bg-primary-yellow shadow-sm"
-              : "bg-transparent hover:bg-white/50"
+              ? "bg-primary-yellow text-primary-navy shadow-sm"
+              : "text-primary-navy hover:bg-white/60",
           )}
         >
-          Give once
+          {t("checkoutGiveOnce")}
         </button>
         <button
+          type="button"
           onClick={() => onChange("monthly")}
           className={cn(
-            "flex-1 py-3.5 px-5 rounded-[26px] text-[15px] font-semibold text-primary-navy cursor-pointer transition-all duration-300 min-h-[44px]",
+            "flex-1 h-11 px-5 rounded-[100px] text-[14px] font-bold transition-all min-h-[44px]",
             frequency === "monthly"
-              ? "bg-primary-yellow shadow-sm"
-              : "bg-transparent hover:bg-white/50"
+              ? "bg-primary-yellow text-primary-navy shadow-sm"
+              : "text-primary-navy hover:bg-white/60",
           )}
         >
-          Monthly
+          {t("checkoutMonthly")}
         </button>
       </div>
-      <p className="text-sm text-text-gray font-medium mt-3 text-center">
-        Boost your impact by giving monthly
+      <p className="text-[12px] text-text-gray mt-2.5 text-center">
+        {t("checkoutMonthlyNote")}
       </p>
     </div>
   );

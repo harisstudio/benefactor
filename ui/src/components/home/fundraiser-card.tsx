@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ProgressBar } from "@/components/ui/progress-bar";
+import { ProgressBar, CircularProgress } from "@/components/ui/progress-bar";
 import { Badge } from "@/components/ui/badge";
 import type { FundraiserCard as FundraiserCardType } from "@/types/fundraiser";
 import { TranslatedText } from "@/components/ui/translated-text";
@@ -23,6 +23,9 @@ export function FundraiserCard({ fundraiser }: FundraiserCardProps) {
           />
           <div className="absolute top-3 left-3">
             <Badge><TranslatedText tKey={fundraiser.tag} fallback={fundraiser.tag} /></Badge>
+          </div>
+          <div className="absolute top-3 right-3 bg-white/95 backdrop-blur rounded-full p-1 shadow-sm">
+            <CircularProgress percent={fundraiser.progressPercent} size={44} strokeWidth={4} className="text-primary-navy" />
           </div>
         </div>
         <div className="p-4">

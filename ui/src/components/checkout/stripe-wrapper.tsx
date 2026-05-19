@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { getStripe } from "@/lib/stripe";
 
-export function StripeWrapper({ 
-  children, 
-  amount 
-}: { 
-  children: React.ReactNode, 
-  amount: number 
+export function StripeWrapper({
+  children,
+  amount,
+  currency = "EUR",
+}: {
+  children: React.ReactNode;
+  amount: number;
+  currency?: "EUR" | "GBP";
 }) {
   const [stripePromise, setStripePromise] = useState<any>(null);
 
@@ -22,15 +24,15 @@ export function StripeWrapper({
       stripe={stripePromise} 
       options={{ 
         mode: 'payment',
-        amount: Math.max(100, Math.round(amount * 100)), // Minimum amount is $1.00 usually, represented in cents
-        currency: 'usd',
+        amount: Math.max(100, Math.round(amount * 100)), // smallest unit (cents/pence)
+        currency: currency.toLowerCase(),
         appearance: {
           theme: 'stripe',
           variables: {
             colorPrimary: '#0E3347',
-            colorBackground: '#f8f9fa',
+            colorBackground: '#F7F9FB',
             colorText: '#002538',
-            colorDanger: '#df1b41',
+            colorDanger: '#b42318',
             fontFamily: 'system-ui, sans-serif',
             borderRadius: '12px',
           }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 
 interface CampaignStoryProps {
   truncated: string;
@@ -11,9 +12,11 @@ export function CampaignStory({ truncated, full }: CampaignStoryProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-[20px] font-bold text-primary-navy leading-[1.2]">Story</h2>
-      <div className="text-[16px] leading-[1.6] text-[#444] font-medium space-y-4">
+    <section className="space-y-5">
+      <h2 className="font-heading text-[clamp(20px,2vw,26px)] font-extrabold text-primary-navy tracking-[-0.01em]">
+        About this campaign
+      </h2>
+      <div className="text-[16px] leading-[1.75] text-text-dark/85 space-y-4">
         {expanded ? (
           full.split("\n").map((p, i) => <p key={i}>{p}</p>)
         ) : (
@@ -21,11 +24,13 @@ export function CampaignStory({ truncated, full }: CampaignStoryProps) {
         )}
       </div>
       <button
+        type="button"
         onClick={() => setExpanded(!expanded)}
-        className="text-primary-navy font-bold underline cursor-pointer hover:text-[#FF6B00] transition-colors text-[16px]"
+        className="inline-flex items-center gap-1.5 text-[14px] font-bold text-primary-navy hover:text-primary-yellow-hover transition-colors"
       >
         {expanded ? "Read less" : "Read more"}
+        {expanded ? <IconChevronUp size={16} stroke={2} /> : <IconChevronDown size={16} stroke={2} />}
       </button>
-    </div>
+    </section>
   );
 }

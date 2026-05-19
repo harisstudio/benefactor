@@ -1,5 +1,8 @@
-import Image from "next/image";
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
+import { CURRENCY_SYMBOL, type CurrencyCode } from "@/lib/fx";
 
 interface AmountGridProps {
   amounts: number[];
@@ -7,6 +10,7 @@ interface AmountGridProps {
   customAmount: string;
   onSelect: (amount: number) => void;
   onCustomChange: (value: string) => void;
+  currency?: CurrencyCode;
 }
 
 export function AmountGrid({
@@ -15,51 +19,53 @@ export function AmountGrid({
   customAmount,
   onSelect,
   onCustomChange,
+  currency = "EUR",
 }: AmountGridProps) {
+  const symbol = CURRENCY_SYMBOL[currency];
+  const { t } = useLanguage();
   return (
-    <div className="space-y-5">
-      {/* Amount buttons - 6 columns on desktop, 3 on mobile */}
-      <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-        {amounts.map((amount) => (
-          <button
-            key={amount}
-            onClick={() => onSelect(amount)}
-            className={cn(
-              "relative py-4 px-2 border-2 rounded-lg text-[15px] font-semibold cursor-pointer transition-all duration-200 min-h-[44px]",
-              selected === amount
-                ? "border-primary-yellow bg-primary-yellow text-primary-navy"
-                : "border-[#e0e0e0] bg-white text-primary-navy hover:border-primary-yellow"
-            )}
-          >
-            £{amount}
-            {amount === 100 && (
-              <Image
-                src="/assets/suggested-badge.svg"
-                alt="Suggested"
-                width={60}
-                height={20}
-                className="absolute -bottom-3 left-1/2 -translate-x-1/2 h-5 w-auto z-[2]"
-              />
-            )}
-          </button>
-        ))}
+    <div className="space-y-4">
+      <label className="block text-[11px] font-semibold text-text-gray uppercase tracking-[0.1em]">
+        {t("checkoutChooseAmount")}
+      </label>
+
+      <div className="grid grid-cols-3 md:grid-cols-6 gap-2.5">
+        {amounts.map((amount) => {
+          const isSelected = selected === amount;
+          const isSuggested = amount === 100;
+          return (
+            <button
+              key={amount}
+              type="button"
+              onClick={() => onSelect(amount)}
+              className={cn(
+                "relative h-12 rounded-[14px] border text-[15px] font-bold transition-all min-h-[44px]",
+                isSelected
+                  ? "border-primary-navy bg-primary-navy text-white shadow-md"
+                  : "border-surface-muted bg-white text-primary-navy hover:border-primary-navy/40 hover:bg-bg-off-white",
+              )}
+            >
+              {symbol}{amount}
+              {isSuggested && !isSelected && (
+                <span className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-primary-yellow text-primary-navy text-[9px] font-bold uppercase tracking-wider rounded-full whitespace-nowrap">
+                  {t("checkoutPopular")}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Custom amount input - matching original design */}
-      <div className="flex items-center justify-between border-2 border-[#e0e0e0] rounded-xl py-4 px-5 bg-white focus-within:border-primary-navy transition-colors">
-        <div className="flex items-baseline gap-1.5">
-          <span className="text-[28px] font-extrabold text-primary-navy leading-none">
-            £
-          </span>
-          <span className="text-sm text-text-gray font-medium">GBP</span>
-        </div>
+      <div className="flex items-center border border-surface-muted rounded-[14px] bg-white focus-within:border-primary-navy focus-within:ring-2 focus-within:ring-primary-navy/10 transition-all">
+        <span className="font-heading text-[22px] font-extrabold text-primary-navy pl-5">{symbol}</span>
         <input
           type="text"
           value={customAmount}
           onChange={(e) => onCustomChange(e.target.value)}
-          className="border-none outline-none text-[28px] font-extrabold text-right text-primary-navy w-[120px] bg-transparent placeholder:text-text-gray"
-          placeholder=".00"
+          placeholder={t("checkoutOtherAmount")}
+          className="flex-1 h-14 px-3 font-heading text-[22px] font-extrabold text-primary-navy outline-none placeholder:font-sans placeholder:text-[15px] placeholder:font-medium placeholder:text-text-gray/70 bg-transparent"
         />
+        <span className="text-[12px] font-semibold text-text-gray uppercase tracking-wider pr-5">{currency}</span>
       </div>
     </div>
   );

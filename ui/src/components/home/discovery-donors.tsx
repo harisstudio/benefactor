@@ -29,7 +29,7 @@ export function DiscoveryDonors({ donors }: DiscoveryDonorsProps) {
 
   return (
     <>
-      <div className="mt-6 border border-[#eee] rounded-2xl p-5 flex-1 flex flex-col justify-between bg-white shadow-sm ring-1 ring-black/[0.03]">
+      <div className="mt-6 border border-surface-muted rounded-2xl p-5 flex-1 flex flex-col justify-between bg-bg-light shadow-sm ring-1 ring-primary-navy/[0.04]">
         <DonorScroll donors={donors} />
 
         {/* Donor buttons */}

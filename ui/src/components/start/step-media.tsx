@@ -2,6 +2,8 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import { IconPhotoPlus, IconReplace, IconTrash } from "@tabler/icons-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface StepMediaProps {
   coverImage: string | null;
@@ -9,13 +11,12 @@ interface StepMediaProps {
 }
 
 export function StepMedia({ coverImage, onImageChange }: StepMediaProps) {
+  const { t } = useLanguage();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (file: File) => {
     const reader = new FileReader();
-    reader.onload = (e) => {
-      onImageChange(e.target?.result as string);
-    };
+    reader.onload = (e) => onImageChange(e.target?.result as string);
     reader.readAsDataURL(file);
   };
 
@@ -31,47 +32,56 @@ export function StepMedia({ coverImage, onImageChange }: StepMediaProps) {
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-bold text-primary-navy">
-        Add a cover photo or video
-      </h2>
-      <p className="text-sm text-text-gray">
-        A good cover photo helps tell your story. You can always update it later.
-      </p>
+    <div className="space-y-5">
+      <div>
+        <h2 className="font-heading text-[18px] font-extrabold text-primary-navy mb-1.5">
+          {t("stepMediaHeading")}
+        </h2>
+        <p className="text-[14px] text-text-gray">
+          {t("stepMediaDesc")}
+        </p>
+      </div>
 
       {coverImage ? (
         <div className="space-y-3">
-          <div className="relative rounded-md overflow-hidden aspect-video">
-            <Image src={coverImage} alt="Cover preview" fill className="object-cover" />
+          <div className="relative rounded-2xl overflow-hidden aspect-video border border-surface-muted">
+            <Image src={coverImage} alt={t("stepMediaCoverAlt")} fill className="object-cover" />
           </div>
           <div className="flex gap-3">
             <button
+              type="button"
               onClick={() => inputRef.current?.click()}
-              className="flex-1 h-10 rounded-sm border border-gray-300 text-sm font-medium text-text-dark hover:bg-bg-off-white transition-colors"
+              className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-[100px] border border-surface-muted bg-white text-[13px] font-semibold text-primary-navy hover:bg-bg-off-white transition-colors"
             >
-              Add more photos
+              <IconReplace size={16} stroke={1.8} />
+              {t("stepMediaReplace")}
             </button>
             <button
-              onClick={() => inputRef.current?.click()}
-              className="flex-1 h-10 rounded-sm border border-gray-300 text-sm font-medium text-text-dark hover:bg-bg-off-white transition-colors"
+              type="button"
+              onClick={() => onImageChange(null)}
+              className="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-[100px] border border-surface-muted bg-white text-[13px] font-semibold text-rose-600 hover:bg-rose-50 hover:border-rose-200 transition-colors"
+              aria-label={t("stepMediaRemoveAria")}
             >
-              Crop and replace
+              <IconTrash size={16} stroke={1.8} />
+              {t("stepMediaRemove")}
             </button>
           </div>
         </div>
       ) : (
         <button
+          type="button"
           onClick={() => inputRef.current?.click()}
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
-          className="w-full aspect-video flex flex-col items-center justify-center gap-3 border-2 border-dashed border-gray-300 rounded-md hover:border-gray-400 transition-colors cursor-pointer"
+          className="w-full aspect-video flex flex-col items-center justify-center gap-3 border-2 border-dashed border-surface-muted rounded-2xl bg-bg-off-white hover:border-primary-navy/40 hover:bg-white transition-all cursor-pointer p-6"
         >
-          <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <span className="text-sm font-medium text-text-gray">
-            Upload a photo or video
+          <span className="w-14 h-14 rounded-2xl bg-white border border-surface-muted flex items-center justify-center">
+            <IconPhotoPlus size={26} stroke={1.5} className="text-primary-navy" />
           </span>
+          <span className="text-[14px] font-bold text-primary-navy">
+            {t("stepMediaDropHint")}
+          </span>
+          <span className="text-[12px] text-text-gray">{t("stepMediaFileHint")}</span>
         </button>
       )}
 

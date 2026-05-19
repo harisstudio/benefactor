@@ -32,41 +32,21 @@ export const dictionary: Record<LanguageCode, Record<TranslationKey, string>> = 
     'footer.selectLanguage': 'Language',
     'footer.selectCountry': 'Country'
   },
-  tr: {
-    'footer.legal.terms': 'Şartlar',
-    'footer.legal.privacy': 'Gizlilik',
-    'footer.legal.cookie': 'Çerez Politikası',
-    'footer.legal.fees': 'Ücretler',
-    'footer.legal.safety': 'Bağış Güvenliği',
-    'footer.legal.help': 'Yardım Merkezi',
-    'footer.legal.contact': 'İletişim',
-    'footer.trust.secure': 'Güvenli ödemeler',
-    'footer.trust.verified': 'Onaylanmış bağış akışı',
-    'footer.trust.data': 'Veri koruması',
-    'footer.copyright': '© {year} Benefactor Platform. Tüm hakları saklıdır.',
-    'footer.selectLanguage': 'Dil',
-    'footer.selectCountry': 'Ülke'
-  },
-  ru: {
-    'footer.legal.terms': 'Условия',
-    'footer.legal.privacy': 'Конфиденциальность',
-    'footer.legal.cookie': 'Политика файлов cookie',
-    'footer.legal.fees': 'Сборы',
-    'footer.legal.safety': 'Безопасность сборов',
-    'footer.legal.help': 'Справочный центр',
-    'footer.legal.contact': 'Контакт',
-    'footer.trust.secure': 'Безопасные платежи',
-    'footer.trust.verified': 'Проверенные кампании',
-    'footer.trust.data': 'Защита данных',
-    'footer.copyright': '© {year} Платформа Benefactor. Все права защищены.',
-    'footer.selectLanguage': 'Язык',
-    'footer.selectCountry': 'Страна'
-  },
-  // Adding fallbacks for all other languages mapped to English for scaffolding
-  lt: {} as any, de: {} as any, fr: {} as any, es: {} as any, it: {} as any, 
-  nl: {} as any, pl: {} as any, ro: {} as any, bg: {} as any, cs: {} as any, 
-  pt: {} as any, sv: {} as any, no: {} as any, da: {} as any, fi: {} as any, 
-  uk: {} as any, kk: {} as any, uz: {} as any, az: {} as any
+  lt: {
+    'footer.legal.terms': 'Sąlygos',
+    'footer.legal.privacy': 'Privatumas',
+    'footer.legal.cookie': 'Slapukų politika',
+    'footer.legal.fees': 'Mokesčiai',
+    'footer.legal.safety': 'Rinkliavų sauga',
+    'footer.legal.help': 'Pagalbos centras',
+    'footer.legal.contact': 'Kontaktai',
+    'footer.trust.secure': 'Saugūs mokėjimai',
+    'footer.trust.verified': 'Patikrintos rinkliavos',
+    'footer.trust.data': 'Duomenų apsauga',
+    'footer.copyright': '© {year} Benefactor Platform. Visos teisės saugomos.',
+    'footer.selectLanguage': 'Kalba',
+    'footer.selectCountry': 'Šalis'
+  }
 };
 
 // Fill empty languages with EN fallback to make it production-ready

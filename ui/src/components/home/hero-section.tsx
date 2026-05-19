@@ -33,7 +33,7 @@ export function HeroSection() {
   const logoTranslateY = Math.min(50, scrollY * 0.2);
 
   return (
-    <section className="relative bg-white overflow-hidden pt-0 md:pt-2 pb-0 min-h-screen flex flex-col justify-start items-center">
+    <section className="relative bg-bg-light overflow-hidden pt-0 md:pt-2 pb-0 min-h-screen flex flex-col justify-start items-center border-b border-surface-muted/60">
       <FloatingHearts />
 
       <div className="relative z-10 max-w-[1000px] w-full mx-auto px-5 text-center mt-0 md:mt-2 pb-0 flex flex-col items-center">
@@ -74,7 +74,7 @@ export function HeroSection() {
         
         <Link
           href="/start"
-          className="block w-fit px-[48px] py-[18px] rounded-[100px] font-bold text-[18px] bg-primary-yellow text-primary-navy shadow-[0_4px_14px_rgba(255,193,7,0.3)] hover:scale-105 hover:shadow-[0_8px_30px_rgba(255,193,7,0.5)] transition-all"
+          className="block w-fit px-[48px] py-[18px] rounded-[100px] font-bold text-[18px] bg-primary-yellow text-primary-navy shadow-md hover:scale-[1.02] hover:shadow-lg hover:bg-primary-yellow-hover transition-all duration-200"
         >
           {t("startBenefactor")}
         </Link>

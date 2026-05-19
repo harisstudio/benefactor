@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { IconPencil } from "@tabler/icons-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ReviewState {
   title: string;
@@ -20,84 +24,137 @@ interface StepReviewProps {
   onPhoneChange: (value: string) => void;
 }
 
-function ReviewRow({ label, value, editStep, onEdit }: { label: string; value: string; editStep: number; onEdit: (s: number) => void }) {
+function ReviewRow({
+  label,
+  value,
+  editStep,
+  onEdit,
+  notSetLabel,
+  editLabel,
+}: {
+  label: string;
+  value: string;
+  editStep: number;
+  onEdit: (s: number) => void;
+  notSetLabel: string;
+  editLabel: string;
+}) {
   return (
-    <div className="flex items-start justify-between py-3 border-b border-gray-100">
-      <div>
-        <span className="block text-xs text-text-gray">{label}</span>
-        <span className="block text-sm font-medium text-text-dark mt-0.5">
-          {value || "—"}
-        </span>
+    <div className="flex items-start justify-between gap-4 py-3.5 border-b border-surface-muted last:border-0">
+      <div className="min-w-0 flex-1">
+        <p className="text-[11px] font-semibold text-text-gray uppercase tracking-[0.1em] mb-1">
+          {label}
+        </p>
+        <p className="text-[14px] text-primary-navy font-semibold break-words">
+          {value || <span className="text-text-gray font-normal">{notSetLabel}</span>}
+        </p>
       </div>
       <button
+        type="button"
         onClick={() => onEdit(editStep)}
-        className="text-xs font-semibold text-primary-navy hover:underline min-h-[44px] flex items-center"
+        className="inline-flex items-center gap-1 h-9 px-3 text-[12px] font-bold text-primary-navy hover:bg-bg-off-white rounded-lg transition-colors shrink-0"
       >
-        Edit
+        <IconPencil size={13} stroke={1.9} />
+        {editLabel}
       </button>
     </div>
   );
 }
 
+const inputClass =
+  "w-full h-12 px-4 border border-surface-muted rounded-[14px] text-[15px] text-text-dark placeholder:text-text-gray/70 focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/10 transition-all";
+
+const labelClass =
+  "block text-[11px] font-semibold text-text-gray mb-1.5 uppercase tracking-[0.1em]";
+
 export function StepReview({ state, onEdit, onLaunch, onEmailChange, onPhoneChange }: StepReviewProps) {
+  const { t } = useLanguage();
+  const notSet = t("stepReviewNotSet");
+  const edit = t("stepReviewEdit");
   return (
     <div className="space-y-6">
       {state.coverImage && (
-        <div className="relative rounded-md overflow-hidden aspect-video">
-          <Image src={state.coverImage} alt="Cover" fill className="object-cover" />
+        <div className="relative rounded-2xl overflow-hidden aspect-video border border-surface-muted">
+          <Image src={state.coverImage} alt={t("stepReviewCoverAlt")} fill className="object-cover" />
         </div>
       )}
 
-      <ReviewRow label="Title" value={state.title} editStep={4} onEdit={onEdit} />
-      <ReviewRow label="Goal" value={state.goalAmount ? `\u00A3${state.goalAmount}` : ""} editStep={2} onEdit={onEdit} />
-      <ReviewRow label="Category" value={state.category} editStep={0} onEdit={onEdit} />
-      <ReviewRow label="Location" value={`${state.country}${state.postcode ? `, ${state.postcode}` : ""}`} editStep={0} onEdit={onEdit} />
-      <ReviewRow label="Story" value={state.story.length > 100 ? state.story.slice(0, 100) + "..." : state.story} editStep={4} onEdit={onEdit} />
+      <div className="bg-white border border-surface-muted rounded-2xl px-5">
+        <ReviewRow label={t("stepReviewTitle")} value={state.title} editStep={4} onEdit={onEdit} notSetLabel={notSet} editLabel={edit} />
+        <ReviewRow
+          label={t("stepReviewGoal")}
+          value={state.goalAmount ? `£${state.goalAmount}` : ""}
+          editStep={2}
+          onEdit={onEdit}
+          notSetLabel={notSet}
+          editLabel={edit}
+        />
+        <ReviewRow label={t("stepReviewCategory")} value={state.category} editStep={0} onEdit={onEdit} notSetLabel={notSet} editLabel={edit} />
+        <ReviewRow
+          label={t("stepReviewLocation")}
+          value={`${state.country}${state.postcode ? `, ${state.postcode}` : ""}`}
+          editStep={0}
+          onEdit={onEdit}
+          notSetLabel={notSet}
+          editLabel={edit}
+        />
+        <ReviewRow
+          label={t("stepReviewStory")}
+          value={state.story.length > 120 ? state.story.slice(0, 120) + "..." : state.story}
+          editStep={4}
+          onEdit={onEdit}
+          notSetLabel={notSet}
+          editLabel={edit}
+        />
+      </div>
 
-      <div className="space-y-4 pt-4 border-t border-gray-100">
-        <h3 className="text-sm font-bold text-primary-navy">Contact Information</h3>
+      <div className="space-y-4 pt-2">
+        <h3 className="font-heading text-[16px] font-extrabold text-primary-navy">
+          {t("stepReviewContact")}
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <label htmlFor="email" className="block text-xs text-text-gray font-medium">Email address</label>
+          <div>
+            <label htmlFor="email" className={labelClass}>{t("stepReviewEmail")}</label>
             <input
               id="email"
               type="email"
-              placeholder="name@example.com"
+              placeholder={t("stepReviewEmailPlaceholder")}
               value={state.email}
               onChange={(e) => onEmailChange(e.target.value)}
-              className="w-full h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy transition-colors"
+              className={inputClass}
             />
           </div>
-          <div className="space-y-1.5">
-            <label htmlFor="phone" className="block text-xs text-text-gray font-medium">Phone number</label>
+          <div>
+            <label htmlFor="phone" className={labelClass}>{t("stepReviewPhone")}</label>
             <input
               id="phone"
               type="tel"
-              placeholder="+1 (555) 000-0000"
+              placeholder={t("stepReviewPhonePlaceholder")}
               value={state.phone}
               onChange={(e) => onPhoneChange(e.target.value)}
-              className="w-full h-11 px-3 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy transition-colors"
+              className={inputClass}
             />
           </div>
         </div>
-        <p className="text-[11px] text-text-gray leading-relaxed">
-          Our team will use these details to contact you for a brief review meeting before your project is launched.
+        <p className="text-[12px] text-text-gray leading-relaxed">
+          {t("stepReviewHint")}
         </p>
       </div>
 
-
-      <div className="flex gap-3 pt-4">
+      <div className="flex flex-col sm:flex-row gap-3 pt-4">
         <button
-          onClick={() => alert("Preview coming soon!")}
-          className="flex-1 h-11 rounded-btn font-bold text-sm border-2 border-primary-navy text-primary-navy hover:bg-primary-navy hover:text-white transition-colors"
+          type="button"
+          onClick={() => alert(t("stepReviewPreviewSoon"))}
+          className="sm:flex-1 h-12 rounded-[100px] font-bold text-[14px] border border-surface-muted bg-white text-primary-navy hover:bg-bg-off-white transition-colors"
         >
-          Preview
+          {t("stepReviewPreview")}
         </button>
         <button
+          type="button"
           onClick={onLaunch}
-          className="flex-1 h-11 rounded-btn font-bold text-sm bg-primary-yellow text-primary-navy hover:brightness-110 transition-all"
+          className="sm:flex-1 h-12 rounded-[100px] font-bold text-[14px] bg-primary-yellow text-primary-navy shadow-md hover:bg-primary-yellow-hover hover:shadow-lg active:scale-[0.98] transition-all"
         >
-          Submit for review
+          {t("stepReviewSubmit")}
         </button>
       </div>
     </div>

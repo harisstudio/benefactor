@@ -7,7 +7,6 @@ export const CATEGORIES = [
   "Education",
   "Emergencies",
   "Environment",
-  "Events",
   "Faith",
   "Family",
   "Funerals & Memorials",
@@ -17,7 +16,6 @@ export const CATEGORIES = [
   "Other",
   "Sports",
   "Travel",
-  "Ukraine Relief",
   "Volunteer",
   "Wishes",
 ] as const;

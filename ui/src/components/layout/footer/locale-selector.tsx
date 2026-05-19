@@ -5,31 +5,13 @@ import { useLocale } from "@/lib/i18n/LocaleContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { SUPPORTED_LANGUAGES, SUPPORTED_COUNTRIES, LanguageCode, CountryCode } from "@/lib/i18n/config";
 
-const legacyMapping: Record<string, any> = {
-  en: "English",
-  es: "Español",
-  fr: "Français",
-  de: "Deutsch",
-  tr: "Türkçe"
-};
+const LEGACY_SUPPORTED = ["en", "lt", "ru", "tr", "de", "fr", "es"];
 
-const GlobeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-[18px] h-[18px]">
-    <circle cx="12" cy="12" r="10" />
-    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-    <path d="M2 12h20" />
-  </svg>
-);
-
-const ChevronIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-3.5 h-3.5 ml-1.5 opacity-70">
-    <path d="M6 9l6 6 6-6" />
-  </svg>
-);
+import { IconWorld, IconChevronDown, IconX } from "@tabler/icons-react";
 
 export function LocaleSelector() {
-  const { language, country, setLanguage, setCountry, t } = useLocale();
-  const { setLanguage: setLegacyLanguage } = useLanguage();
+  const { language, country, setLanguage, setCountry } = useLocale();
+  const { setLanguage: setLegacyLanguage, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
   const currentLang = SUPPORTED_LANGUAGES.find(l => l.code === language);
@@ -37,98 +19,101 @@ export function LocaleSelector() {
 
   const handleLanguageChange = (code: LanguageCode) => {
     setLanguage(code);
-    if (legacyMapping[code]) {
-      setLegacyLanguage(legacyMapping[code]);
+    if (LEGACY_SUPPORTED.includes(code)) {
+      setLegacyLanguage(code as any);
     }
   };
 
   // In a real app we might close on outside click, but here we just toggle
   return (
     <div className="relative">
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 -ml-3 rounded-md hover:bg-white/10 transition-colors text-[14px] font-medium text-white/90 focus:outline-none focus:ring-2 focus:ring-white/20"
+        className="inline-flex items-center gap-2 h-11 px-4 rounded-[100px] border border-surface-muted bg-white hover:border-primary-navy/30 transition-colors text-[13px] font-semibold text-primary-navy focus:outline-none focus:ring-2 focus:ring-primary-navy/10"
         aria-haspopup="dialog"
         aria-expanded={isOpen}
       >
-        <GlobeIcon />
+        <IconWorld size={16} stroke={1.8} />
         <span>{currentLang?.nativeName}</span>
-        <span className="text-white/40 font-light px-0.5">|</span>
+        <span className="text-text-gray/40 font-light">·</span>
         <span>{currentCountry?.name}</span>
-        <ChevronIcon />
+        <IconChevronDown size={14} stroke={2} className="opacity-60" />
       </button>
 
       {isOpen && (
-        <div className="absolute top-12 left-0 w-full min-w-[300px] sm:min-w-[400px] bg-white rounded-xl shadow-2xl p-6 z-50 animate-in fade-in zoom-in-95 duration-200">
-          <div className="flex justify-between items-start mb-6">
-            <h3 className="text-lg font-bold text-primary-navy">
-              Settings
-            </h3>
-            <button 
-              onClick={() => setIsOpen(false)}
-              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
-            {/* Language Selector */}
-            <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
-                {t('footer.selectLanguage')}
-              </label>
-              <select 
-                title={t('footer.selectLanguage')}
-                value={language}
-                onChange={(e) => handleLanguageChange(e.target.value as LanguageCode)}
-                className="w-full h-11 bg-gray-50 border border-gray-200 text-primary-navy text-sm rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all"
-              >
-                {SUPPORTED_LANGUAGES.map((lang) => (
-                  <option key={lang.code} value={lang.code}>
-                    {lang.nativeName} ({lang.name})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Country Selector */}
-            <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
-                {t('footer.selectCountry')}
-              </label>
-              <select 
-                title={t('footer.selectCountry')}
-                value={country}
-                onChange={(e) => setCountry(e.target.value as CountryCode)}
-                className="w-full h-11 bg-gray-50 border border-gray-200 text-primary-navy text-sm rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-primary-yellow focus:border-transparent transition-all"
-              >
-                {SUPPORTED_COUNTRIES.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <button 
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
-            className="w-full h-11 bg-primary-yellow hover:bg-[#E5B400] text-primary-navy font-bold rounded-lg transition-colors"
-          >
-            Save settings
-          </button>
-        </div>
-      )}
+          />
 
-      {/* Backdrop */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 z-40"
-          onClick={() => setIsOpen(false)}
-        />
+          {/* Modal — centered, above everything */}
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4 pointer-events-none">
+            <div
+              className="pointer-events-auto w-full max-w-[460px] bg-white rounded-2xl shadow-2xl border border-surface-muted p-6 animate-in fade-in zoom-in-95 duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="font-heading text-[18px] font-extrabold text-primary-navy">
+                  {t("localeRegionLanguage")}
+                </h3>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  aria-label={t("localeClose")}
+                  className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-bg-off-white text-text-gray transition-colors"
+                >
+                  <IconX size={16} stroke={1.8} />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+                <div>
+                  <label className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-text-gray mb-2">
+                    {t('localeLanguage')}
+                  </label>
+                  <select
+                    title={t('localeLanguage')}
+                    value={language}
+                    onChange={(e) => handleLanguageChange(e.target.value as LanguageCode)}
+                    className="w-full h-11 bg-bg-off-white border border-surface-muted text-primary-navy text-[14px] font-medium rounded-[14px] px-3 focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/10 transition-all"
+                  >
+                    {SUPPORTED_LANGUAGES.map((lang) => (
+                      <option key={lang.code} value={lang.code}>
+                        {lang.nativeName} ({lang.name})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-text-gray mb-2">
+                    {t('localeCountry')}
+                  </label>
+                  <select
+                    title={t('localeCountry')}
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value as CountryCode)}
+                    className="w-full h-11 bg-bg-off-white border border-surface-muted text-primary-navy text-[14px] font-medium rounded-[14px] px-3 focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/10 transition-all"
+                  >
+                    {SUPPORTED_COUNTRIES.map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-full h-12 bg-primary-yellow hover:bg-primary-yellow-hover text-primary-navy font-bold text-[14px] rounded-[100px] shadow-md hover:shadow-lg active:scale-[0.98] transition-all"
+              >
+                {t("localeSave")}
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

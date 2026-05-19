@@ -78,11 +78,13 @@ export function LanguageSelector() {
                   onChange={(e) => setLanguage(e.target.value as any)}
                   className="w-full pl-4 pr-10 pt-7 pb-2.5 bg-white border border-gray-300 rounded-xl text-[16px] font-semibold text-primary-navy appearance-none focus:outline-none focus:border-primary-navy focus:ring-1 focus:ring-primary-navy cursor-pointer transition-colors"
                 >
-                  <option value="English">English</option>
-                  <option value="Español">Español</option>
-                  <option value="Français">Français</option>
-                  <option value="Deutsch">Deutsch</option>
-                  <option value="Türkçe">Türkçe</option>
+                  <option value="en">English</option>
+                  <option value="lt">Lietuvių</option>
+                  <option value="ru">Русский</option>
+                  <option value="tr">Türkçe</option>
+                  <option value="de">Deutsch</option>
+                  <option value="fr">Français</option>
+                  <option value="es">Español</option>
                 </select>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -118,7 +120,7 @@ export function LanguageSelector() {
               </button>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="px-8 py-2.5 rounded-[100px] bg-[#FFC800] hover:bg-[#FFB800] text-[#0E3347] text-[15px] font-bold shadow-sm transition-colors"
+                className="px-8 py-2.5 rounded-[100px] bg-primary-yellow hover:bg-primary-yellow-hover text-primary-navy text-[15px] font-bold shadow-sm transition-colors"
               >
                 Save
               </button>

@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { IconPlayerPlayFilled, IconShare3 } from "@tabler/icons-react";
 import { CampaignHeader } from "@/components/campaign/campaign-header";
 import { DetailGallery } from "@/components/campaign/detail-gallery";
 import { CampaignStory } from "@/components/campaign/campaign-story";
 import { DonationSidebar } from "@/components/campaign/donation-sidebar";
-// import { RelatedFundraisers } from "@/components/campaign/related-fundraisers";
-import { ProgressBar } from "@/components/ui/progress-bar";
-import { getCampaign, getDonors /*, getRelatedFundraisers */ } from "@/lib/api";
+import { getCampaign, getDonors } from "@/lib/api";
 
-export const runtime = 'edge';
+export const runtime = "edge";
 
 export async function generateMetadata({
   params,
@@ -25,10 +24,10 @@ export async function generateMetadata({
 }
 
 const storyTruncated =
-  "Winter is approaching in Lithuania, and for one family, the cold brings fear instead of comfort. This family is currently living in a home that is no longer safe or suitable for the harsh winter months. The house has serious structural problems, poor insulation, and damaged areas that make it difficult to stay warm. Without urgent repairs, the cold weather will turn everyday life into a real struggle. Despite their difficult situation, they are doing everything they can to survive. However, due to limited financial resources, they are unable to...";
+  "Winter is approaching in Lithuania, and for one family, the cold brings fear instead of comfort. This family is currently living in a home that is no longer safe or suitable for the harsh winter months. The house has serious structural problems, poor insulation, and damaged areas that make it difficult to stay warm. Without urgent repairs, the cold weather will turn everyday life into a real struggle.";
 
 const storyFull =
-  "Winter is approaching in Lithuania, and for one family, the cold brings fear instead of comfort.\nThis family is currently living in a home that is no longer safe or suitable for the harsh winter months. The house has serious structural problems, poor insulation, and damaged areas that make it difficult to stay warm. Without urgent repairs, the cold weather will turn everyday life into a real struggle.\nDespite their difficult situation, they are doing everything they can to survive. However, due to limited financial resources, they are unable to cover the cost of essential renovations on their own. What they need is not luxury—only a basic, safe, and warm place to live. Our goal is to raise funds to:\nRepair damaged walls and floors\nEvery donation, no matter the size, will go directly toward the renovation of this home. Your support will help transform a cold, unsafe house into a warm and secure place where this family can live with dignity and peace.\nTogether, we can make sure that this family does not have to face the winter in unsafe conditions. Your kindness today can give them warmth, safety, and hope for the future.";
+  "Winter is approaching in Lithuania, and for one family, the cold brings fear instead of comfort.\nThis family is currently living in a home that is no longer safe or suitable for the harsh winter months. The house has serious structural problems, poor insulation, and damaged areas that make it difficult to stay warm. Without urgent repairs, the cold weather will turn everyday life into a real struggle.\nDespite their difficult situation, they are doing everything they can to survive. However, due to limited financial resources, they are unable to cover the cost of essential renovations on their own. What they need is not luxury. Only a basic, safe, and warm place to live.\nOur goal is to raise funds to repair damaged walls and floors. Every donation, no matter the size, will go directly toward the renovation of this home. Your support will help transform a cold, unsafe house into a warm and secure place where this family can live with dignity and peace.\nTogether, we can make sure that this family does not have to face the winter in unsafe conditions. Your kindness today can give them warmth, safety, and hope for the future.";
 
 export default async function CampaignPage({
   params,
@@ -36,126 +35,120 @@ export default async function CampaignPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-
   const campaign = await getCampaign(id);
   const donors = await getDonors(id);
-  // const featuredFundraisers = await getRelatedFundraisers(id);
-  const percent = Math.round(
-    (campaign.raisedAmount / campaign.goalAmount) * 100
-  );
 
   return (
-    <div className="pt-10 pb-16">
-      <div className="max-w-container mx-auto px-[clamp(20px,5vw,100px)]">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-8 lg:gap-12">
-          {/* Left Column */}
-          <div className="space-y-6">
-            <CampaignHeader title={campaign.title} />
+    <div className="bg-bg-off-white pt-8 md:pt-12 pb-16 md:pb-24">
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-[clamp(40px,5vw,80px)]">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.55fr_1fr] gap-8 lg:gap-12">
+          {/* Left column */}
+          <div className="space-y-8">
+            <CampaignHeader
+              title={campaign.title}
+              category={campaign.category}
+              createdAt={campaign.createdAt}
+              verified
+            />
 
-            {/* Video thumbnail */}
-            <div className="rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] mb-4 bg-bg-off-white">
-              <a
-                href="https://www.youtube.com/watch?v=slFSnCxUS4E"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block relative w-full aspect-video bg-black group"
-              >
-                <Image
-                  src={campaign.heroImage}
-                  alt={campaign.title}
-                  width={800}
-                  height={450}
-                  className="w-full h-full object-cover"
-                  sizes="(max-width: 768px) 100vw, 60vw"
-                  priority
-                />
-                <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
-                  <div className="w-[80px] h-[80px] rounded-full bg-white/30 backdrop-blur-[4px] flex items-center justify-center hover:scale-110 transition-transform">
-                    <svg viewBox="0 0 24 24" fill="white" className="w-10 h-10">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
+            {/* Hero video / image */}
+            <a
+              href="https://www.youtube.com/watch?v=slFSnCxUS4E"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block relative w-full aspect-video rounded-3xl overflow-hidden bg-black shadow-md"
+            >
+              <Image
+                src={campaign.heroImage}
+                alt={campaign.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 60vw"
+                className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                priority
+              />
+              <div className="absolute inset-0 bg-black/15 group-hover:bg-black/25 transition-colors flex items-center justify-center">
+                <div className="w-[78px] h-[78px] rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <IconPlayerPlayFilled size={30} className="text-primary-navy ml-1" />
                 </div>
-                <div className="absolute bottom-5 left-5">
-                  <Image src="/assets/bf_white.svg" alt="Benefactor" width={80} height={24} />
-                </div>
-                <div className="absolute bottom-5 right-5">
-                  <Image src="/assets/yt.svg" alt="YouTube" width={80} height={18} />
-                </div>
-              </a>
-            </div>
+              </div>
+            </a>
 
             {/* Gallery */}
-            <DetailGallery images={campaign.galleryImages} />
+            {campaign.galleryImages.length > 0 && (
+              <DetailGallery images={campaign.galleryImages} />
+            )}
 
             {/* Story */}
-            <CampaignStory truncated={storyTruncated} full={storyFull} />
+            <div className="bg-white border border-surface-muted rounded-3xl p-6 md:p-8 lg:p-10">
+              <CampaignStory truncated={storyTruncated} full={storyFull} />
+            </div>
 
-            {/* Bottom stats bar */}
-            <div className="pt-6 border-t border-gray-200">
-              <div className="flex justify-between mb-5">
-                <div className="flex flex-col items-start text-left">
-                  <span className="text-[18px] font-bold text-primary-navy">
-                    {campaign.currency}{campaign.raisedAmount.toLocaleString()}
-                  </span>
-                  <span className="text-[14px] font-normal text-[#888]">
-                    Raised
-                  </span>
+            {/* Organizer */}
+            <div className="bg-white border border-surface-muted rounded-3xl p-6 md:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-full bg-primary-yellow/30 flex items-center justify-center font-heading text-[18px] font-extrabold text-primary-navy">
+                  {campaign.organizer.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
                 </div>
-                <div className="flex flex-col items-center text-center">
-                  <span className="text-[18px] font-bold text-primary-navy">
-                    {campaign.donationCount}
-                  </span>
-                  <span className="text-[14px] font-normal text-[#888]">
-                    Donations
-                  </span>
-                </div>
-                <div className="flex flex-col items-end text-right">
-                  <span className="text-[18px] font-bold text-primary-navy">
-                    {campaign.currency}{campaign.goalAmount.toLocaleString()}
-                  </span>
-                  <span className="text-[14px] font-normal text-[#888]">
-                    Purpose
-                  </span>
+                <div>
+                  <p className="text-[11px] uppercase tracking-wider text-text-gray font-semibold">
+                    Organizer
+                  </p>
+                  <p className="font-heading text-[17px] font-extrabold text-primary-navy">
+                    {campaign.organizer.name}
+                  </p>
                 </div>
               </div>
+              <button
+                type="button"
+                className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-[100px] font-semibold text-[14px] border border-surface-muted bg-white text-primary-navy hover:bg-bg-off-white transition-all self-start sm:self-auto"
+              >
+                Contact
+              </button>
+            </div>
 
-              {/* Progress bar — matching homepage format */}
-              <div className="w-full h-[14px] bg-[#eee] rounded-full overflow-hidden mb-2.5 relative">
+            {/* Mobile donate CTA (visible on small screens since sidebar is hidden) */}
+            <div className="lg:hidden bg-white border border-surface-muted rounded-3xl p-6 shadow-md space-y-4">
+              <div>
+                <p className="font-heading text-[26px] font-extrabold text-primary-navy leading-none">
+                  {campaign.currency}
+                  {campaign.raisedAmount.toLocaleString("en-US")}
+                </p>
+                <p className="mt-1.5 text-[13px] text-text-gray">
+                  raised of {campaign.currency}
+                  {campaign.goalAmount.toLocaleString("en-US")} goal
+                </p>
+              </div>
+              <div className="h-2.5 bg-surface-muted rounded-full overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-primary-yellow to-[#FF6B00] relative overflow-hidden transition-all duration-500"
-                  style={{ width: `${percent}%` }}
-                >
-                  <div className="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shimmer_3s_ease-in-out_infinite]" />
-                </div>
+                  className="h-full bg-primary-yellow rounded-full"
+                  style={{
+                    width: `${Math.min(100, Math.round((campaign.raisedAmount / campaign.goalAmount) * 100))}%`,
+                  }}
+                />
               </div>
-
-              {/* CTA buttons */}
-              <div className="flex gap-4 mt-6">
-                <Link 
-                  href="/checkout"
-                  className="flex-1 inline-flex items-center justify-center h-[52px] rounded-btn font-bold text-[16px] bg-primary-yellow text-primary-navy shadow-[0_4px_14px_rgba(255,193,7,0.3)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(255,107,0,0.4)] transition-all"
+              <div className="flex gap-3">
+                <Link
+                  href={`/checkout?campaign=${campaign.id}`}
+                  className="flex-1 inline-flex items-center justify-center h-[52px] rounded-[100px] font-bold text-[16px] bg-primary-yellow text-primary-navy shadow-md hover:bg-primary-yellow-hover transition-all"
                 >
                   Donate
                 </Link>
-                <button className="flex-1 inline-flex items-center justify-center h-[52px] rounded-btn font-bold text-[16px] border-2 border-primary-navy text-primary-navy hover:bg-primary-navy hover:text-white transition-colors">
-                  Share
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center gap-2 h-[52px] px-5 rounded-[100px] font-semibold text-[14px] border border-surface-muted bg-white text-primary-navy hover:bg-bg-off-white transition-all"
+                  aria-label="Share"
+                >
+                  <IconShare3 size={18} />
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Right Column */}
+          {/* Right column sidebar */}
           <div className="hidden lg:block">
             <DonationSidebar campaign={campaign} donors={donors} />
           </div>
         </div>
-
-        {/* Related Fundraisers (Temporarily disabled)
-        <div className="mt-16">
-          <RelatedFundraisers fundraisers={featuredFundraisers} />
-        </div>
-        */}
       </div>
     </div>
   );

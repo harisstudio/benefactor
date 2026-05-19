@@ -4,12 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { IconEye, IconEyeOff, IconArrowLeft, IconBrandGoogleFilled } from "@tabler/icons-react";
 import { authClient } from "@/lib/auth-client";
+import { useLanguage } from "@/context/LanguageContext";
 
 type AuthMode = "signin" | "signup";
 type AuthStep = "email" | "credentials";
 
 export function SigninForm() {
+  const { t } = useLanguage();
   const router = useRouter();
   const [mode, setMode] = useState<AuthMode>("signin");
   const [step, setStep] = useState<AuthStep>("email");
@@ -32,22 +35,16 @@ export function SigninForm() {
     setIsLoading(true);
     try {
       if (mode === "signup") {
-        const { error } = await authClient.signUp.email({
-          email,
-          password,
-          name,
-        });
+        const { error } = await authClient.signUp.email({ email, password, name });
         if (error) throw new Error(error.message);
       } else {
-        const { error } = await authClient.signIn.email({
-          email,
-          password,
-        });
+        const { error } = await authClient.signIn.email({ email, password });
         if (error) throw new Error(error.message);
       }
       router.push("/dashboard");
-    } catch (err: any) {
-      alert(err.message || "Authentication failed");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : t("authFailed");
+      alert(msg);
     } finally {
       setIsLoading(false);
     }
@@ -59,151 +56,152 @@ export function SigninForm() {
   };
 
   return (
-    <div className="w-full max-w-[480px] bg-white rounded-md shadow-md p-8 md:p-10 text-center animate-in fade-in zoom-in duration-300">
-      {/* Logo */}
-      <Link href="/">
-        <Image
-          src="/assets/logo.svg"
-          alt="Benefactor"
-          width={180}
-          height={36}
-          className="mx-auto"
-        />
-      </Link>
+    <div className="w-full max-w-[440px]">
+      <div className="bg-white rounded-3xl shadow-md border border-surface-muted p-8 md:p-10">
+        <Link href="/" className="flex justify-center mb-7">
+          <Image src="/assets/logo.svg" alt="Benefactor" width={150} height={32} className="h-auto w-[140px]" priority />
+        </Link>
 
-      {/* Heading */}
-      <h1 className="text-2xl font-bold text-primary-navy mt-6">
-        {mode === "signin" ? "Welcome back" : "Join Benefactor"}
-      </h1>
-      <p className="text-sm text-text-gray mt-2">
-        {mode === "signin" 
-          ? "Sign in to your account to continue." 
-          : "Create an account to start your direct impact."}
-      </p>
+        <div className="text-center mb-7">
+          <h1 className="font-heading text-[26px] md:text-[30px] font-extrabold text-primary-navy tracking-[-0.01em]">
+            {mode === "signin" ? t("authWelcomeBack") : t("authCreateAccount")}
+          </h1>
+          <p className="mt-2 text-[14px] text-text-gray">
+            {mode === "signin" ? t("authSigninDesc") : t("authSignupDesc")}
+          </p>
+        </div>
 
-      {step === "email" && (
-        <>
-          {/* Social buttons */}
-          <div className="space-y-3 mt-6">
-            <button className="w-full h-12 flex items-center justify-center gap-3 border border-gray-300 rounded-sm text-sm font-medium text-text-dark hover:bg-bg-off-white transition-colors">
-              <svg viewBox="0 0 24 24" className="w-5 h-5">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-              </svg>
-              Continue with Google
+        {step === "email" && (
+          <>
+            <button
+              type="button"
+              className="w-full h-12 flex items-center justify-center gap-2.5 border border-surface-muted rounded-[14px] text-[14px] font-semibold text-primary-navy hover:bg-bg-off-white transition-colors"
+            >
+              <IconBrandGoogleFilled size={18} />
+              {t("authContinueGoogle")}
             </button>
-          </div>
 
-          {/* Divider */}
-          <div className="flex items-center gap-3 my-6">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-text-gray uppercase tracking-wider">or</span>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
-        </>
-      )}
+            <div className="flex items-center gap-3 my-6">
+              <div className="flex-1 h-px bg-surface-muted" />
+              <span className="text-[11px] text-text-gray uppercase tracking-[0.14em] font-semibold">{t("authOr")}</span>
+              <div className="flex-1 h-px bg-surface-muted" />
+            </div>
+          </>
+        )}
 
-      <form onSubmit={handleNextStep} className="space-y-4 text-left">
-        {step === "email" ? (
-          <div>
-            <label className="block text-xs font-semibold text-text-dark mb-1 ml-1 uppercase">Email Address</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@example.com"
-              className="w-full h-12 px-4 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
-            />
-          </div>
-        ) : (
-          <div className="space-y-4 animate-in slide-in-from-right duration-300">
-            {mode === "signup" && (
-              <div>
-                <label className="block text-xs font-semibold text-text-dark mb-1 ml-1 uppercase">Full Name</label>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="John Doe"
-                  className="w-full h-12 px-4 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
-                />
-              </div>
-            )}
+        <form onSubmit={handleNextStep} className="space-y-4">
+          {step === "email" ? (
             <div>
-              <label className="block text-xs font-semibold text-text-dark mb-1 ml-1 uppercase">Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full h-12 px-4 border border-gray-300 rounded-sm text-sm text-text-dark placeholder:text-text-gray focus:outline-none focus:border-primary-navy"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-text-gray hover:text-text-dark text-xs font-medium"
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
+              <label className="block text-[11px] font-semibold text-text-gray mb-1.5 uppercase tracking-[0.1em]">
+                {t("authEmail")}
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={t("authEmailPlaceholder")}
+                className="w-full h-12 px-4 border border-surface-muted rounded-[14px] text-[15px] text-text-dark placeholder:text-text-gray/70 focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/10 transition-all"
+              />
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {mode === "signup" && (
+                <div>
+                  <label className="block text-[11px] font-semibold text-text-gray mb-1.5 uppercase tracking-[0.1em]">
+                    {t("authFullName")}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder={t("authNamePlaceholder")}
+                    className="w-full h-12 px-4 border border-surface-muted rounded-[14px] text-[15px] text-text-dark placeholder:text-text-gray/70 focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/10 transition-all"
+                  />
+                </div>
+              )}
+              <div>
+                <label className="block text-[11px] font-semibold text-text-gray mb-1.5 uppercase tracking-[0.1em]">
+                  {t("authPassword")}
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={t("authPasswordPlaceholder")}
+                    className="w-full h-12 pl-4 pr-12 border border-surface-muted rounded-[14px] text-[15px] text-text-dark placeholder:text-text-gray/70 focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/10 transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-text-gray hover:text-primary-navy transition-colors rounded-md"
+                    aria-label={showPassword ? t("authHidePassword") : t("authShowPassword")}
+                  >
+                    {showPassword ? <IconEyeOff size={18} /> : <IconEye size={18} />}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full h-12 rounded-btn font-bold bg-primary-yellow text-primary-navy hover:brightness-110 transition-all flex items-center justify-center gap-2"
-        >
-          {isLoading ? (
-            <div className="w-5 h-5 border-2 border-primary-navy border-t-transparent rounded-full animate-spin" />
-          ) : (
-            step === "email" ? "Continue" : (mode === "signin" ? "Sign In" : "Create Account")
           )}
-        </button>
 
-        {step === "credentials" && (
           <button
-            type="button"
-            onClick={() => setStep("email")}
-            className="w-full text-xs font-semibold text-primary-navy hover:underline mt-2 text-center"
+            type="submit"
+            disabled={isLoading}
+            className="w-full h-12 rounded-[100px] font-bold text-[15px] bg-primary-yellow text-primary-navy shadow-md hover:bg-primary-yellow-hover hover:shadow-lg active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
           >
-            Change email
+            {isLoading ? (
+              <span className="w-5 h-5 border-2 border-primary-navy border-t-transparent rounded-full animate-spin" />
+            ) : step === "email" ? (
+              t("authContinue")
+            ) : mode === "signin" ? (
+              t("authSignIn")
+            ) : (
+              t("authCreate")
+            )}
           </button>
-        )}
-      </form>
 
-      <div className="mt-8 pt-6 border-t border-gray-100 text-sm">
-        <p className="text-text-gray">
-          {mode === "signin" ? "Don't have an account?" : "Already have an account?"}{" "}
-          <button
-            onClick={toggleMode}
-            className="font-bold text-primary-navy hover:underline"
-          >
-            {mode === "signin" ? "Sign up" : "Sign in"}
-          </button>
-        </p>
+          {step === "credentials" && (
+            <button
+              type="button"
+              onClick={() => setStep("email")}
+              className="w-full inline-flex items-center justify-center gap-1.5 text-[13px] font-semibold text-primary-navy hover:underline pt-1"
+            >
+              <IconArrowLeft size={14} />
+              {t("authUseDifferentEmail")}
+            </button>
+          )}
+        </form>
+
+        <div className="mt-7 pt-6 border-t border-surface-muted text-center">
+          <p className="text-[14px] text-text-gray">
+            {mode === "signin" ? t("authNewToBenefactor") : t("authAlreadyHave")}{" "}
+            <button
+              type="button"
+              onClick={toggleMode}
+              className="font-bold text-primary-navy hover:underline"
+            >
+              {mode === "signin" ? t("authCreateLink") : t("authSignInLink")}
+            </button>
+          </p>
+        </div>
       </div>
 
-      {/* Footer text */}
-      <p className="text-[11px] text-text-gray mt-6 leading-relaxed max-w-[280px] mx-auto">
-        By continuing, you agree to Benefactor's{" "}
-        <a href="#" className="underline">Terms of Service</a> and{" "}
-        <a href="#" className="underline">Privacy Policy</a>.
+      <p className="text-center text-[11px] text-text-gray mt-6 leading-relaxed max-w-[320px] mx-auto">
+        {t("authAgreeTerms")}{" "}
+        <Link href="#" className="underline hover:text-primary-navy">{t("authTerms")}</Link>
+        {" "}{t("authAnd")}{" "}
+        <Link href="#" className="underline hover:text-primary-navy">{t("authPrivacy")}</Link>.
       </p>
 
-      {/* Back link */}
       <Link
         href="/"
-        className="inline-block mt-4 text-sm font-medium text-text-dark hover:text-primary-navy transition-colors"
+        className="inline-flex items-center justify-center gap-1.5 w-full mt-3 text-[13px] font-semibold text-text-gray hover:text-primary-navy transition-colors"
       >
-        &larr; Back to Benefactor
+        <IconArrowLeft size={14} />
+        {t("authBackToBenefactor")}
       </Link>
     </div>
   );

@@ -1,88 +1,120 @@
 "use client";
 
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { IconCreditCard } from "@tabler/icons-react";
 import { CardForm } from "./card-form";
+import { useLanguage } from "@/context/LanguageContext";
 
-type PaymentMethod = "paypal" | "applepay" | "gpay" | "card";
+export type PaymentMethod = "paypal" | "applepay" | "gpay" | "card";
 
 interface PaymentMethodsProps {
   selected: PaymentMethod;
   onChange: (method: PaymentMethod) => void;
 }
 
-const methods: { key: PaymentMethod; label: string; icon: React.ReactNode }[] = [
-  {
-    key: "paypal",
-    label: "PayPal",
-    icon: (
-      <span className="text-sm font-bold">
-        <span className="text-[#003087]">Pay</span>
-        <span className="text-[#009cde]">Pal</span>
-      </span>
-    ),
-  },
-  {
-    key: "applepay",
-    label: "Apple Pay",
-    icon: (
-      <img src="/assets/apple-pay.png" alt="Apple Pay" className="h-5 w-auto" />
-    ),
-  },
-  {
-    key: "gpay",
-    label: "Google Pay",
-    icon: (
-      <span className="text-sm font-bold text-text-dark">G Pay</span>
-    ),
-  },
-  {
-    key: "card",
-    label: "Stripe",
-    icon: (
-      <img src="/assets/stripe-logo.png" alt="Stripe" className="h-5 w-auto" />
-    ),
-  },
-];
+type MethodSpec = {
+  key: PaymentMethod;
+  label: string;
+  logo?: { src: string; width: number; height: number; alt: string };
+  Icon?: React.ComponentType<{ size?: number; className?: string; stroke?: number }>;
+};
 
 export function PaymentMethods({ selected, onChange }: PaymentMethodsProps) {
+  const { t } = useLanguage();
+
+  const methods: MethodSpec[] = [
+    {
+      key: "paypal",
+      label: t("checkoutPaypal"),
+      logo: { src: "/assets/paypal-logo.svg", width: 64, height: 18, alt: "PayPal" },
+    },
+    {
+      key: "applepay",
+      label: t("checkoutApplePay"),
+      logo: { src: "/assets/apple-pay.png", width: 48, height: 20, alt: "Apple Pay" },
+    },
+    {
+      key: "gpay",
+      label: t("checkoutGooglePay"),
+      logo: { src: "/assets/google-pay-mark.svg", width: 44, height: 20, alt: "Google Pay" },
+    },
+    {
+      key: "card",
+      label: t("checkoutCard"),
+      Icon: IconCreditCard,
+    },
+  ];
+
+  // Apple/Google Pay are rendered automatically by Stripe's PaymentElement
+  // (with `layout: 'tabs'` and `wallets` enabled in the Stripe dashboard).
+  // Selecting them just shows the same PaymentElement, which surfaces the right wallet
+  // based on the visitor's browser/device.
+  const showStripeForm =
+    selected === "card" || selected === "applepay" || selected === "gpay";
+
   return (
     <div className="space-y-3">
-      <h3 className="text-[17px] font-bold text-primary-navy">
-        Payment method
-      </h3>
+      <label className="block text-[11px] font-semibold text-text-gray uppercase tracking-[0.1em]">
+        {t("checkoutPaymentMethod")}
+      </label>
 
-      {/* Payment options - vertical list matching original */}
-      <div className="flex flex-col gap-2.5">
-        {methods.map((m) => (
-          <label
-            key={m.key}
-            onClick={() => onChange(m.key)}
-            className={cn(
-              "flex items-center gap-3 py-4 px-4 border-2 rounded-[30px] cursor-pointer transition-all duration-200 bg-white min-h-[44px]",
-              selected === m.key
-                ? "border-primary-yellow bg-[rgba(255,200,0,0.05)]"
-                : "border-[#1a2b4a] hover:bg-[#f9f9f9]"
-            )}
-          >
-            <input
-              type="radio"
-              name="payment"
-              value={m.key}
-              checked={selected === m.key}
-              onChange={() => onChange(m.key)}
-              className="w-5 h-5 accent-primary-yellow flex-shrink-0"
-            />
-            {m.icon}
-            <span className="text-[15px] font-normal text-primary-navy">
-              {m.label}
-            </span>
-          </label>
-        ))}
+      <div className="flex flex-col gap-2">
+        {methods.map(({ key, label, logo, Icon }) => {
+          const isSelected = selected === key;
+          return (
+            <label
+              key={key}
+              className={cn(
+                "flex items-center gap-3 h-14 px-4 border rounded-[14px] cursor-pointer transition-all",
+                isSelected
+                  ? "border-primary-navy bg-primary-navy/5 shadow-sm"
+                  : "border-surface-muted bg-white hover:border-primary-navy/40",
+              )}
+            >
+              <input
+                type="radio"
+                name="payment"
+                value={key}
+                checked={isSelected}
+                onChange={() => onChange(key)}
+                className="w-5 h-5 accent-primary-navy shrink-0"
+              />
+              <span className="w-12 flex items-center justify-center shrink-0">
+                {logo ? (
+                  <Image
+                    src={logo.src}
+                    alt={logo.alt}
+                    width={logo.width}
+                    height={logo.height}
+                    className="h-5 w-auto object-contain"
+                  />
+                ) : Icon ? (
+                  <Icon size={22} stroke={1.6} className="text-primary-navy" />
+                ) : null}
+              </span>
+              <span className="text-[14px] font-semibold text-primary-navy">{label}</span>
+            </label>
+          );
+        })}
       </div>
 
-      {/* Stripe payment forms */}
-      {(selected === "card" || selected === "applepay" || selected === "gpay") && (
-        <CardForm method={selected as any} />
+      {showStripeForm && (
+        <>
+          <CardForm method={selected} />
+          <div className="flex items-center justify-end gap-2 pt-1">
+            <span className="text-[11px] font-medium text-text-gray uppercase tracking-[0.1em]">
+              {t("poweredBy")}
+            </span>
+            <Image
+              src="/assets/stripe-logo.png"
+              alt="Stripe"
+              width={48}
+              height={20}
+              className="h-5 w-auto opacity-80"
+            />
+          </div>
+        </>
       )}
     </div>
   );

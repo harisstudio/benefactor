@@ -1,39 +1,47 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { IconArrowLeft, IconLock } from "@tabler/icons-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function CheckoutNavbar() {
+  const { t } = useLanguage();
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b border-gray-200">
-      <div className="relative flex items-center justify-center px-4 md:px-10 h-16">
-        {/* Back link - left */}
+    <nav className="sticky top-0 z-50 bg-white border-b border-surface-muted">
+      <div className="max-w-[1200px] mx-auto h-16 px-4 md:px-8 grid grid-cols-[1fr_auto_1fr] items-center">
         <Link
           href="/campaigns/1"
-          className="absolute left-4 md:left-10 text-sm font-medium text-primary-navy hover:opacity-80 transition-opacity min-h-[44px] flex items-center gap-1"
+          className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-text-gray hover:text-primary-navy transition-colors min-h-[44px] justify-self-start"
         >
-          <span className="text-base">←</span> Back
+          <IconArrowLeft size={16} stroke={1.8} />
+          <span className="hidden sm:inline">{t("backToCampaign")}</span>
+          <span className="sm:hidden">{t("back")}</span>
         </Link>
 
-        {/* Logo - center */}
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center justify-center">
           <Image
             src="/assets/logo.svg"
             alt="Benefactor"
             width={140}
-            height={40}
-            className="h-10 w-auto"
+            height={28}
+            className="h-auto w-[120px] md:w-[140px]"
+            priority
           />
         </Link>
 
-        {/* Sign in - right */}
-        <Link
-          href="/signin"
-          className="absolute right-4 md:right-10 text-sm font-medium text-primary-navy hover:opacity-80 transition-opacity min-h-[44px] flex items-center"
-        >
-          <span className="hidden sm:inline">
-            Already have an account?{" "}
+        <div className="justify-self-end flex items-center gap-3 sm:gap-4">
+          <span className="hidden md:inline-flex items-center gap-1.5 text-[12px] font-semibold text-text-gray">
+            <IconLock size={14} stroke={1.8} className="text-emerald-600" />
+            {t("securedByStripe")}
           </span>
-          <span className="font-bold text-primary-yellow ml-1">Sign in</span>
-        </Link>
+          <Link
+            href="/signin"
+            className="text-[13px] font-semibold text-primary-navy hover:underline min-h-[44px] flex items-center"
+          >
+            {t("signin")}
+          </Link>
+        </div>
       </div>
     </nav>
   );

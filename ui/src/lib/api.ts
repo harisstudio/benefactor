@@ -19,16 +19,23 @@ import { roles as mockRoles } from "@/data/roles";
 const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8787";
 const baseUrl = rawBaseUrl.endsWith("/api") ? rawBaseUrl : `${rawBaseUrl.replace(/\/$/, "")}/api`;
 
+/** Avoid hanging SSR when API host is wrong or offline (falls back to mocks quickly). */
+const API_FETCH_TIMEOUT_MS = 4000;
+
 /**
  * Fetch wrapper that talks to our Cloudflare Worker backend.
  */
 async function apiFetch<T>(path: string): Promise<T> {
   const url = `${baseUrl}${path}`;
   console.log(`[API Fetch] ${url}`);
-  
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), API_FETCH_TIMEOUT_MS);
+
   try {
     const res = await fetch(url, {
       next: { revalidate: 0 },
+      signal: controller.signal,
     });
     
     if (!res.ok) {
@@ -40,6 +47,8 @@ async function apiFetch<T>(path: string): Promise<T> {
   } catch (err) {
     console.error(`[API Network Error] Failed to fetch ${url}:`, err);
     throw err;
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
@@ -152,11 +161,18 @@ export async function getRoles() {
 // ─── Payments ─────────────────────────────────────────────
 
 export async function createPaymentIntent(amount: number, campaignId: string = "00000000-0000-0000-0000-000000000000") {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), API_FETCH_TIMEOUT_MS);
+  try {
   const res = await fetch(`${baseUrl}/donations/create-intent`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ amount, campaignId }),
+    signal: controller.signal,
   });
   if (!res.ok) throw new Error("Failed to create payment intent");
   return res.json() as Promise<{ clientSecret: string }>;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }

@@ -41,25 +41,25 @@ export function DonationsModal({ isOpen, onClose, donors, initialTab = "recent" 
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* Modal Content */}
-      <div className="relative w-full max-w-[500px] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 slide-in-from-bottom-5 duration-300">
+      <div className="relative w-full max-w-[500px] bg-bg-light rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 slide-in-from-bottom-5 duration-300">
         
         {/* Header */}
-        <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
+        <div className="px-6 py-5 border-b border-surface-muted flex items-center justify-between sticky top-0 bg-bg-light z-10">
           <h2 className="text-xl font-bold text-primary-navy font-heading">
             <TranslatedText tKey="donations" fallback="Donations" /> ({donors.length})
           </h2>
           <button 
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors group"
+            className="p-2 hover:bg-surface-muted rounded-full transition-colors group"
           >
-            <svg className="w-6 h-6 text-gray-400 group-hover:text-primary-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 text-text-gray group-hover:text-primary-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex px-6 pt-4 border-b border-gray-50">
+        <div className="flex px-6 pt-4 border-b border-surface-muted">
           <button
             onClick={() => setActiveTab("recent")}
             className={`flex-1 pb-4 text-sm font-bold border-b-2 transition-all ${
@@ -95,7 +95,7 @@ export function DonationsModal({ isOpen, onClose, donors, initialTab = "recent" 
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-bg-off-white flex items-center justify-center text-primary-navy font-bold text-sm">
                     {activeTab === "top" ? (
-                      <span className="text-[#FF6B00]">#{idx + 1}</span>
+                      <span className="text-primary-yellow-hover font-bold">#{idx + 1}</span>
                     ) : (
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 006.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -121,7 +121,7 @@ export function DonationsModal({ isOpen, onClose, donors, initialTab = "recent" 
         </div>
 
         {/* Footer */}
-        <div className="p-6 bg-gray-50/50 border-t border-gray-100 flex justify-center">
+        <div className="p-6 bg-bg-off-white border-t border-surface-muted flex justify-center">
           <button 
             onClick={onClose}
             className="h-12 px-8 rounded-btn font-bold text-sm bg-primary-yellow text-primary-navy hover:brightness-110 transition-all shadow-sm"
@@ -136,14 +136,14 @@ export function DonationsModal({ isOpen, onClose, donors, initialTab = "recent" 
           width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f1f1f1;
+          background: #f7f9fb;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #dbdbdb;
+          background: #eef2f6;
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #888;
+          background: #5f6b7a;
         }
       `}</style>
     </div>

@@ -40,8 +40,8 @@ export function ProgressCircle({
       >
         <defs>
           <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFA500" />
-            <stop offset="100%" stopColor="#FFC800" />
+            <stop offset="0%" stopColor="#e6b400" />
+            <stop offset="100%" stopColor="#ffc800" />
           </linearGradient>
           <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="0.5" />
@@ -58,7 +58,7 @@ export function ProgressCircle({
         
         {/* Background track */}
         <path
-          className="text-[#f0f1f3]"
+          className="text-surface-muted"
           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
           fill="none"
           stroke="currentColor"

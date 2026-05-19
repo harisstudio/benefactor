@@ -1,44 +1,53 @@
 "use client";
 
-import Image from "next/image";
+import { IconCamera, IconCircleCheck } from "@tabler/icons-react";
 
 export function ProfileHeader() {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-6 md:p-8 shadow-sm flex flex-col md:flex-row items-center gap-6 mb-8">
-      <div className="relative group">
-        <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-bg-off-white shadow-inner bg-primary-navy flex items-center justify-center text-white text-3xl font-bold">
+    <div className="bg-white rounded-3xl border border-surface-muted shadow-sm p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 mb-8">
+      <div className="relative">
+        <div className="w-24 h-24 rounded-full bg-primary-navy flex items-center justify-center text-white font-heading text-[28px] font-extrabold shadow-sm">
           HO
         </div>
-        <button className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary-yellow text-primary-navy border-2 border-white flex items-center justify-center shadow-md hover:scale-110 transition-transform">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
+        <button
+          type="button"
+          className="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-primary-yellow text-primary-navy border-2 border-white flex items-center justify-center shadow-md hover:bg-primary-yellow-hover transition-colors"
+          aria-label="Change photo"
+        >
+          <IconCamera size={16} stroke={1.8} />
         </button>
       </div>
 
-      <div className="flex-1 text-center md:text-left space-y-1">
-        <h2 className="text-2xl font-bold text-primary-navy">Haris Ozturk</h2>
-        <p className="text-sm text-text-gray font-medium">Member since April 2024 • London, UK</p>
-        <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-3">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-primary-navy bg-bg-off-white px-3 py-1.5 rounded-full">
-            <span className="w-2 h-2 rounded-full bg-green-500" />
-            Verified Profile
-          </div>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-primary-navy bg-bg-off-white px-3 py-1.5 rounded-full">
+      <div className="flex-1 text-center md:text-left">
+        <h2 className="font-heading text-[24px] font-extrabold text-primary-navy tracking-[-0.01em]">
+          Haris Ozturk
+        </h2>
+        <p className="text-[13px] text-text-gray mt-1">
+          Member since April 2024 · London, UK
+        </p>
+        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-3">
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/70 px-3 py-1 rounded-full">
+            <IconCircleCheck size={12} stroke={2.2} />
+            Verified
+          </span>
+          <span className="inline-flex items-center text-[11px] font-semibold text-primary-navy bg-bg-off-white border border-surface-muted px-3 py-1 rounded-full">
             Fundraiser
-          </div>
+          </span>
         </div>
       </div>
 
-      <div className="flex gap-4 md:border-l border-gray-100 md:pl-8">
+      <div className="flex gap-8 md:border-l border-surface-muted md:pl-8">
         <div className="text-center">
-          <p className="text-xl font-bold text-primary-navy">12</p>
-          <p className="text-[10px] text-text-gray uppercase tracking-widest font-bold">Donations</p>
+          <p className="font-heading text-[22px] font-extrabold text-primary-navy">12</p>
+          <p className="text-[10px] text-text-gray uppercase tracking-[0.14em] font-semibold mt-0.5">
+            Donations
+          </p>
         </div>
         <div className="text-center">
-          <p className="text-xl font-bold text-primary-navy">2</p>
-          <p className="text-[10px] text-text-gray uppercase tracking-widest font-bold">Projects</p>
+          <p className="font-heading text-[22px] font-extrabold text-primary-navy">2</p>
+          <p className="text-[10px] text-text-gray uppercase tracking-[0.14em] font-semibold mt-0.5">
+            Projects
+          </p>
         </div>
       </div>
     </div>

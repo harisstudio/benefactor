@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ProgressBar } from "@/components/ui/progress-bar";
+import { FeaturedProgressBar } from "@/components/ui/progress-bar";
 import { CampaignGallery } from "./campaign-gallery";
 import { DiscoveryDonors } from "./discovery-donors";
 import { getFeaturedCampaign, getDonors } from "@/lib/api";
@@ -14,14 +14,14 @@ export async function CampaignDiscovery() {
   );
 
   return (
-    <section className="pt-2 md:pt-12 pb-8 md:pb-12 bg-white">
+    <section className="pt-2 md:pt-12 pb-8 md:pb-12 bg-bg-light">
       <div className="max-w-container mx-auto px-[clamp(20px,5vw,100px)]">
         {/* Section heading */}
         <h2 className="text-[clamp(26px,4.5vw,44px)] md:text-[32px] font-bold text-primary-navy text-center mb-3 md:mb-12 leading-[1.1] md:leading-tight tracking-[-1px] md:tracking-normal">
           <TranslatedText tKey="trustedHeading" fallback="Fundraising on Benefactor is easy, powerful, and trusted" />
         </h2>
-        <h3 className="md:hidden text-[17px] font-bold text-primary-navy text-center mb-8 max-w-[800px] mx-auto leading-tight opacity-80">
-          Help a Family in Lithuania Stay Warm This Winter
+        <h3 className="md:hidden text-[17px] font-bold text-primary-navy text-center mb-8 max-w-[800px] mx-auto leading-tight text-text-gray">
+          {campaign.title}
         </h3>
 
         {/* Two-column grid — 1.6fr / 1fr like original */}
@@ -74,7 +74,7 @@ export async function CampaignDiscovery() {
                   <span className="text-[18px] font-bold text-primary-navy">
                     {campaign.currency}{campaign.raisedAmount.toLocaleString()}
                   </span>
-                  <span className="text-[14px] font-normal text-[#888]">
+                  <span className="text-[14px] font-normal text-text-gray">
                     <TranslatedText tKey="raised" fallback="Raised" />
                   </span>
                 </div>
@@ -82,7 +82,7 @@ export async function CampaignDiscovery() {
                   <span className="text-[18px] font-bold text-primary-navy">
                     {campaign.donationCount}
                   </span>
-                  <span className="text-[14px] font-normal text-[#888]">
+                  <span className="text-[14px] font-normal text-text-gray">
                     <TranslatedText tKey="donations" fallback="Donations" />
                   </span>
                 </div>
@@ -90,27 +90,19 @@ export async function CampaignDiscovery() {
                   <span className="text-[18px] font-bold text-primary-navy">
                     {campaign.currency}{campaign.goalAmount.toLocaleString()}
                   </span>
-                  <span className="text-[14px] font-normal text-[#888]">
+                  <span className="text-[14px] font-normal text-text-gray">
                     <TranslatedText tKey="purpose" fallback="Purpose" />
                   </span>
                 </div>
               </div>
 
-              {/* Progress bar — taller, with shimmer */}
-              <div className="w-full h-[14px] bg-[#eee] rounded-full overflow-hidden mb-2.5 relative">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-primary-yellow to-[#FF6B00] relative overflow-hidden transition-all duration-500"
-                  style={{ width: `${progressPercent}%` }}
-                >
-                  <div className="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shimmer_3s_ease-in-out_infinite]" />
-                </div>
-              </div>
+              <FeaturedProgressBar percent={progressPercent} />
 
               {/* CTA buttons */}
               <div className="flex gap-4 mt-4">
                 <Link
                   href="/campaigns/1"
-                  className="flex-1 inline-flex items-center justify-center h-[52px] rounded-btn font-bold text-[16px] bg-primary-yellow text-primary-navy shadow-[0_4px_14px_rgba(255,193,7,0.3)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(255,107,0,0.4)] transition-all"
+                  className="flex-1 inline-flex items-center justify-center h-[52px] rounded-btn font-bold text-[16px] bg-primary-yellow text-primary-navy shadow-md hover:-translate-y-0.5 hover:shadow-lg hover:bg-primary-yellow-hover transition-all duration-200"
                 >
                   <TranslatedText tKey="donatePlain" fallback="Donate" />
                 </Link>
@@ -128,14 +120,14 @@ export async function CampaignDiscovery() {
               <h2 className="hidden md:block text-[clamp(22px,2vw,32px)] font-bold text-primary-navy leading-[1.2] mb-5">
                 {campaign.title}
               </h2>
-              <p className="text-[16px] leading-[1.6] text-[#444] font-medium mb-4">
+              <p className="text-[16px] leading-[1.6] text-text-dark font-medium mb-4">
                 {campaign.description}
               </p>
-              <p className="text-[16px] leading-[1.6] text-[#444] font-medium mb-4">
+              <p className="text-[16px] leading-[1.6] text-text-dark font-medium mb-4">
                 {campaign.story}
               </p>
               <p className="mt-auto">
-                <span className="text-primary-navy font-bold underline cursor-pointer hover:text-[#FF6B00] transition-colors">
+                <span className="text-primary-navy font-bold underline cursor-pointer hover:text-text-gray transition-colors">
                   <TranslatedText tKey="readMore" fallback="Read more" />
                 </span>
               </p>

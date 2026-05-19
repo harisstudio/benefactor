@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { IconChevronRight } from "@tabler/icons-react";
 import { ProfileHeader } from "@/components/profile/profile-header";
 import { ProfileForm } from "@/components/profile/profile-form";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "My Profile — Benefactor",
@@ -10,21 +11,28 @@ export const metadata: Metadata = {
 
 export default function ProfilePage() {
   return (
-    <div className="max-w-[1100px] mx-auto px-5 py-8 md:py-12">
-      <div className="flex items-center gap-2 text-sm text-text-gray mb-6">
-        <Link href="/dashboard" className="hover:text-primary-navy transition-colors">Dashboard</Link>
-        <span>/</span>
-        <span className="text-text-dark font-medium">My Profile</span>
-      </div>
+    <div className="bg-bg-off-white min-h-screen">
+      <div className="max-w-[1100px] mx-auto px-5 sm:px-8 py-10 md:py-14">
+        <nav className="flex items-center gap-1.5 text-[13px] text-text-gray mb-6" aria-label="Breadcrumb">
+          <Link href="/dashboard" className="hover:text-primary-navy font-semibold transition-colors">
+            Dashboard
+          </Link>
+          <IconChevronRight size={14} className="text-text-gray/60" />
+          <span className="text-primary-navy font-semibold">Profile</span>
+        </nav>
 
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-primary-navy font-heading">
-          Profile Settings
-        </h1>
-      </div>
+        <div className="mb-10">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-text-gray mb-2">
+            Settings
+          </p>
+          <h1 className="font-heading text-[clamp(28px,3.4vw,42px)] font-extrabold text-primary-navy tracking-[-0.015em]">
+            Profile
+          </h1>
+        </div>
 
-      <ProfileHeader />
-      <ProfileForm />
+        <ProfileHeader />
+        <ProfileForm />
+      </div>
     </div>
   );
 }

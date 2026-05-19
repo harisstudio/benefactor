@@ -3,7 +3,9 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { IconX } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface MobileDrawerProps {
   open: boolean;
@@ -12,12 +14,39 @@ interface MobileDrawerProps {
 }
 
 export function MobileDrawer({ open, onClose, session }: MobileDrawerProps) {
+  const { t } = useLanguage();
+
+  const accountLink = session
+    ? { href: "/profile", label: session.user.name || t("navProfile") }
+    : { href: "/signin", label: t("signin") };
+
+  const sections: {
+    heading?: string;
+    links: { href: string; label: string }[];
+  }[] = [
+    {
+      links: [
+        { href: "/", label: t("navHome") },
+        { href: "/campaigns/1", label: t("donate") },
+        { href: "/start", label: t("fundraise") },
+      ],
+    },
+    {
+      heading: t("about"),
+      links: [
+        { href: "/how", label: t("fundraiseHow") },
+        { href: "/about", label: t("aboutAbout") },
+        { href: "/careers", label: t("aboutCareers") },
+      ],
+    },
+    {
+      heading: t("navAccount"),
+      links: [accountLink],
+    },
+  ];
+
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = open ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
@@ -33,71 +62,78 @@ export function MobileDrawer({ open, onClose, session }: MobileDrawerProps) {
 
   return (
     <>
-      {/* Overlay */}
       <div
         className={cn(
-          "fixed inset-0 bg-black/50 z-[998] transition-opacity",
-          open ? "opacity-100" : "opacity-0 pointer-events-none"
+          "fixed inset-0 bg-primary-navy/50 backdrop-blur-sm z-[998] transition-opacity",
+          open ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Drawer */}
-      <div
+      <aside
         className={cn(
-          "fixed top-0 right-0 h-full w-[280px] bg-white z-[999] shadow-lg transition-transform duration-300",
-          open ? "translate-x-0" : "translate-x-full"
+          "fixed top-0 right-0 h-full w-[88%] max-w-[340px] bg-white z-[999] shadow-2xl transition-transform duration-300 flex flex-col",
+          open ? "translate-x-0" : "translate-x-full",
         )}
         aria-hidden={!open}
         role="dialog"
-        aria-label="Navigation menu"
+        aria-label={t("openMenu")}
       >
-        <div className="flex items-center justify-between p-5 border-b border-gray-100">
-          <Image src="/assets/logo.svg" alt="Benefactor" width={130} height={26} />
+        <div className="flex items-center justify-between px-5 py-4 border-b border-surface-muted">
+          <Link href="/" onClick={onClose}>
+            <Image
+              src="/assets/logo.svg"
+              alt="Benefactor"
+              width={130}
+              height={26}
+              className="h-auto w-[120px]"
+            />
+          </Link>
           <button
+            type="button"
             onClick={onClose}
-            className="text-2xl text-text-gray hover:text-text-dark min-w-[44px] min-h-[44px] flex items-center justify-center"
-            aria-label="Close menu"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-text-gray hover:bg-bg-off-white hover:text-primary-navy transition-colors"
+            aria-label={t("closeMenu")}
           >
-            &times;
+            <IconX size={20} stroke={1.8} />
           </button>
         </div>
 
-        <nav className="flex flex-col p-5 gap-1">
-          {[
-            { href: "/", label: "Home" },
-            { href: "#", label: "My Fundraisers" },
-            { href: "#", label: "Donations" },
-            { href: "#", label: "Search" },
-            { href: "/campaigns/1", label: "Donate" },
-            { href: "#", label: "Fundraise" },
-            { href: "/how", label: "How Benefactor Works" },
-            { href: "/about", label: "About Benefactor" },
-            { href: "/careers", label: "Careers" },
-            ...(session
-              ? [{ href: "/dashboard", label: session.user.name || "Dashboard" }]
-              : [{ href: "/signin", label: "Sign in" }]),
-          ].map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              onClick={onClose}
-              className="py-3 px-2 text-base text-text-dark hover:bg-bg-off-white rounded-sm transition-colors"
-            >
-              {link.label}
-            </Link>
+        <nav className="flex-1 overflow-y-auto px-5 py-6 space-y-7">
+          {sections.map((s, i) => (
+            <div key={i}>
+              {s.heading && (
+                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-text-gray mb-3 px-2">
+                  {s.heading}
+                </p>
+              )}
+              <div className="space-y-0.5">
+                {s.links.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={onClose}
+                    className="block py-3 px-3 rounded-xl text-[15px] font-semibold text-primary-navy hover:bg-bg-off-white transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
           ))}
+        </nav>
 
+        <div className="p-5 border-t border-surface-muted">
           <Link
             href="/start"
             onClick={onClose}
-            className="mt-4 flex items-center justify-center h-12 rounded-btn font-bold text-sm border-2 border-primary-yellow text-primary-navy hover:bg-primary-yellow transition-colors"
+            className="flex items-center justify-center h-12 rounded-[100px] font-bold text-[14px] bg-primary-yellow text-primary-navy shadow-md hover:bg-primary-yellow-hover hover:shadow-lg active:scale-[0.98] transition-all"
           >
-            Start a Benefactor
+            {t("startBenefactor")}
           </Link>
-        </nav>
-      </div>
+        </div>
+      </aside>
     </>
   );
 }

@@ -4,15 +4,16 @@ import { useReducer, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { StripeWrapper } from "./stripe-wrapper";
 import Image from "next/image";
-import { ProgressCircle } from "@/components/ui/progress-circle";
+import { IconShieldCheck } from "@tabler/icons-react";
 import { DonationTabs } from "./donation-tabs";
 import { AmountGrid } from "./amount-grid";
 import { TipSection } from "./tip-section";
-import { PaymentMethods } from "./payment-methods";
+import { PaymentMethods, type PaymentMethod } from "./payment-methods";
 import { DonationSummary } from "./donation-summary";
+import { CircularProgress } from "@/components/ui/progress-bar";
 import { createPaymentIntent } from "@/lib/api";
-
-type PaymentMethod = "paypal" | "applepay" | "gpay" | "card";
+import { useLanguage } from "@/context/LanguageContext";
+import { type CurrencyCode } from "@/lib/fx";
 
 interface CheckoutState {
   frequency: "once" | "monthly";
@@ -20,6 +21,7 @@ interface CheckoutState {
   customAmount: string;
   tipPercent: number;
   paymentMethod: PaymentMethod;
+  currency: CurrencyCode;
   isAnonymous: boolean;
   wantsUpdates: boolean;
 }
@@ -30,6 +32,7 @@ type CheckoutAction =
   | { type: "SET_CUSTOM_AMOUNT"; payload: string }
   | { type: "SET_TIP"; payload: number }
   | { type: "SET_PAYMENT"; payload: PaymentMethod }
+  | { type: "SET_CURRENCY"; payload: CurrencyCode }
   | { type: "TOGGLE_ANONYMOUS" }
   | { type: "TOGGLE_UPDATES" };
 
@@ -49,6 +52,8 @@ function reducer(state: CheckoutState, action: CheckoutAction): CheckoutState {
       return { ...state, tipPercent: action.payload };
     case "SET_PAYMENT":
       return { ...state, paymentMethod: action.payload };
+    case "SET_CURRENCY":
+      return { ...state, currency: action.payload };
     case "TOGGLE_ANONYMOUS":
       return { ...state, isAnonymous: !state.isAnonymous };
     case "TOGGLE_UPDATES":
@@ -62,6 +67,7 @@ const initialState: CheckoutState = {
   customAmount: ".00",
   tipPercent: 17.5,
   paymentMethod: "paypal",
+  currency: "EUR",
   isAnonymous: false,
   wantsUpdates: false,
 };
@@ -69,7 +75,11 @@ const initialState: CheckoutState = {
 const presetAmounts = [25, 50, 100, 150, 200, 500];
 
 export function CheckoutCard() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { language } = useLanguage();
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    currency: language === "lt" ? "EUR" : "GBP",
+  });
 
   const donationAmount =
     state.selectedAmount ?? (parseFloat(state.customAmount) || 0);
@@ -77,13 +87,13 @@ export function CheckoutCard() {
   const total = donationAmount + tipAmount;
 
   return (
-    <StripeWrapper amount={total}>
-      <CheckoutInner 
-        state={state} 
-        dispatch={dispatch} 
-        donationAmount={donationAmount} 
-        tipAmount={tipAmount} 
-        total={total} 
+    <StripeWrapper amount={total} currency={state.currency}>
+      <CheckoutInner
+        state={state}
+        dispatch={dispatch}
+        donationAmount={donationAmount}
+        tipAmount={tipAmount}
+        total={total}
       />
     </StripeWrapper>
   );
@@ -92,12 +102,15 @@ export function CheckoutCard() {
 function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
   state: CheckoutState, dispatch: React.Dispatch<CheckoutAction>, donationAmount: number, tipAmount: number, total: number
 }) {
+  const { t } = useLanguage();
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDonate = async () => {
-    if (state.paymentMethod !== "card" || !stripe || !elements) return;
+    // PayPal goes through its own SDK; everything else (card, applepay, gpay)
+    // is handled by the Stripe PaymentElement which auto-surfaces the right wallet.
+    if (state.paymentMethod === "paypal" || !stripe || !elements) return;
     
     setIsProcessing(true);
     try {
@@ -117,24 +130,27 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
 
       if (error) alert(error.message);
     } catch (err: any) {
-      alert(err.message || "Payment failed");
+      alert(err.message || t("checkoutPaymentFailed"));
     } finally {
       setIsProcessing(false);
     }
   };
 
   return (
-    <div className="bg-white rounded-2xl p-5 sm:p-7 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-6">
-      {/* ──── Campaign Header ──── */}
-      <div className="flex items-center gap-4">
-        <ProgressCircle percent={75} size={70} strokeWidth={3} />
-        <div>
-          <h1 className="text-lg font-bold text-primary-navy leading-snug">
-            Help a Family in Lithuania Stay Warm This Winter
-          </h1>
-          <p className="text-sm text-text-gray font-medium mt-1">
-            Still £4,335 to go. Help us build momentum.
+    <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-surface-muted space-y-7">
+      {/* Campaign header */}
+      <div className="pb-6 border-b border-surface-muted flex items-start gap-5">
+        <CircularProgress percent={53} size={72} strokeWidth={7} className="shrink-0 text-primary-navy" />
+        <div className="flex-1 min-w-0">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-text-gray mb-2">
+            {t("checkoutYouAreDonatingTo")}
           </p>
+          <h1 className="font-heading text-[clamp(20px,2vw,24px)] font-extrabold text-primary-navy leading-tight tracking-[-0.01em] mb-3">
+            {t("checkoutCampaignTitle")}
+          </h1>
+          <div className="flex items-center gap-2 text-[13px]">
+            <span className="text-text-gray">{t("checkoutToGo", { amount: "€12,238" })}</span>
+          </div>
         </div>
       </div>
 
@@ -144,11 +160,40 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
         onChange={(f) => dispatch({ type: "SET_FREQUENCY", payload: f })}
       />
 
+      {/* ──── Currency toggle ──── */}
+      <div>
+        <label className="block text-[11px] font-semibold text-text-gray uppercase tracking-[0.1em] mb-2">
+          {t("checkoutCurrency")}
+        </label>
+        <div className="inline-flex bg-bg-off-white border border-surface-muted rounded-[100px] p-1">
+          {(["EUR", "GBP"] as CurrencyCode[]).map((c) => {
+            const active = state.currency === c;
+            return (
+              <button
+                key={c}
+                type="button"
+                onClick={() => dispatch({ type: "SET_CURRENCY", payload: c })}
+                className={
+                  "h-9 px-5 rounded-[100px] text-[13px] font-bold transition-all " +
+                  (active
+                    ? "bg-primary-navy text-white shadow-sm"
+                    : "text-primary-navy hover:bg-white/60")
+                }
+              >
+                {c === "EUR" ? "€ EUR" : "£ GBP"}
+              </button>
+            );
+          })}
+        </div>
+        <p className="text-[12px] text-text-gray mt-2">{t("checkoutCurrencyNote")}</p>
+      </div>
+
       {/* ──── Amount Grid ──── */}
       <AmountGrid
         amounts={presetAmounts}
         selected={state.selectedAmount}
         customAmount={state.customAmount}
+        currency={state.currency}
         onSelect={(a) => dispatch({ type: "SET_AMOUNT", payload: a })}
         onCustomChange={(v) =>
           dispatch({ type: "SET_CUSTOM_AMOUNT", payload: v })
@@ -167,44 +212,40 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
         onChange={(m) => dispatch({ type: "SET_PAYMENT", payload: m })}
       />
 
-      {/* ──── Privacy Checkboxes ──── */}
-      <div className="space-y-0 pt-5 border-t border-[#e0e0e0]">
-        <label className="flex items-center gap-2.5 py-2 cursor-pointer min-h-[44px]">
+      {/* Privacy checkboxes */}
+      <div className="space-y-1 pt-5 border-t border-surface-muted">
+        <label className="flex items-start gap-3 py-2 cursor-pointer">
           <input
             type="checkbox"
             checked={state.isAnonymous}
             onChange={() => dispatch({ type: "TOGGLE_ANONYMOUS" })}
-            className="w-5 h-5 accent-primary-navy rounded-sm flex-shrink-0"
+            className="w-5 h-5 accent-primary-navy rounded mt-0.5 shrink-0"
           />
-          <span className="text-sm text-text-dark font-medium">
-            Don&rsquo;t display my name publicly on the fundraiser.
+          <span className="text-[14px] text-text-dark leading-relaxed">
+            {t("checkoutAnonOption")}
           </span>
         </label>
-        <label className="flex items-center gap-2.5 py-2 cursor-pointer min-h-[44px]">
+        <label className="flex items-start gap-3 py-2 cursor-pointer">
           <input
             type="checkbox"
             checked={state.wantsUpdates}
             onChange={() => dispatch({ type: "TOGGLE_UPDATES" })}
-            className="w-5 h-5 accent-primary-navy rounded-sm flex-shrink-0"
+            className="w-5 h-5 accent-primary-navy rounded mt-0.5 shrink-0"
           />
-          <span className="text-sm text-text-dark font-medium">
-            Get occasional marketing updates from Benefactor.
+          <span className="text-[14px] text-text-dark leading-relaxed">
+            {t("checkoutUpdatesOption")}
           </span>
         </label>
       </div>
 
       {/* ──── Summary ──── */}
-      <DonationSummary donation={donationAmount} tip={tipAmount} total={total} />
+      <DonationSummary donation={donationAmount} tip={tipAmount} total={total} currency={state.currency} />
 
       {/* ──── Donate Button ──── */}
       <button
         onClick={handleDonate}
         disabled={isProcessing}
-        className={`w-full h-14 rounded-[30px] font-bold text-base cursor-pointer transition-all duration-300 flex items-center justify-center gap-3 hover:opacity-90 hover:-translate-y-0.5 ${
-          state.paymentMethod === "gpay"
-            ? "bg-black text-white"
-            : "bg-primary-yellow text-primary-navy"
-        } disabled:opacity-70`}
+        className="w-full h-14 rounded-[100px] font-bold text-[16px] cursor-pointer transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg active:scale-[0.98] bg-primary-yellow text-primary-navy hover:bg-primary-yellow-hover disabled:opacity-70 disabled:shadow-none"
       >
         {isProcessing ? (
           <div className="w-5 h-5 border-2 border-primary-navy border-t-transparent rounded-full animate-spin" />
@@ -219,54 +260,53 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
                 className="h-[22px] w-auto"
               />
             )}
+            {state.paymentMethod === "applepay" && (
+              <Image
+                src="/assets/apple-pay.png"
+                alt="Apple Pay"
+                width={64}
+                height={26}
+                className="h-[26px] w-auto"
+              />
+            )}
             {state.paymentMethod === "gpay" && (
               <Image
                 src="/assets/google-pay-mark.svg"
                 alt="Google Pay"
-                width={60}
-                height={36}
-                className="h-9 w-auto"
+                width={64}
+                height={26}
+                className="h-[26px] w-auto"
               />
             )}
-            {state.paymentMethod === "card" && "Donate now"}
+            {state.paymentMethod === "card" && t("checkoutDonateNow")}
           </>
         )}
       </button>
 
-      {/* ──── Terms ──── */}
-      <p className="text-[13px] text-text-gray text-center leading-relaxed font-medium">
-        By continuing, you agree to Benefactor&rsquo;s{" "}
-        <a href="#" className="text-primary-navy underline hover:no-underline">
-          Terms of Service
+      {/* Terms */}
+      <p className="text-[12px] text-text-gray text-center leading-relaxed">
+        {t("checkoutAgreeTerms")}{" "}
+        <a href="#" className="text-primary-navy font-semibold underline hover:no-underline">
+          {t("checkoutTermsLink")}
         </a>{" "}
-        and{" "}
-        <a href="#" className="text-primary-navy underline hover:no-underline">
-          Privacy Notice
+        {t("checkoutAnd")}{" "}
+        <a href="#" className="text-primary-navy font-semibold underline hover:no-underline">
+          {t("checkoutPrivacyLink")}
         </a>
         .
       </p>
 
-      {/* ──── Protection Notice ──── */}
-      <div className="flex items-start gap-3 p-4 bg-bg-off-white rounded-xl">
-        <Image
-          src="/assets/shield-icon.svg"
-          alt="Security guarantee"
-          width={28}
-          height={28}
-          className="flex-shrink-0 mt-0.5"
-        />
+      {/* Protection notice */}
+      <div className="flex items-start gap-3 p-5 bg-bg-off-white rounded-2xl border border-surface-muted">
+        <IconShieldCheck size={24} stroke={1.6} className="text-primary-navy shrink-0 mt-0.5" />
         <div>
-          <h4 className="text-sm font-bold text-primary-navy mb-1">
-            Benefactor protects your donation
+          <h4 className="font-heading text-[14px] font-extrabold text-primary-navy mb-1">
+            {t("checkoutProtectionTitle")}
           </h4>
-          <p className="text-[13px] text-text-gray font-medium leading-relaxed">
-            We guarantee you a full refund for up to a year in the rare case
-            that fraud occurs.{" "}
-            <a
-              href="#"
-              className="text-primary-navy underline hover:no-underline"
-            >
-              Learn more
+          <p className="text-[13px] text-text-gray leading-relaxed">
+            {t("checkoutProtectionDesc")}{" "}
+            <a href="#" className="text-primary-navy font-semibold underline hover:no-underline">
+              {t("checkoutLearnMore")}
             </a>
           </p>
         </div>

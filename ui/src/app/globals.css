@@ -1,13 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  /* Colors */
-  --color-primary-yellow: #FFC800;
-  --color-primary-navy: #0E3347;
+  /* Brand + UI palette (single source) */
+  --color-primary-yellow: #ffc800;
+  --color-primary-yellow-hover: #e6b400;
+  --color-primary-navy: #002538;
   --color-text-dark: #002538;
-  --color-text-gray: #666666;
-  --color-bg-light: #FFFFFF;
-  --color-bg-off-white: #F8F9FA;
+  --color-text-gray: #5f6b7a;
+  --color-bg-light: #ffffff;
+  --color-bg-off-white: #f7f9fb;
+  --color-surface-muted: #eef2f6;
 
   /* Fonts (set by next/font CSS variables) */
   --font-heading: var(--font-primary, var(--font-inter));
@@ -45,7 +47,7 @@
   body {
     font-family: var(--font-body);
     color: var(--color-text-dark);
-    background: var(--color-bg-light);
+    background: var(--color-bg-off-white);
     line-height: 1.625;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -73,6 +75,21 @@
 @keyframes scrollDonors {
   0% { transform: translateY(0); }
   100% { transform: translateY(-50%); }
+}
+
+/* Donor feed vertical ticker — used in DonationSidebar */
+.animate-donor-marquee {
+  animation-name: scrollDonors;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+.animate-donor-marquee:hover {
+  animation-play-state: paused;
+}
+.donor-marquee-mask {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0, #000 18%, #000 82%, transparent 100%);
 }
 
 @keyframes slow-bounce {

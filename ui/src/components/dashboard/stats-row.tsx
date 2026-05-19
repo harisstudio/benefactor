@@ -1,20 +1,33 @@
+import { IconCoin, IconHeartFilled, IconUsers, IconShare3, IconTrendingUp } from "@tabler/icons-react";
+
 const stats = [
-  { label: "Total Raised", value: "\u00A32,450", change: "\u2191 12% this week" },
-  { label: "Donations", value: "48", change: "\u2191 5 new today" },
-  { label: "Supporters", value: "34", change: "\u2191 3 new" },
-  { label: "Shares", value: "126", change: "\u2191 18 this week" },
+  { label: "Total raised", value: "£2,450", change: "+12% this week", Icon: IconCoin },
+  { label: "Donations", value: "48", change: "+5 today", Icon: IconHeartFilled },
+  { label: "Supporters", value: "34", change: "+3 new", Icon: IconUsers },
+  { label: "Shares", value: "126", change: "+18 this week", Icon: IconShare3 },
 ];
 
 export function StatsRow() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {stats.map((stat) => (
-        <div key={stat.label} className="bg-white rounded-md shadow-sm p-5">
-          <span className="block text-xs text-text-gray">{stat.label}</span>
-          <span className="block text-2xl font-bold text-primary-navy mt-1 font-heading">
-            {stat.value}
-          </span>
-          <span className="block text-xs text-green-600 mt-1">{stat.change}</span>
+      {stats.map(({ label, value, change, Icon }) => (
+        <div
+          key={label}
+          className="bg-white border border-surface-muted rounded-2xl p-5 md:p-6 hover:shadow-md transition-shadow"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[11px] font-semibold text-text-gray uppercase tracking-[0.1em]">
+              {label}
+            </span>
+            <Icon size={18} stroke={1.7} className="text-primary-navy/60" />
+          </div>
+          <p className="font-heading text-[clamp(22px,2.4vw,30px)] font-extrabold text-primary-navy leading-none">
+            {value}
+          </p>
+          <p className="flex items-center gap-1 mt-2 text-[12px] font-semibold text-emerald-600">
+            <IconTrendingUp size={13} stroke={2} />
+            {change}
+          </p>
         </div>
       ))}
     </div>

@@ -1,33 +1,56 @@
-const activities = [
-  { avatar: "\uD83D\uDC9B", name: "Emma W.", action: "donated", time: "2 minutes ago", amount: "\u00A350" },
-  { avatar: "\uD83D\uDC9B", name: "James M.", action: "donated", time: "15 minutes ago", amount: "\u00A3100" },
-  { avatar: "\uD83D\uDC9B", name: "Sarah K.", action: "donated", time: "1 hour ago", amount: "\u00A325" },
-  { avatar: "\uD83D\uDD17", name: "Ali R.", action: "shared your fundraiser", time: "2 hours ago", amount: "" },
-  { avatar: "\uD83D\uDC9B", name: "Anonymous", action: "donated", time: "3 hours ago", amount: "\u00A375" },
+"use client";
+
+import { IconHeartFilled, IconShare3, type Icon } from "@tabler/icons-react";
+import { useLanguage } from "@/context/LanguageContext";
+
+type Activity = {
+  Icon: Icon;
+  iconClass: string;
+  nameKey: string;
+  actionKey: string;
+  timeKey: string;
+  amount?: string;
+};
+
+const activities: Activity[] = [
+  { Icon: IconHeartFilled, iconClass: "text-rose-500 bg-rose-50", nameKey: "dashActDonorEmma", actionKey: "dashActDonated", timeKey: "dashActTime2m", amount: "£50" },
+  { Icon: IconHeartFilled, iconClass: "text-rose-500 bg-rose-50", nameKey: "dashActDonorJames", actionKey: "dashActDonated", timeKey: "dashActTime15m", amount: "£100" },
+  { Icon: IconHeartFilled, iconClass: "text-rose-500 bg-rose-50", nameKey: "dashActDonorSarah", actionKey: "dashActDonated", timeKey: "dashActTime1h", amount: "£25" },
+  { Icon: IconShare3, iconClass: "text-sky-600 bg-sky-50", nameKey: "dashActDonorAli", actionKey: "dashActShared", timeKey: "dashActTime2h" },
+  { Icon: IconHeartFilled, iconClass: "text-rose-500 bg-rose-50", nameKey: "dashActDonorAnonymous", actionKey: "dashActDonated", timeKey: "dashActTime3h", amount: "£75" },
 ];
 
 export function ActivityFeed() {
+  const { t } = useLanguage();
   return (
-    <div>
-      <h2 className="text-lg font-bold text-primary-navy mb-4">Recent Activity</h2>
-      <div className="space-y-0">
+    <div className="bg-white border border-surface-muted rounded-2xl p-5 md:p-6">
+      <h2 className="font-heading text-[18px] font-extrabold text-primary-navy mb-4">
+        {t("dashRecentActivity")}
+      </h2>
+      <ul>
         {activities.map((a, i) => (
-          <div key={i} className="flex items-center gap-3 py-3 border-b border-gray-100 last:border-0">
-            <span className="text-xl flex-shrink-0">{a.avatar}</span>
+          <li
+            key={i}
+            className="flex items-center gap-3 py-3 border-b border-surface-muted last:border-0"
+          >
+            <span className={`shrink-0 w-9 h-9 rounded-full flex items-center justify-center ${a.iconClass}`}>
+              <a.Icon size={15} stroke={1.8} />
+            </span>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-text-dark">
-                <strong>{a.name}</strong> {a.action}
+              <p className="text-[14px] text-primary-navy">
+                <strong className="font-bold">{t(a.nameKey)}</strong>{" "}
+                <span className="text-text-gray">{t(a.actionKey)}</span>
               </p>
-              <span className="text-xs text-text-gray">{a.time}</span>
+              <p className="text-[12px] text-text-gray mt-0.5">{t(a.timeKey)}</p>
             </div>
             {a.amount && (
-              <span className="text-sm font-bold text-primary-navy flex-shrink-0">
+              <span className="font-heading text-[14px] font-extrabold text-primary-navy shrink-0 tabular-nums">
                 {a.amount}
               </span>
             )}
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }

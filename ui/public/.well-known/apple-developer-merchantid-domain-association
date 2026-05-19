@@ -1,0 +1,24 @@
+REPLACE_THIS_FILE_WITH_THE_BLOB_DOWNLOADED_FROM_STRIPE_DASHBOARD
+# How to fill this file (do this ONCE per production domain):
+#
+# 1. Go to https://dashboard.stripe.com/settings/payment_methods
+# 2. Enable "Apple Pay" if it isn't already.
+# 3. Under "Apple Pay → Web domains", click "Add a new domain".
+# 4. Enter your production domain (e.g. benefactor.com).
+# 5. Stripe will give you a file named
+#       apple-developer-merchantid-domain-association
+#    Download it.
+# 6. Replace the ENTIRE contents of this file with that downloaded blob
+#    (no comments, no whitespace — just the raw token Stripe gave you).
+# 7. Deploy. Stripe will fetch
+#       https://YOUR_DOMAIN/.well-known/apple-developer-merchantid-domain-association
+#    over HTTPS and validate it. Once validated, Apple Pay tile will start
+#    appearing automatically in the Stripe PaymentElement on Safari / iOS.
+#
+# Notes:
+# - The path must be served as plain text (Next.js serves files in /public
+#   as-is, so this is already correct).
+# - Apple Pay does NOT show up on http://localhost — you must test on
+#   the deployed HTTPS domain that Stripe has verified.
+# - Google Pay needs no domain verification; it appears automatically in
+#   supported browsers (Chrome on Android, Chrome desktop with a saved card).

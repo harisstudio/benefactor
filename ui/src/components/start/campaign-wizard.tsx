@@ -11,6 +11,9 @@ import { StepStory } from "./step-story";
 import { StepReview } from "./step-review";
 import { StepShare } from "./step-share";
 import Link from "next/link";
+import Image from "next/image";
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
+import { useLanguage } from "@/context/LanguageContext";
 import { authClient } from "@/lib/auth-client";
 
 interface WizardState {
@@ -92,26 +95,6 @@ const initialState: WizardState = {
   phone: "",
 };
 
-const stepTitles = [
-  "Let's begin your fundraising journey",
-  "Who will benefit from the funds?",
-  "Set your fundraising goal",
-  "Make your fundraiser stand out",
-  "Tell potential donors your story",
-  "Submit for review",
-  "Your project is being reviewed!",
-];
-
-const stepSubtitles = [
-  "We're here to guide you every step of the way.",
-  "Let us know who the funds are intended for.",
-  "You can always change this later. We'll help you along the way.",
-  "A great photo or video can make all the difference.",
-  "A compelling story will help you connect with donors.",
-  "Enter your contact details and submit for approval.",
-  "",
-];
-
 function canContinue(state: WizardState): boolean {
   switch (state.currentStep) {
     case 0: return state.category !== "";
@@ -125,8 +108,28 @@ function canContinue(state: WizardState): boolean {
 }
 
 export function CampaignWizard() {
+  const { t } = useLanguage();
   const [state, dispatch] = useReducer(reducer, initialState);
   const { data: session } = authClient.useSession();
+
+  const stepTitles = [
+    t("wizardStepTitle0"),
+    t("wizardStepTitle1"),
+    t("wizardStepTitle2"),
+    t("wizardStepTitle3"),
+    t("wizardStepTitle4"),
+    t("wizardStepTitle5"),
+    t("wizardStepTitle6"),
+  ];
+  const stepSubtitles = [
+    t("wizardStepSubtitle0"),
+    t("wizardStepSubtitle1"),
+    t("wizardStepSubtitle2"),
+    t("wizardStepSubtitle3"),
+    t("wizardStepSubtitle4"),
+    t("wizardStepSubtitle5"),
+    t("wizardStepSubtitle6"),
+  ];
 
   const next = useCallback(() => dispatch({ type: "NEXT" }), []);
   const prev = useCallback(() => dispatch({ type: "PREV" }), []);
@@ -147,29 +150,42 @@ export function CampaignWizard() {
       />
 
       {/* Right content */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen bg-white">
         {/* Header */}
-        <div className="flex justify-end p-5">
+        <div className="flex justify-between items-center px-5 sm:px-8 py-5 border-b border-surface-muted lg:border-b-0">
+          <Link href="/" className="lg:hidden flex items-center">
+            <Image src="/assets/logo.svg" alt="Benefactor" width={120} height={24} className="h-auto w-[110px]" priority />
+          </Link>
+          <div className="hidden lg:block" />
           {session ? (
-            <Link href="/dashboard" className="text-sm text-text-gray hover:text-text-dark transition-colors min-h-[44px] flex items-center">
-              {session.user.name || "Dashboard"}
+            <Link
+              href="/profile"
+              className="text-[13px] font-semibold text-text-gray hover:text-primary-navy transition-colors min-h-[44px] flex items-center"
+            >
+              {session.user.name || t("navProfile")}
             </Link>
           ) : (
-            <Link href="/signin" className="text-sm text-text-gray hover:text-text-dark transition-colors min-h-[44px] flex items-center">
-              Sign in
+            <Link
+              href="/signin"
+              className="text-[13px] font-semibold text-text-gray hover:text-primary-navy transition-colors min-h-[44px] flex items-center"
+            >
+              {t("signin")}
             </Link>
           )}
         </div>
 
         {/* Step content */}
-        <div className="flex-1 flex items-start justify-center px-5 pb-24">
+        <div className="flex-1 flex items-start justify-center px-5 sm:px-8 pt-8 pb-28">
           <div className="w-full max-w-[560px]">
-            {/* Mobile title (visible on smaller screens) */}
-            <div className="lg:hidden mb-6">
-              <h1 className="text-xl font-bold text-primary-navy">
+            {/* Mobile title */}
+            <div className="lg:hidden mb-7">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-text-gray mb-2">
+                {t("wizardStepOf", { current: Math.min(state.currentStep + 1, 6), total: 6 })}
+              </p>
+              <h1 className="font-heading text-[26px] font-extrabold text-primary-navy leading-tight tracking-[-0.01em]">
                 {stepTitles[state.currentStep]}
               </h1>
-              <p className="text-sm text-text-gray mt-1">
+              <p className="text-[14px] text-text-gray mt-2">
                 {stepSubtitles[state.currentStep]}
               </p>
             </div>
@@ -227,36 +243,45 @@ export function CampaignWizard() {
 
         {/* Bottom bar */}
         {state.currentStep < 6 && (
-          <div className="fixed bottom-0 left-0 right-0 lg:left-[38%] bg-white border-t border-gray-200 px-5 py-3 z-40">
-            <ProgressBar percent={progress} className="mb-3" />
-            <div className="flex items-center justify-between max-w-[560px] mx-auto">
-              {state.currentStep > 0 ? (
-                <button
-                  onClick={prev}
-                  className="text-sm font-medium text-text-dark hover:text-primary-navy min-h-[44px]"
-                >
-                  &larr;
-                </button>
-              ) : (
-                <div />
-              )}
+          <div className="fixed bottom-0 left-0 right-0 lg:left-[38%] bg-white/95 backdrop-blur border-t border-surface-muted px-5 sm:px-8 py-4 z-40">
+            <div className="max-w-[560px] mx-auto">
+              <div className="h-1 bg-surface-muted rounded-full overflow-hidden mb-4">
+                <div
+                  className="h-full bg-primary-yellow rounded-full transition-[width] duration-500"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                {state.currentStep > 0 ? (
+                  <button
+                    onClick={prev}
+                    className="inline-flex items-center gap-1.5 h-11 px-3 text-[14px] font-semibold text-text-gray hover:text-primary-navy transition-colors"
+                  >
+                    <IconArrowLeft size={16} />
+                    {t("wizardBack")}
+                  </button>
+                ) : (
+                  <div />
+                )}
 
-              <div className="flex items-center gap-3">
-                {state.currentStep === 3 && (
+                <div className="flex items-center gap-3">
+                  {state.currentStep === 3 && (
+                    <button
+                      onClick={next}
+                      className="h-11 px-3 text-[14px] font-semibold text-text-gray hover:text-primary-navy transition-colors"
+                    >
+                      {t("wizardSkip")}
+                    </button>
+                  )}
                   <button
                     onClick={next}
-                    className="text-sm font-medium text-text-gray hover:text-text-dark min-h-[44px]"
+                    disabled={!canContinue(state)}
+                    className="inline-flex items-center gap-1.5 h-11 px-6 rounded-[100px] font-bold text-[14px] bg-primary-yellow text-primary-navy shadow-md hover:bg-primary-yellow-hover hover:shadow-lg active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none transition-all"
                   >
-                    Skip for now
+                    {state.currentStep === 4 ? t("wizardReview") : state.currentStep === 5 ? t("wizardSubmit") : t("wizardContinue")}
+                    <IconArrowRight size={16} />
                   </button>
-                )}
-                <button
-                  onClick={next}
-                  disabled={!canContinue(state)}
-                  className="h-11 px-6 rounded-btn font-bold text-sm bg-primary-yellow text-primary-navy disabled:opacity-40 disabled:cursor-not-allowed hover:brightness-110 transition-all min-w-[44px]"
-                >
-                  {state.currentStep === 4 ? "Review" : state.currentStep === 5 ? "Submit to Review" : "Continue"}
-                </button>
+                </div>
               </div>
             </div>
           </div>

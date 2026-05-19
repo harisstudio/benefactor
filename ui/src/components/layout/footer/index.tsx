@@ -2,36 +2,28 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useLocale } from "@/lib/i18n/LocaleContext";
 import { LocaleSelector } from "./locale-selector";
 import { TrustSection } from "./trust-section";
 import { LegalLinks } from "./legal-links";
-import { useLanguage } from "@/context/LanguageContext"; // For legacy translations like 'Donate', 'About' temporarily
-
-// Using some standard layout links mapped across
-const fundraiseLinks = [
-  { label: "Start a Benefactor", href: "/start" },
-  { label: "Fundraising categories", href: "/campaigns/1" },
-];
-
-const aboutLinks = [
-  { label: "How Benefactor works", href: "/how" },
-  { label: "About Benefactor", href: "/about" },
-  { label: "Careers", href: "/careers" },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export function GlobalFooter() {
-  const { t: localeT } = useLocale();
-  // Using legacy context just to preserve backwards-compatible terms we defined earlier in the project. 
-  // In a full migration, these would move into translations.ts
   const { t: legacyT } = useLanguage();
 
+  const fundraiseLinks = [
+    { label: legacyT("footerStartLabel"), href: "/start" },
+    { label: legacyT("footerFundraisingCategories"), href: "/campaigns/1" },
+  ];
+
+  const aboutLinks = [
+    { label: legacyT("footerHowItWorks"), href: "/how" },
+    { label: legacyT("footerAboutLink"), href: "/about" },
+    { label: legacyT("footerCareers"), href: "/careers" },
+  ];
+
   return (
-    <footer 
-      className="relative text-white overflow-hidden mt-0"
-      style={{
-        backgroundColor: "var(--primary-navy, #0E3347)",
-      }}
+    <footer
+      className="relative text-primary-navy overflow-hidden mt-0 bg-white border-t border-surface-muted"
     >
       <div className="max-w-container mx-auto px-[clamp(20px,5vw,80px)] pt-16 md:pt-24 pb-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
@@ -39,8 +31,8 @@ export function GlobalFooter() {
           {/* Brand & Contact Column */}
           <div className="flex flex-col gap-8 md:pr-4">
             <Link href="/">
-              <Image 
-                src="/assets/logo-footer.png" 
+              <Image
+                src="/assets/logo.svg"
                 alt="Benefactor Logo" 
                 width={180} 
                 height={54} 
@@ -53,13 +45,13 @@ export function GlobalFooter() {
 
           {/* Quick Links Columns */}
           <div className="md:pl-6">
-            <h4 className="text-[16px] font-bold mb-6 text-white tracking-wide uppercase">
-              {legacyT("fundraise").replace(" ▾", "") || "Fundraise"}
+            <h4 className="text-[16px] font-bold mb-6 text-primary-navy tracking-wide uppercase">
+              {legacyT("fundraise")}
             </h4>
             <ul className="space-y-4">
               {fundraiseLinks.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-[14px] text-white/80 hover:text-white transition-all">
+                  <Link href={link.href} className="text-[14px] text-text-gray hover:text-primary-navy transition-all">
                     {link.label}
                   </Link>
                 </li>
@@ -68,13 +60,13 @@ export function GlobalFooter() {
           </div>
 
           <div>
-            <h4 className="text-[16px] font-bold mb-6 text-white tracking-wide uppercase">
-              {legacyT("footerAbout") || "About"}
+            <h4 className="text-[16px] font-bold mb-6 text-primary-navy tracking-wide uppercase">
+              {legacyT("about")}
             </h4>
             <ul className="space-y-4">
               {aboutLinks.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="text-[14px] text-white/80 hover:text-white transition-all">
+                  <Link href={link.href} className="text-[14px] text-text-gray hover:text-primary-navy transition-all">
                     {link.label}
                   </Link>
                 </li>
@@ -88,12 +80,12 @@ export function GlobalFooter() {
         <TrustSection />
       </div>
 
-      {/* Bottom White Bar */}
-      <div className="bg-white text-primary-navy py-5 relative z-10 w-full rounded-tl-sm rounded-tr-sm">
+      {/* Bottom bar */}
+      <div className="border-t border-surface-muted text-primary-navy py-5 relative z-10 w-full">
         <div className="max-w-container mx-auto px-5 flex flex-col xl:flex-row xl:items-center justify-between gap-6">
           <div className="flex flex-col md:flex-row md:items-center gap-x-8 gap-y-4">
             <span className="text-[13px] font-black text-primary-navy/80 tracking-tight">
-              {localeT('footer.copyright').replace('{year}', new Date().getFullYear().toString())}
+              {legacyT('footerCopyright', { year: new Date().getFullYear() })}
             </span>
             <LegalLinks />
           </div>

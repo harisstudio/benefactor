@@ -60,6 +60,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const setLanguage = (lang: LanguageCode) => {
     setLanguageState(lang);
     localStorage.setItem("benefactor_locale_lang", lang);
+    localStorage.setItem("benefactor_lang", lang);
   };
 
   const setCountry = (c: CountryCode) => {

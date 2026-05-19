@@ -1,4 +1,8 @@
+"use client";
+
+import { IconUser, IconUsers, IconHeartHandshake } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Beneficiary = "yourself" | "someone" | "charity" | "";
 
@@ -7,67 +11,57 @@ interface StepBeneficiaryProps {
   onSelect: (value: Beneficiary) => void;
 }
 
-const options: { key: Beneficiary; title: string; description: string; icon: React.ReactNode }[] = [
-  {
-    key: "yourself",
-    title: "Yourself",
-    description: "Funds are delivered to your bank account for your own use",
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-        <circle cx="12" cy="7" r="4" />
-      </svg>
-    ),
-  },
-  {
-    key: "someone",
-    title: "Someone else",
-    description: "You'll invite a beneficiary to receive funds or distribute them yourself",
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-    ),
-  },
-  {
-    key: "charity",
-    title: "Charity",
-    description: "Funds are delivered to your chosen nonprofit for you",
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-      </svg>
-    ),
-  },
-];
-
 export function StepBeneficiary({ selected, onSelect }: StepBeneficiaryProps) {
+  const { t } = useLanguage();
+  const options: {
+    key: Beneficiary;
+    title: string;
+    description: string;
+    Icon: typeof IconUser;
+  }[] = [
+    { key: "yourself", title: t("stepBenYourselfTitle"), description: t("stepBenYourselfDesc"), Icon: IconUser },
+    { key: "someone", title: t("stepBenSomeoneTitle"), description: t("stepBenSomeoneDesc"), Icon: IconUsers },
+    { key: "charity", title: t("stepBenCharityTitle"), description: t("stepBenCharityDesc"), Icon: IconHeartHandshake },
+  ];
+
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-bold text-primary-navy">
-        Who are you fundraising for?
+    <div className="space-y-3">
+      <h2 className="font-heading text-[18px] font-extrabold text-primary-navy mb-2">
+        {t("stepBeneficiaryHeading")}
       </h2>
-      {options.map((opt) => (
-        <button
-          key={opt.key}
-          onClick={() => onSelect(opt.key)}
-          className={cn(
-            "w-full flex items-center gap-4 p-4 rounded-sm border-2 text-left transition-all min-h-[44px]",
-            selected === opt.key
-              ? "border-primary-navy bg-bg-off-white"
-              : "border-gray-200 hover:border-gray-400"
-          )}
-        >
-          <div className="flex-shrink-0 text-text-gray">{opt.icon}</div>
-          <div>
-            <h3 className="text-sm font-bold text-primary-navy">{opt.title}</h3>
-            <p className="text-xs text-text-gray mt-0.5">{opt.description}</p>
-          </div>
-        </button>
-      ))}
+      {options.map((opt) => {
+        const isSelected = selected === opt.key;
+        return (
+          <button
+            key={opt.key}
+            type="button"
+            onClick={() => onSelect(opt.key)}
+            className={cn(
+              "w-full flex items-center gap-4 p-5 rounded-2xl border text-left transition-all",
+              isSelected
+                ? "border-primary-navy bg-primary-navy/5 shadow-sm"
+                : "border-surface-muted bg-white hover:border-primary-navy/40 hover:shadow-sm",
+            )}
+          >
+            <span
+              className={cn(
+                "shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center",
+                isSelected ? "bg-primary-navy text-white" : "bg-bg-off-white text-primary-navy",
+              )}
+            >
+              <opt.Icon size={24} stroke={1.7} />
+            </span>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-heading text-[15px] font-extrabold text-primary-navy">
+                {opt.title}
+              </h3>
+              <p className="text-[13px] text-text-gray mt-0.5 leading-relaxed">
+                {opt.description}
+              </p>
+            </div>
+          </button>
+        );
+      })}
     </div>
   );
 }
