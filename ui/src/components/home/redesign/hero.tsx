@@ -129,6 +129,8 @@ export function RedesignHero() {
                 <video
                   ref={videoRef}
                   src="/assets/hero-video.mp4"
+                  poster="/assets/campaign-man-new.jpg"
+                  preload="auto"
                   autoPlay
                   muted
                   loop
