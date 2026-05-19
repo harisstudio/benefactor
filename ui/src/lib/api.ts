@@ -16,18 +16,43 @@ import { roles as mockRoles } from "@/data/roles";
 
 // ─── Helpers ──────────────────────────────────────────────
 
-const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8787";
-const baseUrl = rawBaseUrl.endsWith("/api") ? rawBaseUrl : `${rawBaseUrl.replace(/\/$/, "")}/api`;
+const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+const baseUrl = rawBaseUrl.endsWith("/api")
+  ? rawBaseUrl
+  : rawBaseUrl
+    ? `${rawBaseUrl.replace(/\/$/, "")}/api`
+    : "";
+
+/**
+ * Skip the network entirely when we don't have a real backend pointed at
+ * (no env var, or pointed at localhost while running on a real host). This
+ * keeps the deployed demo snappy and the browser console clean — every
+ * route already has a typed mock fallback below.
+ */
+const API_DISABLED = (() => {
+  if (!baseUrl) return true;
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    const looksLikeLocal = /localhost|127\.0\.0\.1/.test(baseUrl);
+    const onRealHost =
+      host !== "localhost" && host !== "127.0.0.1" && !host.endsWith(".local");
+    if (looksLikeLocal && onRealHost) return true;
+  }
+  return false;
+})();
 
 /** Avoid hanging SSR when API host is wrong or offline (falls back to mocks quickly). */
 const API_FETCH_TIMEOUT_MS = 4000;
 
 /**
- * Fetch wrapper that talks to our Cloudflare Worker backend.
+ * Fetch wrapper that talks to our backend. When `API_DISABLED` is true the
+ * caller's try/catch will trip and the mock fallback runs.
  */
 async function apiFetch<T>(path: string): Promise<T> {
+  if (API_DISABLED) {
+    throw new Error("API disabled — no backend configured");
+  }
   const url = `${baseUrl}${path}`;
-  console.log(`[API Fetch] ${url}`);
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), API_FETCH_TIMEOUT_MS);
@@ -37,15 +62,13 @@ async function apiFetch<T>(path: string): Promise<T> {
       next: { revalidate: 0 },
       signal: controller.signal,
     });
-    
+
     if (!res.ok) {
-      console.error(`[API Error] ${res.status} for ${path}`);
       throw new Error(`API ${res.status}: ${path}`);
     }
-    
+
     return await res.json() as T;
   } catch (err) {
-    console.error(`[API Network Error] Failed to fetch ${url}:`, err);
     throw err;
   } finally {
     clearTimeout(timeoutId);
@@ -161,17 +184,22 @@ export async function getRoles() {
 // ─── Payments ─────────────────────────────────────────────
 
 export async function createPaymentIntent(amount: number, campaignId: string = "00000000-0000-0000-0000-000000000000") {
+  if (API_DISABLED) {
+    throw new Error(
+      "Donations are not yet enabled on this environment. Backend is being connected — please check back soon.",
+    );
+  }
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), API_FETCH_TIMEOUT_MS);
   try {
-  const res = await fetch(`${baseUrl}/donations/create-intent`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount, campaignId }),
-    signal: controller.signal,
-  });
-  if (!res.ok) throw new Error("Failed to create payment intent");
-  return res.json() as Promise<{ clientSecret: string }>;
+    const res = await fetch(`${baseUrl}/donations/create-intent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount, campaignId }),
+      signal: controller.signal,
+    });
+    if (!res.ok) throw new Error("Failed to create payment intent");
+    return res.json() as Promise<{ clientSecret: string }>;
   } finally {
     clearTimeout(timeoutId);
   }
