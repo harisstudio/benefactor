@@ -3,8 +3,9 @@ import Stripe from 'stripe';
 import { getDb } from '../db';
 import { donations, campaigns } from '../db/schema';
 import { eq, sql } from 'drizzle-orm';
+import { sendDonationReceipt } from '../lib/brevo';
 
-const webhooksRouter = new Hono<{ Bindings: { STRIPE_SECRET_KEY: string; STRIPE_WEBHOOK_SECRET: string; HYPERDRIVE: { connectionString: string } } }>();
+const webhooksRouter = new Hono<{ Bindings: { STRIPE_SECRET_KEY: string; STRIPE_WEBHOOK_SECRET: string; HYPERDRIVE: { connectionString: string }; BREVO_API_KEY?: string } }>();
 
 webhooksRouter.post('/stripe', async (c) => {
   const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, {
@@ -50,6 +51,29 @@ webhooksRouter.post('/stripe', async (c) => {
             currentAmount: sql`${campaigns.currentAmount} + ${(paymentIntent.amount / 100).toString()}`
           })
           .where(eq(campaigns.id, campaignId));
+      }
+    }
+
+    // Fire a thank-you receipt via Brevo. Pull the donor's email from the
+    // charge's billing details so wallets (Apple Pay / Google Pay) work
+    // without an extra email field. Errors here must not block the webhook
+    // 200 response — Stripe would otherwise retry the whole event.
+    if (c.env.BREVO_API_KEY) {
+      try {
+        const charges = await stripe.charges.list({ payment_intent: paymentIntent.id, limit: 1 });
+        const charge = charges.data[0];
+        const email = charge?.billing_details?.email;
+        if (email) {
+          await sendDonationReceipt({
+            apiKey: c.env.BREVO_API_KEY,
+            to: { email, name: charge.billing_details.name || undefined },
+            amount: paymentIntent.amount / 100,
+            currency: paymentIntent.currency,
+            paymentRef: paymentIntent.id,
+          });
+        }
+      } catch (err) {
+        console.error('Receipt email failed:', err);
       }
     }
   }
