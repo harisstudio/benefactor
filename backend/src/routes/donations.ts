@@ -31,9 +31,13 @@ donationsRouter.post('/create-intent', async (c) => {
       apiVersion: '2026-04-22.dahlia' as any,
     });
 
+    // Let Stripe auto-surface every payment method enabled on the account
+    // (cards, Apple Pay, Google Pay, Revolut Pay, etc.) instead of hardcoding
+    // a list. Enable/disable individual methods from the Stripe Dashboard.
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100),
       currency: paymentCurrency,
+      automatic_payment_methods: { enabled: true },
       metadata: {
         campaignId,
         donorId: session?.user?.id || 'anonymous',

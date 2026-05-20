@@ -6,7 +6,7 @@ import { IconCreditCard } from "@tabler/icons-react";
 import { CardForm } from "./card-form";
 import { useLanguage } from "@/context/LanguageContext";
 
-export type PaymentMethod = "paypal" | "applepay" | "gpay" | "card";
+export type PaymentMethod = "paypal" | "applepay" | "gpay" | "revolut" | "card";
 
 interface PaymentMethodsProps {
   selected: PaymentMethod;
@@ -40,6 +40,11 @@ export function PaymentMethods({ selected, onChange }: PaymentMethodsProps) {
       logo: { src: "/assets/google-pay-mark.svg", width: 44, height: 20, alt: "Google Pay" },
     },
     {
+      key: "revolut",
+      label: t("checkoutRevolutPay"),
+      logo: { src: "/assets/revolut-pay.svg", width: 64, height: 18, alt: "Revolut Pay" },
+    },
+    {
       key: "card",
       label: t("checkoutCard"),
       Icon: IconCreditCard,
@@ -51,7 +56,10 @@ export function PaymentMethods({ selected, onChange }: PaymentMethodsProps) {
   // Selecting them just shows the same PaymentElement, which surfaces the right wallet
   // based on the visitor's browser/device.
   const showStripeForm =
-    selected === "card" || selected === "applepay" || selected === "gpay";
+    selected === "card" ||
+    selected === "applepay" ||
+    selected === "gpay" ||
+    selected === "revolut";
 
   return (
     <div className="space-y-3">
