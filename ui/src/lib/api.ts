@@ -99,10 +99,50 @@ export async function getFeaturedCampaign(): Promise<Campaign> {
 
 // ─── Donors ───────────────────────────────────────────────
 
+interface StripeDonationDTO {
+  id: string;
+  name: string;
+  amount: number;
+  currency: string;
+  createdAt: number;
+  isAnonymous: boolean;
+  message?: string;
+}
+
+function formatTimeAgo(timestamp: number): string {
+  const seconds = Math.max(1, Math.floor((Date.now() - timestamp) / 1000));
+  if (seconds < 60) return "just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+  const days = Math.floor(hours / 24);
+  return `${days} day${days === 1 ? "" : "s"} ago`;
+}
+
+function currencySymbol(code: string): string {
+  const c = code.toUpperCase();
+  if (c === "GBP") return "£";
+  if (c === "USD") return "$";
+  return "€";
+}
+
 export async function getDonors(campaignId: string): Promise<Donor[]> {
   try {
-    // Assuming backend returns donors nested under campaign or a separate endpoint
-    return await apiFetch<Donor[]>(`/campaigns/${campaignId}/donors`);
+    const res = await apiFetch<{ donations: StripeDonationDTO[] }>("/donations/recent");
+    const live = (res?.donations || []).map((d) => ({
+      id: d.id,
+      name: d.isAnonymous ? "Anonymous" : d.name,
+      amount: d.amount,
+      currency: currencySymbol(d.currency),
+      timeAgo: formatTimeAgo(d.createdAt),
+      isAnonymous: d.isAnonymous,
+      message: d.message,
+    }));
+    // Append the historical mock donors after the live ones so the feed always
+    // looks populated even when Stripe has few recent charges.
+    void campaignId;
+    return [...live, ...mockDonors];
   } catch (err) {
     console.warn('API fetch failed, falling back to mock data:', err);
     return mockDonors;

@@ -1,7 +1,6 @@
 import type { Donor } from "@/types/campaign";
 
 export const donors: Donor[] = [
-  { id: "0",  name: "Haris",                    amount: 1,   currency: "€", timeAgo: "Today",               isAnonymous: false },
   { id: "1",  name: "William Simonaitis",       amount: 500, currency: "€", timeAgo: "November 8, 2025",   isAnonymous: false },
   { id: "2",  name: "Vaida Anuzienė",           amount: 500, currency: "€", timeAgo: "November 9, 2025",   isAnonymous: false },
   { id: "3",  name: "Victoria Pocyna",          amount: 500, currency: "€", timeAgo: "November 30, 2025",  isAnonymous: false },

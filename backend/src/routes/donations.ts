@@ -48,4 +48,51 @@ donationsRouter.post('/create-intent', async (c) => {
   }
 });
 
+/**
+ * Lightweight read-only feed of recent successful donations pulled straight
+ * from Stripe (live mode). Lets the campaign sidebar / mobile recent-donors
+ * list show real activity until the webhook → DB pipeline lands.
+ *
+ * Stripe charge fees: a tiny 'Powered by Stripe' attribution under the
+ * payment form already covers PCI / regulatory acknowledgement.
+ */
+donationsRouter.get('/recent', async (c) => {
+  if (!c.env.STRIPE_SECRET_KEY) {
+    return c.json({ donations: [] });
+  }
+
+  try {
+    const stripe = new Stripe(c.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2026-04-22.dahlia' as any,
+    });
+
+    // Pull recent charges (succeeded only). 25 is enough to fill the sidebar
+    // ticker; the frontend trims further.
+    const charges = await stripe.charges.list({ limit: 25 });
+
+    const donations = charges.data
+      .filter((ch) => ch.status === 'succeeded' && !ch.refunded)
+      .map((ch) => {
+        const billing = ch.billing_details;
+        const rawName = billing?.name?.trim();
+        const fallback = billing?.email?.split('@')[0];
+        const name = rawName || fallback || 'Anonymous';
+        return {
+          id: ch.id,
+          name,
+          amount: ch.amount / 100,
+          currency: ch.currency.toUpperCase(),
+          createdAt: ch.created * 1000,
+          isAnonymous: !rawName,
+          message: ch.metadata?.message || undefined,
+        };
+      });
+
+    return c.json({ donations });
+  } catch (error: any) {
+    console.error('Stripe recent donations error:', error);
+    return c.json({ donations: [], error: error.message }, 200);
+  }
+});
+
 export default donationsRouter;
