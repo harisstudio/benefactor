@@ -136,6 +136,42 @@ export function PaymentMethods({
         />
       </div>
 
+      {/* Revolut Pay — separate tile because it's a redirect-flow method,
+         not a native express wallet that fits ExpressCheckoutElement. */}
+      <button
+        type="button"
+        onClick={async () => {
+          if (!stripe || !elements) return;
+          try {
+            const { clientSecret } = await createPaymentIntent(total, currency, {
+              showName: !isAnonymous,
+            });
+            if (!clientSecret) throw new Error("Failed to get client secret");
+
+            const submit = await elements.submit();
+            if (submit.error) throw submit.error;
+
+            addRecentDonor({ amount: donationAmount, currency, isAnonymous });
+
+            const { error } = await stripe.confirmPayment({
+              elements,
+              clientSecret,
+              confirmParams: {
+                return_url: `${window.location.origin}/checkout/success`,
+                payment_method_data: { type: "revolut_pay" as any },
+              },
+            } as any);
+            if (error) toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: error.message });
+          } catch (err: any) {
+            toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: err?.message });
+          }
+        }}
+        className="w-full h-12 rounded-[14px] bg-[#0666EB] hover:bg-[#0552c4] active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-white font-semibold text-[15px] shadow-sm"
+      >
+        <span className="font-extrabold tracking-tight">Revolut</span>
+        <span className="opacity-90 font-medium">Pay</span>
+      </button>
+
       {/* Divider */}
       <div className="flex items-center gap-3 py-1">
         <div className="flex-1 h-px bg-surface-muted" />
