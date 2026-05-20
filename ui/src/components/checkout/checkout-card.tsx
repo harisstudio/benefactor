@@ -124,7 +124,7 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
         elements,
         clientSecret,
         confirmParams: {
-          return_url: `${window.location.origin}/dashboard`,
+          return_url: `${window.location.origin}/checkout/success`,
         },
       });
 
