@@ -13,6 +13,7 @@ import { DonationSummary } from "./donation-summary";
 import { CircularProgress } from "@/components/ui/progress-bar";
 import { createPaymentIntent } from "@/lib/api";
 import { addRecentDonor } from "@/lib/recent-donors";
+import { useToast } from "@/components/ui/toast";
 import { useLanguage } from "@/context/LanguageContext";
 import { type CurrencyCode } from "@/lib/fx";
 
@@ -69,7 +70,9 @@ const initialState: CheckoutState = {
   tipPercent: 17.5,
   paymentMethod: "card",
   currency: "EUR",
-  isAnonymous: false,
+  // Default to anonymous so donors don't accidentally publish their wallet
+  // name. They can opt in via the "Show my name publicly" checkbox below.
+  isAnonymous: true,
   wantsUpdates: false,
 };
 
@@ -104,6 +107,7 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
   state: CheckoutState, dispatch: React.Dispatch<CheckoutAction>, donationAmount: number, tipAmount: number, total: number
 }) {
   const { t } = useLanguage();
+  const toast = useToast();
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -115,7 +119,9 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
     
     setIsProcessing(true);
     try {
-      const { clientSecret } = await createPaymentIntent(total, state.currency);
+      const { clientSecret } = await createPaymentIntent(total, state.currency, {
+        showName: !state.isAnonymous,
+      });
       if (!clientSecret) throw new Error("Failed to get client secret");
 
       const { error: submitError } = await elements.submit();
@@ -140,9 +146,9 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
         },
       });
 
-      if (error) alert(error.message);
+      if (error) toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: error.message });
     } catch (err: any) {
-      alert(err.message || t("checkoutPaymentFailed"));
+      toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: err?.message });
     } finally {
       setIsProcessing(false);
     }
@@ -233,12 +239,12 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
         <label className="flex items-start gap-3 py-2 cursor-pointer">
           <input
             type="checkbox"
-            checked={state.isAnonymous}
+            checked={!state.isAnonymous}
             onChange={() => dispatch({ type: "TOGGLE_ANONYMOUS" })}
             className="w-5 h-5 accent-primary-navy rounded mt-0.5 shrink-0"
           />
           <span className="text-[14px] text-text-dark leading-relaxed">
-            {t("checkoutAnonOption")}
+            {t("checkoutShowName")}
           </span>
         </label>
         <label className="flex items-start gap-3 py-2 cursor-pointer">

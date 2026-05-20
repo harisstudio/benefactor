@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
 import { createPaymentIntent } from "@/lib/api";
 import { addRecentDonor } from "@/lib/recent-donors";
+import { useToast } from "@/components/ui/toast";
 import type { CurrencyCode } from "@/lib/fx";
 
 // Wallet identifiers reported by ExpressCheckoutElement. PayPal stays as a
@@ -32,6 +33,7 @@ export function PaymentMethods({
   isAnonymous,
 }: PaymentMethodsProps) {
   const { t } = useLanguage();
+  const toast = useToast();
   const stripe = useStripe();
   const elements = useElements();
   const [expressReady, setExpressReady] = useState(false);
@@ -45,7 +47,9 @@ export function PaymentMethods({
   const handleExpressConfirm = async () => {
     if (!stripe || !elements) return;
     try {
-      const { clientSecret } = await createPaymentIntent(total, currency);
+      const { clientSecret } = await createPaymentIntent(total, currency, {
+        showName: !isAnonymous,
+      });
       if (!clientSecret) throw new Error("Failed to get client secret");
 
       const submit = await elements.submit();
@@ -64,9 +68,9 @@ export function PaymentMethods({
           return_url: `${window.location.origin}/checkout/success`,
         },
       });
-      if (error) alert(error.message);
+      if (error) toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: error.message });
     } catch (err: any) {
-      alert(err.message || t("checkoutPaymentFailed"));
+      toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: err?.message });
     }
   };
 

@@ -6,7 +6,7 @@ const donationsRouter = new Hono<{ Bindings: { STRIPE_SECRET_KEY: string; HYPERD
 
 donationsRouter.post('/create-intent', async (c) => {
   const body = await c.req.json();
-  const { amount, currency, campaignId, message } = body;
+  const { amount, currency, campaignId, message, showName } = body;
   const allowedCurrencies = new Set(['eur', 'gbp', 'usd']);
   const paymentCurrency = allowedCurrencies.has((currency || '').toLowerCase())
     ? (currency as string).toLowerCase()
@@ -42,6 +42,7 @@ donationsRouter.post('/create-intent', async (c) => {
         campaignId,
         donorId: session?.user?.id || 'anonymous',
         message: message || '',
+        showName: showName ? 'true' : 'false',
       },
     });
 
@@ -74,21 +75,42 @@ donationsRouter.get('/recent', async (c) => {
     // ticker; the frontend trims further.
     const charges = await stripe.charges.list({ limit: 25 });
 
-    // Privacy by default: every donor is shown as "Anonymous" on the public
-    // feed regardless of what billing name the wallet handed Stripe. We'll
-    // add an opt-in toggle on the checkout form later if a donor wants
-    // their name displayed.
-    const donations = charges.data
-      .filter((ch) => ch.status === 'succeeded' && !ch.refunded)
-      .map((ch) => ({
-        id: ch.id,
-        name: 'Anonymous',
-        amount: ch.amount / 100,
-        currency: ch.currency.toUpperCase(),
-        createdAt: ch.created * 1000,
-        isAnonymous: true,
-        message: ch.metadata?.message || undefined,
-      }));
+    // Privacy default: show as "Anonymous" unless the donor explicitly
+    // opted in at checkout (metadata.showName === 'true' on the underlying
+    // PaymentIntent). When opted in, we still mask the surname for safety.
+    const donations = await Promise.all(
+      charges.data
+        .filter((ch) => ch.status === 'succeeded' && !ch.refunded)
+        .map(async (ch) => {
+          let showName = false;
+          if (ch.payment_intent && typeof ch.payment_intent === 'string') {
+            try {
+              const pi = await stripe.paymentIntents.retrieve(ch.payment_intent);
+              showName = pi.metadata?.showName === 'true';
+            } catch {
+              // ignore retrieval failures; default to anonymous
+            }
+          }
+          let displayName = 'Anonymous';
+          const rawName = ch.billing_details?.name?.trim();
+          if (showName && rawName) {
+            const parts = rawName.split(/\s+/);
+            displayName = parts[0];
+            if (parts.length > 1) {
+              displayName += ` ${parts[parts.length - 1].charAt(0).toUpperCase()}.`;
+            }
+          }
+          return {
+            id: ch.id,
+            name: displayName,
+            amount: ch.amount / 100,
+            currency: ch.currency.toUpperCase(),
+            createdAt: ch.created * 1000,
+            isAnonymous: !showName,
+            message: ch.metadata?.message || undefined,
+          };
+        }),
+    );
 
     return c.json({ donations });
   } catch (error: any) {

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { IconEye, IconEyeOff, IconArrowLeft, IconBrandGoogleFilled } from "@tabler/icons-react";
 import { authClient } from "@/lib/auth-client";
 import { useLanguage } from "@/context/LanguageContext";
+import { useToast } from "@/components/ui/toast";
 
 type AuthMode = "signin" | "signup";
 type AuthStep = "email" | "credentials";
@@ -14,6 +15,7 @@ type AuthStep = "email" | "credentials";
 export function SigninForm() {
   const { t } = useLanguage();
   const router = useRouter();
+  const toast = useToast();
   const [mode, setMode] = useState<AuthMode>("signin");
   const [step, setStep] = useState<AuthStep>("email");
   const [email, setEmail] = useState("");
@@ -44,7 +46,7 @@ export function SigninForm() {
       router.push("/dashboard");
     } catch (err) {
       const msg = err instanceof Error ? err.message : t("authFailed");
-      alert(msg);
+      toast.show({ tone: "error", title: t("authFailed"), description: msg });
     } finally {
       setIsLoading(false);
     }

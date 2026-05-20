@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { inter, manrope } from "@/lib/fonts";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { LocaleProvider } from "@/lib/i18n/LocaleContext";
+import { ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -26,7 +27,9 @@ export default function RootLayout({
       <body>
         <LocaleProvider>
           <LanguageProvider>
-            {children}
+            <ToastProvider>
+              {children}
+            </ToastProvider>
           </LanguageProvider>
         </LocaleProvider>
       </body>
