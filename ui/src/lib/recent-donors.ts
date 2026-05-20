@@ -59,12 +59,16 @@ export function addRecentDonor(input: {
   message?: string;
 }) {
   if (!isBrowser()) return;
+  const code = input.currency.toUpperCase();
+  const symbol = code === "GBP" ? "£" : code === "USD" ? "$" : "€";
   const entry: StoredDonor = {
     id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-    name: input.isAnonymous ? "Anonymous" : (input.name?.trim() || "Anonymous"),
+    // Public donor feed defaults to Anonymous; opt-in display name is a
+    // future feature once we wire up an explicit consent toggle.
+    name: "Anonymous",
     amount: Math.round(input.amount * 100) / 100,
-    currency: input.currency.toUpperCase(),
-    isAnonymous: !!input.isAnonymous,
+    currency: symbol,
+    isAnonymous: true,
     message: input.message,
     timestamp: Date.now(),
   };

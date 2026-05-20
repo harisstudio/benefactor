@@ -74,33 +74,21 @@ donationsRouter.get('/recent', async (c) => {
     // ticker; the frontend trims further.
     const charges = await stripe.charges.list({ limit: 25 });
 
+    // Privacy by default: every donor is shown as "Anonymous" on the public
+    // feed regardless of what billing name the wallet handed Stripe. We'll
+    // add an opt-in toggle on the checkout form later if a donor wants
+    // their name displayed.
     const donations = charges.data
       .filter((ch) => ch.status === 'succeeded' && !ch.refunded)
-      .map((ch) => {
-        const billing = ch.billing_details;
-        const rawName = billing?.name?.trim();
-        // Privacy default: only the first name (Apple Pay sends the full
-        // legal name) and mask the surname with an initial if present.
-        // Donors who explicitly want their full name should opt in via the
-        // checkout form (future work).
-        let displayName = 'Anonymous';
-        if (rawName) {
-          const parts = rawName.split(/\s+/);
-          displayName = parts[0];
-          if (parts.length > 1) {
-            displayName += ` ${parts[parts.length - 1].charAt(0).toUpperCase()}.`;
-          }
-        }
-        return {
-          id: ch.id,
-          name: displayName,
-          amount: ch.amount / 100,
-          currency: ch.currency.toUpperCase(),
-          createdAt: ch.created * 1000,
-          isAnonymous: !rawName,
-          message: ch.metadata?.message || undefined,
-        };
-      });
+      .map((ch) => ({
+        id: ch.id,
+        name: 'Anonymous',
+        amount: ch.amount / 100,
+        currency: ch.currency.toUpperCase(),
+        createdAt: ch.created * 1000,
+        isAnonymous: true,
+        message: ch.metadata?.message || undefined,
+      }));
 
     return c.json({ donations });
   } catch (error: any) {
