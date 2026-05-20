@@ -6,7 +6,11 @@ const donationsRouter = new Hono<{ Bindings: { STRIPE_SECRET_KEY: string; HYPERD
 
 donationsRouter.post('/create-intent', async (c) => {
   const body = await c.req.json();
-  const { amount, campaignId, message } = body;
+  const { amount, currency, campaignId, message } = body;
+  const allowedCurrencies = new Set(['eur', 'gbp', 'usd']);
+  const paymentCurrency = allowedCurrencies.has((currency || '').toLowerCase())
+    ? (currency as string).toLowerCase()
+    : 'eur';
 
   if (!amount || !campaignId) {
     return c.json({ error: 'Missing amount or campaignId' }, 400);
@@ -29,7 +33,7 @@ donationsRouter.post('/create-intent', async (c) => {
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100),
-      currency: 'usd',
+      currency: paymentCurrency,
       metadata: {
         campaignId,
         donorId: session?.user?.id || 'anonymous',

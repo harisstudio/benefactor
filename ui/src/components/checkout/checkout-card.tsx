@@ -114,7 +114,7 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
     
     setIsProcessing(true);
     try {
-      const { clientSecret } = await createPaymentIntent(total);
+      const { clientSecret } = await createPaymentIntent(total, state.currency);
       if (!clientSecret) throw new Error("Failed to get client secret");
 
       const { error: submitError } = await elements.submit();

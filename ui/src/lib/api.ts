@@ -183,7 +183,7 @@ export async function getRoles() {
 
 // ─── Payments ─────────────────────────────────────────────
 
-export async function createPaymentIntent(amount: number, campaignId: string = "00000000-0000-0000-0000-000000000000") {
+export async function createPaymentIntent(amount: number, currency: string = "eur", campaignId: string = "00000000-0000-0000-0000-000000000000") {
   if (API_DISABLED) {
     throw new Error(
       "Donations are not yet enabled on this environment. Backend is being connected — please check back soon.",
@@ -195,7 +195,7 @@ export async function createPaymentIntent(amount: number, campaignId: string = "
     const res = await fetch(`${baseUrl}/donations/create-intent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount, campaignId }),
+      body: JSON.stringify({ amount, currency: currency.toLowerCase(), campaignId }),
       signal: controller.signal,
     });
     if (!res.ok) throw new Error("Failed to create payment intent");
