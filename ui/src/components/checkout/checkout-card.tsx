@@ -12,6 +12,7 @@ import { PaymentMethods, type PaymentMethod } from "./payment-methods";
 import { DonationSummary } from "./donation-summary";
 import { CircularProgress } from "@/components/ui/progress-bar";
 import { createPaymentIntent } from "@/lib/api";
+import { addRecentDonor } from "@/lib/recent-donors";
 import { useLanguage } from "@/context/LanguageContext";
 import { type CurrencyCode } from "@/lib/fx";
 
@@ -119,6 +120,17 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
 
       const { error: submitError } = await elements.submit();
       if (submitError) throw submitError;
+
+      // Optimistically log this donor in the local recent-donors feed so
+      // the campaign sidebar updates the moment we hand off to Stripe. If
+      // the payment ultimately fails we still leave it — Stripe will only
+      // confirm successful charges, and the backend webhook will be the
+      // source of truth once that wiring lands.
+      addRecentDonor({
+        amount: donationAmount,
+        currency: state.currency,
+        isAnonymous: state.isAnonymous,
+      });
 
       const { error } = await stripe.confirmPayment({
         elements,

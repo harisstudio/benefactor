@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getRecentDonors, subscribeRecentDonors } from "@/lib/recent-donors";
 import Link from "next/link";
 import { IconShare3, IconHeartFilled, IconChevronUp, IconChevronDown } from "@tabler/icons-react";
 import type { Campaign, Donor } from "@/types/campaign";
@@ -91,13 +92,23 @@ export function DonationSidebar({ campaign, donors }: DonationSidebarProps) {
   const [showAll, setShowAll] = useState(false);
   const [sortTop, setSortTop] = useState(false);
 
+  // Pull in any donations made from this browser (via local cache) and
+  // prepend them so the feed updates the moment someone donates.
+  const [recentLocal, setRecentLocal] = useState<typeof donors>([]);
+  useEffect(() => {
+    const refresh = () => setRecentLocal(getRecentDonors());
+    refresh();
+    return subscribeRecentDonors(refresh);
+  }, []);
+
+  const mergedDonors = [...recentLocal, ...donors];
   const percent = Math.min(
     100,
     Math.round((campaign.raisedAmount / campaign.goalAmount) * 100),
   );
   const sorted = sortTop
-    ? [...donors].sort((a, b) => b.amount - a.amount)
-    : donors;
+    ? [...mergedDonors].sort((a, b) => b.amount - a.amount)
+    : mergedDonors;
 
   const shareUrl =
     typeof window !== "undefined"
@@ -141,7 +152,7 @@ export function DonationSidebar({ campaign, donors }: DonationSidebarProps) {
           </button>
         </div>
 
-        {donors.length > 0 && (
+        {mergedDonors.length > 0 && (
           <div className="border-t border-surface-muted pt-5">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-heading text-[15px] font-extrabold text-primary-navy">
@@ -196,13 +207,13 @@ export function DonationSidebar({ campaign, donors }: DonationSidebarProps) {
               </div>
             )}
 
-            {donors.length > 5 && (
+            {mergedDonors.length > 5 && (
               <button
                 type="button"
                 onClick={() => setShowAll((v) => !v)}
                 className="mt-4 w-full h-10 rounded-[100px] border border-surface-muted text-[13px] font-semibold text-primary-navy hover:bg-bg-off-white transition-all"
               >
-                {showAll ? "Show less" : `See all ${donors.length} donors`}
+                {showAll ? "Show less" : `See all ${mergedDonors.length} donors`}
               </button>
             )}
           </div>
