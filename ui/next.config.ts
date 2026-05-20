@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      { source: "/donate", destination: "/checkout", permanent: false },
+    ];
+  },
   async rewrites() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000/api";
     return [
