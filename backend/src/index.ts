@@ -12,7 +12,14 @@ import donationsRouter from './routes/donations';
 import webhooksRouter from './routes/webhooks';
 import adminRouter from './routes/admin';
 
-const app = new Hono<{ Bindings: { HYPERDRIVE: { connectionString: string }; BETTER_AUTH_SECRET?: string } }>();
+const app = new Hono<{
+  Bindings: {
+    HYPERDRIVE: { connectionString: string };
+    BETTER_AUTH_SECRET?: string;
+    GOOGLE_CLIENT_ID?: string;
+    GOOGLE_CLIENT_SECRET?: string;
+  };
+}>();
 
 app.onError((err, c) => {
   console.error('GLOBAL ERROR:', err);
@@ -60,7 +67,15 @@ app.get('/api/test-db', async (c) => {
 app.on(['POST', 'GET'], '/api/auth/**', (c) => {
   const url = new URL(c.req.url);
   const baseURL = `${url.protocol}//${url.host}/api/auth`;
-  const auth = getAuth(c.env.HYPERDRIVE.connectionString, baseURL, c.env.BETTER_AUTH_SECRET || "fallback-secret-benefactor-team-auth-2024");
+  const auth = getAuth(
+    c.env.HYPERDRIVE.connectionString,
+    baseURL,
+    c.env.BETTER_AUTH_SECRET || "fallback-secret-benefactor-team-auth-2024",
+    {
+      googleClientId: c.env.GOOGLE_CLIENT_ID,
+      googleClientSecret: c.env.GOOGLE_CLIENT_SECRET,
+    },
+  );
   return auth.handler(c.req.raw);
 });
 

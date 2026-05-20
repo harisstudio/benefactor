@@ -39,8 +39,28 @@ const verifyPassword = async ({ hash: stored, password }: { hash: string; passwo
   return diff === 0;
 };
 
-export const getAuth = (databaseUrl: string, baseURL: string = "https://api.benefactorteam.com/api/auth", secret: string = "fallback-secret-benefactor-team-auth-2024") => {
+interface AuthOptions {
+  googleClientId?: string;
+  googleClientSecret?: string;
+}
+
+export const getAuth = (
+  databaseUrl: string,
+  baseURL: string = "https://api.benefactorteam.com/api/auth",
+  secret: string = "fallback-secret-benefactor-team-auth-2024",
+  options: AuthOptions = {},
+) => {
   const db = getDb(databaseUrl);
+  const socialProviders =
+    options.googleClientId && options.googleClientSecret
+      ? {
+          google: {
+            clientId: options.googleClientId,
+            clientSecret: options.googleClientSecret,
+          },
+        }
+      : undefined;
+
   return betterAuth({
     secret,
     baseURL,
@@ -60,6 +80,7 @@ export const getAuth = (databaseUrl: string, baseURL: string = "https://api.bene
         verify: verifyPassword,
       }
     },
+    socialProviders,
     trustedOrigins: [
       "https://benefactorteam.com",
       "https://api.benefactorteam.com",

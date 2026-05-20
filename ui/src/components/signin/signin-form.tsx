@@ -77,6 +77,17 @@ export function SigninForm() {
           <>
             <button
               type="button"
+              onClick={async () => {
+                try {
+                  await authClient.signIn.social({
+                    provider: "google",
+                    callbackURL: "/",
+                  });
+                } catch (err) {
+                  const msg = err instanceof Error ? err.message : t("authFailed");
+                  toast.show({ tone: "error", title: t("authFailed"), description: msg });
+                }
+              }}
               className="w-full h-12 flex items-center justify-center gap-2.5 border border-surface-muted rounded-[14px] text-[14px] font-semibold text-primary-navy hover:bg-bg-off-white transition-colors"
             >
               <IconBrandGoogleFilled size={18} />
