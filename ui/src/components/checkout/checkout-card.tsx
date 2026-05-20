@@ -67,7 +67,7 @@ const initialState: CheckoutState = {
   selectedAmount: null,
   customAmount: ".00",
   tipPercent: 17.5,
-  paymentMethod: "paypal",
+  paymentMethod: "card",
   currency: "EUR",
   isAnonymous: false,
   wantsUpdates: false,
@@ -222,6 +222,10 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
       <PaymentMethods
         selected={state.paymentMethod}
         onChange={(m) => dispatch({ type: "SET_PAYMENT", payload: m })}
+        total={total}
+        currency={state.currency}
+        donationAmount={donationAmount}
+        isAnonymous={state.isAnonymous}
       />
 
       {/* Privacy checkboxes */}
