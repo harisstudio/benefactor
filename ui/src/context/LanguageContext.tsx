@@ -66,6 +66,16 @@ const en: Dict = {
   heroHelpFamilyLithuania: "Help a Family in Lithuania",
   heroDonateNow: "Donate now",
 
+  // ─── Checkout success ──────────────────────────────────────────────────
+  successHeading: "Thank you for your donation!",
+  successTagline: "Every donation is a new hope.",
+  successBody: "Your kindness brings real change to someone's life today. We've sent a receipt to your email — keep an eye on your inbox for updates on the impact of your gift.",
+  successBackHome: "Back home",
+  successViewCampaign: "View campaign",
+  successShare: "Share",
+  successShareText: "I just supported a cause on Benefactor — every donation is a new hope. Join me:",
+  successReceiptNote: "A receipt has been sent to your email. Powered by Stripe — secure payments.",
+
   // ─── Featured (home) ────────────────────────────────────────────────────
   featuredHeading: "Featured campaign",
   featuredViewAll: "View all",
@@ -616,6 +626,16 @@ const lt: Dict = {
   heroWatchOnYoutube: "Žiūrėti per YouTube",
   heroHelpFamilyLithuania: "Padėk šeimai Lietuvoje",
   heroDonateNow: "Paaukoti dabar",
+
+  // ─── Checkout success ──────────────────────────────────────────────────
+  successHeading: "Ačiū už jūsų auką!",
+  successTagline: "Kiekviena auka – nauja viltis.",
+  successBody: "Jūsų gerumas šiandien atneša tikrus pokyčius kažkieno gyvenime. Kvitą išsiuntėme į jūsų el. paštą – stebėkite gautuosius, kad sužinotumėte apie jūsų aukos poveikį.",
+  successBackHome: "Grįžti į pradžią",
+  successViewCampaign: "Peržiūrėti kampaniją",
+  successShare: "Pasidalinti",
+  successShareText: "Ką tik parėmiau projektą Benefactor platformoje – kiekviena auka yra nauja viltis. Prisijunk:",
+  successReceiptNote: "Kvitas išsiųstas į jūsų el. paštą. Mokėjimus saugiai apdoroja Stripe.",
 
   // Featured
   featuredHeading: "Rekomenduojama rinkliava",
