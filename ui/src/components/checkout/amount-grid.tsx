@@ -65,7 +65,7 @@ export function AmountGrid({
           placeholder={t("checkoutOtherAmount")}
           className="flex-1 h-14 px-3 font-heading text-[22px] font-extrabold text-primary-navy outline-none placeholder:font-sans placeholder:text-[15px] placeholder:font-medium placeholder:text-text-gray/70 bg-transparent"
         />
-        <span className="text-[12px] font-semibold text-text-gray uppercase tracking-wider pr-5">{currency}</span>
+        <span className="hidden sm:inline text-[12px] font-semibold text-text-gray uppercase tracking-wider pr-5">{currency}</span>
       </div>
     </div>
   );

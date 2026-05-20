@@ -6,6 +6,7 @@ import { CampaignHeader } from "@/components/campaign/campaign-header";
 import { DetailGallery } from "@/components/campaign/detail-gallery";
 import { CampaignStory } from "@/components/campaign/campaign-story";
 import { DonationSidebar } from "@/components/campaign/donation-sidebar";
+import { MobileRecentDonors } from "@/components/campaign/mobile-recent-donors";
 import { getCampaign, getDonors } from "@/lib/api";
 
 export const runtime = "edge";
@@ -142,6 +143,9 @@ export default async function CampaignPage({
                 </button>
               </div>
             </div>
+
+            {/* Mobile recent donors (sidebar is hidden on small screens) */}
+            <MobileRecentDonors donors={donors} totalCount={campaign.donationCount} />
           </div>
 
           {/* Right column sidebar */}
