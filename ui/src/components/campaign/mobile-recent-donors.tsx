@@ -51,7 +51,7 @@ export function MobileRecentDonors({ donors, totalCount }: Props) {
               </div>
             </div>
             <span className="shrink-0 text-[13px] font-bold text-primary-navy tabular-nums">
-              {d.currency === "GBP" ? "£" : d.currency === "USD" ? "$" : "€"}
+              {d.currency}
               {Math.round(d.amount).toLocaleString("en-US")}
             </span>
           </li>

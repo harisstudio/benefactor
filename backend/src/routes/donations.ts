@@ -79,11 +79,21 @@ donationsRouter.get('/recent', async (c) => {
       .map((ch) => {
         const billing = ch.billing_details;
         const rawName = billing?.name?.trim();
-        const fallback = billing?.email?.split('@')[0];
-        const name = rawName || fallback || 'Anonymous';
+        // Privacy default: only the first name (Apple Pay sends the full
+        // legal name) and mask the surname with an initial if present.
+        // Donors who explicitly want their full name should opt in via the
+        // checkout form (future work).
+        let displayName = 'Anonymous';
+        if (rawName) {
+          const parts = rawName.split(/\s+/);
+          displayName = parts[0];
+          if (parts.length > 1) {
+            displayName += ` ${parts[parts.length - 1].charAt(0).toUpperCase()}.`;
+          }
+        }
         return {
           id: ch.id,
-          name,
+          name: displayName,
           amount: ch.amount / 100,
           currency: ch.currency.toUpperCase(),
           createdAt: ch.created * 1000,
