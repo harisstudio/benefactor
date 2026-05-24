@@ -145,7 +145,7 @@ export function PaymentMethods({
       // Redirect-based methods don't need elements.submit() — confirm
       // directly with the payment_method type to trigger the Revolut Pay
       // hand-off.
-      const { error } = await stripe.confirmRevolutPayPayment(clientSecret, {
+      const { error } = await (stripe as any).confirmRevolutPayPayment(clientSecret, {
         return_url: `${window.location.origin}/checkout/success`,
       });
       if (error) toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: error.message });
