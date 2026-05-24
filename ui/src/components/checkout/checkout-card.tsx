@@ -328,25 +328,7 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
                 className="h-[22px] w-auto"
               />
             )}
-            {state.paymentMethod === "applepay" && (
-              <Image
-                src="/assets/apple-pay.png"
-                alt="Apple Pay"
-                width={64}
-                height={26}
-                className="h-[26px] w-auto"
-              />
-            )}
-            {state.paymentMethod === "gpay" && (
-              <Image
-                src="/assets/google-pay-mark.svg"
-                alt="Google Pay"
-                width={64}
-                height={26}
-                className="h-[26px] w-auto"
-              />
-            )}
-            {state.paymentMethod === "card" && t("checkoutDonateNow")}
+            {(state.paymentMethod === "card" || state.paymentMethod === "wallet") && t("checkoutDonateNow")}
           </>
         )}
       </button>
