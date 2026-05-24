@@ -44,19 +44,20 @@ export function PaymentMethods({
    * fly and confirm via `stripe.confirmPayment`. The ExpressCheckoutElement
    * 'confirm' event fires after the wallet has authorised the payment.
    */
-  const handleExpressConfirm = async ({ expressPaymentType }: { expressPaymentType?: string }) => {
+  const handleExpressConfirm = async () => {
     if (!stripe || !elements) return;
     try {
+      // Required for deferred-intent ExpressCheckoutElement: collect data
+      // from the wallet sheet before minting the PaymentIntent.
+      const submit = await elements.submit();
+      if (submit.error) throw submit.error;
+
       const { clientSecret } = await createPaymentIntent(total, currency, {
         showName: !isAnonymous,
       });
       if (!clientSecret) throw new Error("Failed to get client secret");
 
-      addRecentDonor({
-        amount: donationAmount,
-        currency,
-        isAnonymous,
-      });
+      addRecentDonor({ amount: donationAmount, currency, isAnonymous });
 
       const { error } = await stripe.confirmPayment({
         elements,
@@ -124,10 +125,16 @@ export function PaymentMethods({
             },
           }}
           onReady={({ availablePaymentMethods }) => {
-            if (availablePaymentMethods) {
-              setExpressReady(true);
-              onChange("wallet");
-            }
+            const hasAny = !!availablePaymentMethods && Object.values(availablePaymentMethods).some(Boolean);
+            if (hasAny) setExpressReady(true);
+          }}
+          onClick={({ resolve }) => {
+            resolve({
+              emailRequired: false,
+              phoneNumberRequired: false,
+              shippingAddressRequired: false,
+              billingAddressRequired: false,
+            });
           }}
           onConfirm={handleExpressConfirm}
         />
