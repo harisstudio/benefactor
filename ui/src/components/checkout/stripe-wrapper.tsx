@@ -27,8 +27,8 @@ export function StripeWrapper({
         amount: Math.max(100, Math.round(amount * 100)), // smallest unit (cents/pence)
         currency: currency.toLowerCase(),
         // Restrict to card only — Apple Pay / Google Pay still work via
-        // ExpressCheckoutElement (they wrap card). Removes Klarna, Amazon
-        // Pay, Link, Afterpay from PaymentElement tabs.
+        // PaymentRequest API tiles. Removes Klarna, Amazon Pay, Link,
+        // Afterpay from PaymentElement tabs and the Link upsell banner.
         paymentMethodTypes: ['card'],
         appearance: {
           theme: 'stripe',

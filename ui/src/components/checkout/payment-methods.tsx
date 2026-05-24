@@ -289,7 +289,10 @@ export function PaymentMethods({
             options={{
               layout: "tabs",
               defaultValues: { billingDetails: { name: "" } },
-              wallets: { applePay: "never", googlePay: "never" },
+              // Disable all wallets / Link upsell — those flows are handled
+              // by our own tiles (Apple Pay / Google Pay / Revolut Pay).
+              wallets: { applePay: "never", googlePay: "never", link: "never" } as any,
+              terms: { card: "never" } as any,
             }}
           />
           <div className="flex items-center justify-end gap-2 pt-3">
