@@ -44,16 +44,13 @@ export function PaymentMethods({
    * fly and confirm via `stripe.confirmPayment`. The ExpressCheckoutElement
    * 'confirm' event fires after the wallet has authorised the payment.
    */
-  const handleExpressConfirm = async () => {
+  const handleExpressConfirm = async ({ expressPaymentType }: { expressPaymentType?: string }) => {
     if (!stripe || !elements) return;
     try {
       const { clientSecret } = await createPaymentIntent(total, currency, {
         showName: !isAnonymous,
       });
       if (!clientSecret) throw new Error("Failed to get client secret");
-
-      const submit = await elements.submit();
-      if (submit.error) throw submit.error;
 
       addRecentDonor({
         amount: donationAmount,
