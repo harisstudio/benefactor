@@ -62,7 +62,11 @@ webhooksRouter.post('/stripe', async (c) => {
       try {
         const charges = await stripe.charges.list({ payment_intent: paymentIntent.id, limit: 1 });
         const charge = charges.data[0];
-        const email = charge?.billing_details?.email;
+        // Prefer billing_details (wallet methods set it), fall back to the
+        // email we captured at checkout via metadata, then receipt_email.
+        const email = charge?.billing_details?.email
+          || (paymentIntent.metadata?.donorEmail as string | undefined)
+          || (paymentIntent.receipt_email as string | null | undefined);
         if (email) {
           await sendDonationReceipt({
             apiKey: c.env.BREVO_API_KEY,

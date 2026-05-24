@@ -1,7 +1,8 @@
 "use client";
 
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
+import { authClient } from "@/lib/auth-client";
 import { StripeWrapper } from "./stripe-wrapper";
 import Image from "next/image";
 import { IconShieldCheck } from "@tabler/icons-react";
@@ -26,6 +27,7 @@ interface CheckoutState {
   currency: CurrencyCode;
   isAnonymous: boolean;
   wantsUpdates: boolean;
+  email: string;
 }
 
 type CheckoutAction =
@@ -36,7 +38,8 @@ type CheckoutAction =
   | { type: "SET_PAYMENT"; payload: PaymentMethod }
   | { type: "SET_CURRENCY"; payload: CurrencyCode }
   | { type: "TOGGLE_ANONYMOUS" }
-  | { type: "TOGGLE_UPDATES" };
+  | { type: "TOGGLE_UPDATES" }
+  | { type: "SET_EMAIL"; payload: string };
 
 function reducer(state: CheckoutState, action: CheckoutAction): CheckoutState {
   switch (action.type) {
@@ -60,6 +63,8 @@ function reducer(state: CheckoutState, action: CheckoutAction): CheckoutState {
       return { ...state, isAnonymous: !state.isAnonymous };
     case "TOGGLE_UPDATES":
       return { ...state, wantsUpdates: !state.wantsUpdates };
+    case "SET_EMAIL":
+      return { ...state, email: action.payload };
   }
 }
 
@@ -74,6 +79,7 @@ const initialState: CheckoutState = {
   // name. They can opt in via the "Show my name publicly" checkbox below.
   isAnonymous: true,
   wantsUpdates: false,
+  email: "",
 };
 
 const presetAmounts = [25, 50, 100, 150, 200, 500];
@@ -112,15 +118,34 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Pre-fill email from signed-in session so logged-in donors don't have
+  // to re-type. Anonymous donors fill it manually (browser autofill kicks
+  // in via autocomplete="email").
+  useEffect(() => {
+    if (state.email) return;
+    authClient.getSession().then((res: any) => {
+      const sessionEmail = res?.data?.user?.email;
+      if (sessionEmail) dispatch({ type: "SET_EMAIL", payload: sessionEmail });
+    }).catch(() => {});
+  }, []);
+
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+
   const handleDonate = async () => {
     // PayPal goes through its own SDK; everything else (card, applepay, gpay)
     // is handled by the Stripe PaymentElement which auto-surfaces the right wallet.
     if (state.paymentMethod === "paypal" || !stripe || !elements) return;
-    
+
+    if (!isEmailValid) {
+      toast.show({ tone: "error", title: t("checkoutEmailRequired"), description: t("checkoutEmailRequiredDesc") });
+      return;
+    }
+
     setIsProcessing(true);
     try {
       const { clientSecret } = await createPaymentIntent(total, state.currency, {
         showName: !state.isAnonymous,
+        email: state.email,
       });
       if (!clientSecret) throw new Error("Failed to get client secret");
 
@@ -143,6 +168,9 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
         clientSecret,
         confirmParams: {
           return_url: `${window.location.origin}/checkout/success`,
+          payment_method_data: {
+            billing_details: { email: state.email },
+          },
         },
       });
 
@@ -223,6 +251,24 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
         percent={state.tipPercent}
         onChange={(v) => dispatch({ type: "SET_TIP", payload: v })}
       />
+
+      {/* ──── Email ──── */}
+      <div>
+        <label className="block text-[11px] font-semibold text-text-gray uppercase tracking-[0.1em] mb-2">
+          {t("checkoutEmail")}
+        </label>
+        <input
+          type="email"
+          required
+          autoComplete="email"
+          name="email"
+          value={state.email}
+          onChange={(e) => dispatch({ type: "SET_EMAIL", payload: e.target.value })}
+          placeholder={t("checkoutEmailPlaceholder")}
+          className="w-full h-14 px-5 border border-surface-muted rounded-[14px] text-[15px] text-text-dark placeholder:text-text-gray/70 focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/10 transition-all bg-white"
+        />
+        <p className="text-[12px] text-text-gray mt-2">{t("checkoutEmailNote")}</p>
+      </div>
 
       {/* ──── Payment Methods ──── */}
       <PaymentMethods

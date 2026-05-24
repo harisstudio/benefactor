@@ -14,24 +14,36 @@ export function DonationSummary({ donation, tip, total, currency = "EUR" }: Dona
   const symbol = CURRENCY_SYMBOL[currency];
   const fmt = (n: number) => `${symbol}${n.toFixed(2)}`;
   const { t } = useLanguage();
+
   return (
-    <div className="pt-5 border-t border-surface-muted">
-      <h4 className="font-heading text-[14px] font-extrabold text-primary-navy mb-3 uppercase tracking-[0.08em]">
+    <div className="pt-5 border-t border-surface-muted space-y-3">
+      <label className="block text-[11px] font-semibold text-text-gray uppercase tracking-[0.1em]">
         {t("checkoutSummary")}
-      </h4>
-      <div className="space-y-2">
+      </label>
+
+      {/* Sub-line items */}
+      <div className="space-y-2 px-1">
         <div className="flex justify-between text-[14px] text-text-gray">
           <span>{t("checkoutYourDonation")}</span>
-          <span className="tabular-nums">{fmt(donation)}</span>
+          <span className="tabular-nums font-semibold text-primary-navy">{fmt(donation)}</span>
         </div>
         <div className="flex justify-between text-[14px] text-text-gray">
           <span>{t("checkoutBenefactorTip")}</span>
-          <span className="tabular-nums">{fmt(tip)}</span>
+          <span className="tabular-nums font-semibold text-primary-navy">{fmt(tip)}</span>
         </div>
-        <div className="flex justify-between font-heading text-[18px] font-extrabold text-primary-navy mt-3 pt-3 border-t border-surface-muted">
-          <span>{t("checkoutTotalToday")}</span>
-          <span className="tabular-nums">{fmt(total)}</span>
+      </div>
+
+      {/* Total — large bold tile matching AmountGrid custom input */}
+      <div className="flex items-center justify-between border border-surface-muted rounded-[14px] bg-white px-5 py-4">
+        <div className="flex flex-col">
+          <span className="font-heading text-[22px] font-extrabold text-primary-navy leading-none">{symbol}</span>
+          <span className="text-[11px] font-semibold text-text-gray uppercase tracking-[0.12em] mt-1.5">
+            {currency} · {t("checkoutTotalToday")}
+          </span>
         </div>
+        <span className="font-heading text-[36px] md:text-[40px] font-extrabold text-primary-navy tabular-nums tracking-[-0.02em] leading-none">
+          {total.toFixed(2)}
+        </span>
       </div>
     </div>
   );

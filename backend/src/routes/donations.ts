@@ -6,7 +6,10 @@ const donationsRouter = new Hono<{ Bindings: { STRIPE_SECRET_KEY: string; HYPERD
 
 donationsRouter.post('/create-intent', async (c) => {
   const body = await c.req.json();
-  const { amount, currency, campaignId, message, showName } = body;
+  const { amount, currency, campaignId, message, showName, email } = body;
+  const donorEmail = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    ? email.trim().toLowerCase()
+    : undefined;
   const allowedCurrencies = new Set(['eur', 'gbp', 'usd']);
   const paymentCurrency = allowedCurrencies.has((currency || '').toLowerCase())
     ? (currency as string).toLowerCase()
@@ -38,11 +41,15 @@ donationsRouter.post('/create-intent', async (c) => {
       amount: Math.round(amount * 100),
       currency: paymentCurrency,
       payment_method_types: ['card', 'revolut_pay'],
+      // receipt_email tells Stripe to send a fallback receipt and also
+      // surfaces the email in webhooks even for redirect-based methods.
+      ...(donorEmail ? { receipt_email: donorEmail } : {}),
       metadata: {
         campaignId,
         donorId: session?.user?.id || 'anonymous',
         message: message || '',
         showName: showName ? 'true' : 'false',
+        ...(donorEmail ? { donorEmail } : {}),
       },
     });
 

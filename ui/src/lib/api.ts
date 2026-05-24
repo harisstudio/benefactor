@@ -226,7 +226,7 @@ export async function getRoles() {
 export async function createPaymentIntent(
   amount: number,
   currency: string = "eur",
-  options: { showName?: boolean; campaignId?: string } = {},
+  options: { showName?: boolean; campaignId?: string; email?: string } = {},
 ) {
   const campaignId = options.campaignId ?? "00000000-0000-0000-0000-000000000000";
   if (API_DISABLED) {
@@ -245,6 +245,7 @@ export async function createPaymentIntent(
         currency: currency.toLowerCase(),
         campaignId,
         showName: !!options.showName,
+        email: options.email,
       }),
       signal: controller.signal,
     });
