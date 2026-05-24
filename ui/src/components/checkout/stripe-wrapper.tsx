@@ -22,10 +22,14 @@ export function StripeWrapper({
   return (
     <Elements 
       stripe={stripePromise} 
-      options={{ 
+      options={{
         mode: 'payment',
         amount: Math.max(100, Math.round(amount * 100)), // smallest unit (cents/pence)
         currency: currency.toLowerCase(),
+        // Restrict to card only — Apple Pay / Google Pay still work via
+        // ExpressCheckoutElement (they wrap card). Removes Klarna, Amazon
+        // Pay, Link, Afterpay from PaymentElement tabs.
+        paymentMethodTypes: ['card'],
         appearance: {
           theme: 'stripe',
           variables: {

@@ -72,43 +72,49 @@ export function PaymentMethods({
     }
   };
 
+  const handleRevolutPay = async () => {
+    if (!stripe || !elements) return;
+    try {
+      const submit = await elements.submit();
+      if (submit.error) throw submit.error;
+
+      const { clientSecret } = await createPaymentIntent(total, currency, {
+        showName: !isAnonymous,
+      });
+      if (!clientSecret) throw new Error("Failed to get client secret");
+
+      addRecentDonor({ amount: donationAmount, currency, isAnonymous });
+
+      const { error } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/checkout/success`,
+          payment_method_data: { type: "revolut_pay" as any },
+        },
+      } as any);
+      if (error) toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: error.message });
+    } catch (err: any) {
+      toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: err?.message });
+    }
+  };
+
+  const tileClass = (active: boolean) =>
+    cn(
+      "relative flex flex-col items-center justify-center gap-1.5 h-[68px] rounded-[14px] border-2 transition-all min-h-[44px]",
+      active
+        ? "border-primary-navy bg-primary-navy/5 shadow-sm"
+        : "border-surface-muted bg-white hover:border-primary-navy/40",
+    );
+
   return (
     <div className="space-y-4">
       <label className="block text-[11px] font-semibold text-text-gray uppercase tracking-[0.1em]">
         {t("checkoutPaymentMethod")}
       </label>
 
-      {/* PayPal tile (separate flow) */}
-      <label
-        className={cn(
-          "flex items-center gap-3 h-14 px-4 border rounded-[14px] cursor-pointer transition-all",
-          selected === "paypal"
-            ? "border-primary-navy bg-primary-navy/5 shadow-sm"
-            : "border-surface-muted bg-white hover:border-primary-navy/40",
-        )}
-      >
-        <input
-          type="radio"
-          name="payment"
-          value="paypal"
-          checked={selected === "paypal"}
-          onChange={() => onChange("paypal")}
-          className="w-5 h-5 accent-primary-navy shrink-0"
-        />
-        <span className="w-12 flex items-center justify-center shrink-0">
-          <Image
-            src="/assets/paypal-logo.svg"
-            alt="PayPal"
-            width={64}
-            height={18}
-            className="h-5 w-auto object-contain"
-          />
-        </span>
-        <span className="text-[14px] font-semibold text-primary-navy">{t("checkoutPaypal")}</span>
-      </label>
-
-      {/* Express wallets — Apple Pay / Google Pay / Link / Revolut Pay
-         appear as native buttons (only those the device supports). */}
+      {/* Apple Pay / Google Pay — Stripe's native ExpressCheckoutElement.
+          Tapping these opens the wallet sheet directly. */}
       <div
         className={cn(
           "transition-opacity",
@@ -117,11 +123,15 @@ export function PaymentMethods({
       >
         <ExpressCheckoutElement
           options={{
-            buttonHeight: 48,
+            buttonHeight: 56,
+            layout: { type: "horizontal", visibleButtonCount: 4 },
             paymentMethods: {
               applePay: "always",
               googlePay: "always",
-              link: "auto",
+              link: "never",
+              amazonPay: "never",
+              klarna: "never",
+              paypal: "never",
             },
           }}
           onReady={({ availablePaymentMethods }) => {
@@ -140,70 +150,52 @@ export function PaymentMethods({
         />
       </div>
 
-      {/* Revolut Pay — separate tile because it's a redirect-flow method,
-         not a native express wallet that fits ExpressCheckoutElement. */}
-      <button
-        type="button"
-        onClick={async () => {
-          if (!stripe || !elements) return;
-          try {
-            const { clientSecret } = await createPaymentIntent(total, currency, {
-              showName: !isAnonymous,
-            });
-            if (!clientSecret) throw new Error("Failed to get client secret");
+      {/* Custom tile grid — PayPal, Revolut Pay, Card. Matches AmountGrid
+          styling so the checkout reads as one consistent system. */}
+      <div className="grid grid-cols-3 gap-2.5">
+        <button
+          type="button"
+          onClick={() => onChange("paypal")}
+          className={tileClass(selected === "paypal")}
+          aria-label={t("checkoutPaypal")}
+        >
+          <Image
+            src="/assets/paypal-logo.svg"
+            alt="PayPal"
+            width={72}
+            height={20}
+            className="h-5 w-auto object-contain"
+          />
+        </button>
 
-            const submit = await elements.submit();
-            if (submit.error) throw submit.error;
+        <button
+          type="button"
+          onClick={handleRevolutPay}
+          className={cn(
+            "relative flex items-center justify-center gap-1 h-[68px] rounded-[14px] border-2 border-transparent bg-[#0666EB] hover:bg-[#0552c4] active:scale-[0.98] transition-all text-white shadow-sm min-h-[44px]",
+          )}
+          aria-label="Revolut Pay"
+        >
+          <span className="font-extrabold tracking-tight text-[15px]">Revolut</span>
+          <span className="opacity-90 font-medium text-[15px]">Pay</span>
+        </button>
 
-            addRecentDonor({ amount: donationAmount, currency, isAnonymous });
-
-            const { error } = await stripe.confirmPayment({
-              elements,
-              clientSecret,
-              confirmParams: {
-                return_url: `${window.location.origin}/checkout/success`,
-                payment_method_data: { type: "revolut_pay" as any },
-              },
-            } as any);
-            if (error) toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: error.message });
-          } catch (err: any) {
-            toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: err?.message });
-          }
-        }}
-        className="w-full h-12 rounded-[14px] bg-[#0666EB] hover:bg-[#0552c4] active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-white font-semibold text-[15px] shadow-sm"
-      >
-        <span className="font-extrabold tracking-tight">Revolut</span>
-        <span className="opacity-90 font-medium">Pay</span>
-      </button>
-
-      {/* Divider */}
-      <div className="flex items-center gap-3 py-1">
-        <div className="flex-1 h-px bg-surface-muted" />
-        <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-text-gray">
-          {t("checkoutOrPayCard")}
-        </span>
-        <div className="flex-1 h-px bg-surface-muted" />
+        <button
+          type="button"
+          onClick={() => onChange("card")}
+          className={tileClass(selected === "card")}
+          aria-label={t("checkoutCard")}
+        >
+          <svg width="28" height="20" viewBox="0 0 28 20" fill="none" className="text-primary-navy">
+            <rect x="1" y="1" width="26" height="18" rx="3" stroke="currentColor" strokeWidth="1.5" />
+            <rect x="1" y="5" width="26" height="3" fill="currentColor" />
+            <rect x="4" y="13" width="6" height="2" rx="1" fill="currentColor" />
+          </svg>
+          <span className="text-[12px] font-semibold text-primary-navy uppercase tracking-[0.08em]">
+            {t("checkoutCard")}
+          </span>
+        </button>
       </div>
-
-      {/* Card form (always visible) */}
-      <label
-        className={cn(
-          "flex items-center gap-3 h-14 px-4 border rounded-[14px] cursor-pointer transition-all",
-          selected === "card"
-            ? "border-primary-navy bg-primary-navy/5 shadow-sm"
-            : "border-surface-muted bg-white hover:border-primary-navy/40",
-        )}
-      >
-        <input
-          type="radio"
-          name="payment"
-          value="card"
-          checked={selected === "card"}
-          onChange={() => onChange("card")}
-          className="w-5 h-5 accent-primary-navy shrink-0"
-        />
-        <span className="text-[14px] font-semibold text-primary-navy">{t("checkoutCard")}</span>
-      </label>
 
       {selected === "card" && (
         <div className="pt-2">

@@ -31,13 +31,13 @@ donationsRouter.post('/create-intent', async (c) => {
       apiVersion: '2026-04-22.dahlia' as any,
     });
 
-    // Let Stripe auto-surface every payment method enabled on the account
-    // (cards, Apple Pay, Google Pay, Revolut Pay, etc.) instead of hardcoding
-    // a list. Enable/disable individual methods from the Stripe Dashboard.
+    // Restrict to card + Revolut Pay only. Apple Pay and Google Pay are
+    // wallets on top of card, so they keep working via ExpressCheckoutElement.
+    // Excludes Klarna, Amazon Pay, Link, Afterpay from the checkout.
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100),
       currency: paymentCurrency,
-      automatic_payment_methods: { enabled: true },
+      payment_method_types: ['card', 'revolut_pay'],
       metadata: {
         campaignId,
         donorId: session?.user?.id || 'anonymous',
