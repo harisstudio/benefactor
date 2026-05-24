@@ -54,13 +54,16 @@ export function PaymentMethods({
   useEffect(() => { donationAmountRef.current = donationAmount; }, [donationAmount]);
 
   useEffect(() => {
-    if (!stripe || total <= 0) return;
+    if (!stripe) return;
+    // Initialise with a placeholder amount so canMakePayment can run
+    // immediately on mount — the actual amount is patched in via the
+    // update effect below once the user picks one.
     const pr = stripe.paymentRequest({
       // Stripe account country (where the merchant is registered) — must
       // match the Stripe Dashboard regardless of donation currency.
       country: "GB",
       currency: currency.toLowerCase(),
-      total: { label: "Donation", amount: Math.max(100, Math.round(total * 100)) },
+      total: { label: "Donation", amount: Math.max(100, Math.round(total * 100)) || 100 },
       requestPayerEmail: true,
       requestPayerName: false,
     });
@@ -120,10 +123,10 @@ export function PaymentMethods({
   // Update the running PaymentRequest's amount whenever total changes so
   // the native sheet shows the right number when the user taps the wallet.
   useEffect(() => {
-    if (!paymentRequest || total <= 0) return;
+    if (!paymentRequest) return;
     paymentRequest.update({
       currency: currency.toLowerCase(),
-      total: { label: "Donation", amount: Math.max(100, Math.round(total * 100)) },
+      total: { label: "Donation", amount: Math.max(100, Math.round(total * 100)) || 100 },
     });
   }, [paymentRequest, total, currency]);
 
