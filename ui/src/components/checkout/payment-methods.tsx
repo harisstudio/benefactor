@@ -56,7 +56,9 @@ export function PaymentMethods({
   useEffect(() => {
     if (!stripe || total <= 0) return;
     const pr = stripe.paymentRequest({
-      country: currency === "GBP" ? "GB" : "LT",
+      // Stripe account country (where the merchant is registered) — must
+      // match the Stripe Dashboard regardless of donation currency.
+      country: "GB",
       currency: currency.toLowerCase(),
       total: { label: "Donation", amount: Math.max(100, Math.round(total * 100)) },
       requestPayerEmail: true,
@@ -131,11 +133,8 @@ export function PaymentMethods({
   };
 
   const handleRevolutPay = async () => {
-    if (!stripe || !elements) return;
+    if (!stripe) return;
     try {
-      const submit = await elements.submit();
-      if (submit.error) throw submit.error;
-
       const { clientSecret } = await createPaymentIntent(total, currency, {
         showName: !isAnonymous,
       });
@@ -143,14 +142,12 @@ export function PaymentMethods({
 
       addRecentDonor({ amount: donationAmount, currency, isAnonymous });
 
-      const { error } = await stripe.confirmPayment({
-        elements,
-        clientSecret,
-        confirmParams: {
-          return_url: `${window.location.origin}/checkout/success`,
-          payment_method_data: { type: "revolut_pay" as any },
-        },
-      } as any);
+      // Redirect-based methods don't need elements.submit() — confirm
+      // directly with the payment_method type to trigger the Revolut Pay
+      // hand-off.
+      const { error } = await stripe.confirmRevolutPayPayment(clientSecret, {
+        return_url: `${window.location.origin}/checkout/success`,
+      });
       if (error) toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: error.message });
     } catch (err: any) {
       toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: err?.message });
