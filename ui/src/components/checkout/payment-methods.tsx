@@ -145,15 +145,25 @@ export function PaymentMethods({
 
       addRecentDonor({ amount: donationAmount, currency, isAnonymous });
 
-      // Redirect-based methods don't need elements.submit() — confirm
-      // directly with the payment_method type to trigger the Revolut Pay
-      // hand-off.
-      const { error } = await (stripe as any).confirmRevolutPayPayment(clientSecret, {
+      // Create a Revolut Pay PaymentMethod first, then confirm — this is
+      // the supported flow when not mounting a PaymentElement.
+      const stripeAny = stripe as any;
+      const pmResult = await stripeAny.createPaymentMethod({
+        type: "revolut_pay",
+      });
+      if (pmResult.error) throw pmResult.error;
+
+      const { error } = await stripeAny.confirmRevolutPayPayment(clientSecret, {
+        payment_method: pmResult.paymentMethod.id,
         return_url: `${window.location.origin}/checkout/success`,
       });
-      if (error) toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: error.message });
+      if (error) {
+        console.error("Revolut Pay error:", error);
+        toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: error.message });
+      }
     } catch (err: any) {
-      toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: err?.message });
+      console.error("Revolut Pay flow error:", err);
+      toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: err?.message || "Unknown error" });
     }
   };
 
