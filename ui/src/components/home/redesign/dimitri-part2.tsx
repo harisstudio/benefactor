@@ -66,12 +66,11 @@ export function DimitriPart2() {
   }
 
   function toggleMute() {
-    // Mute toggle applies to both clips at once so the audio source is
-    // unambiguous — only one track plays at a time.
+    // Only the landscape clip carries audio so two narrations never play
+    // at once. The portrait teaser stays muted permanently.
     const next = !muted;
     setMuted(next);
     if (landscapeRef.current) landscapeRef.current.muted = next;
-    if (portraitRef.current) portraitRef.current.muted = next;
   }
 
   function changeAudio(next: AudioLang) {
@@ -188,6 +187,9 @@ export function DimitriPart2() {
                 muted
                 loop
                 playsInline
+                // Click the portrait clip to control the landscape clip's
+                // audio — keeps the UX consistent without ever playing two
+                // soundtracks at once.
                 onClick={toggleMute}
                 className="absolute inset-0 w-full h-full object-cover cursor-pointer"
               />
