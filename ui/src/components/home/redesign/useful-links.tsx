@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { IconArrowRight } from "@tabler/icons-react";
 import { useLanguage } from "@/context/LanguageContext";
@@ -18,13 +17,6 @@ export function RedesignUsefulLinks() {
       <div className="max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-[clamp(40px,5vw,120px)]">
         <div className="grid gap-12 lg:gap-20 lg:grid-cols-[1fr_1.4fr] items-start">
           <div>
-            <Image
-              src="/assets/logo-dark.png"
-              alt="Benefactor"
-              width={180}
-              height={36}
-              className="h-auto w-[160px] md:w-[180px] mb-8"
-            />
             <span className="inline-flex items-center h-7 px-3 rounded-full bg-white/15 text-white text-[11px] font-bold uppercase tracking-[0.14em] mb-5">
               {t("usefulBadge")}
             </span>
