@@ -71,8 +71,7 @@ const en: Dict = {
   dimitriPart2Chapter: "Part 2",
   dimitriStoryBadge: "Story",
   dimitriPart2Title: "Dimitri's story continues",
-  dimitriPart2Subtitle:
-    "Pick a language to hear his words — Cheslovas tells the next chapter himself.",
+  dimitriPart2Subtitle: "Dimitri's House — Part 2",
   dimitriPart2HelpLine: "Stand with Dimitri and his family",
 
   // ─── Checkout success ──────────────────────────────────────────────────
@@ -650,8 +649,7 @@ const lt: Dict = {
   dimitriPart2Chapter: "2 dalis",
   dimitriStoryBadge: "Istorija",
   dimitriPart2Title: "Dimitrijaus istorija tęsiasi",
-  dimitriPart2Subtitle:
-    "Pasirinkite kalbą ir išgirskite jo žodžius — Česlovas pats pasakoja kitą skyrių.",
+  dimitriPart2Subtitle: "Dimitrijaus namai — 2 dalis",
   dimitriPart2HelpLine: "Palaikykite Dimitrijų ir jo šeimą",
   heroDonateNow: "Paaukoti dabar",
 
