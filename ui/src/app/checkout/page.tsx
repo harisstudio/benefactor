@@ -10,7 +10,7 @@ const CheckoutCard = dynamic(
 );
 
 export const metadata: Metadata = {
-  title: "Checkout — Benefactor",
+  title: "Checkout | Benefactor",
   description: "Complete your donation securely on Benefactor.",
 };
 

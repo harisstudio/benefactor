@@ -1,7 +1,7 @@
 import { SearchClient } from "@/components/search/search-client";
 
 export const metadata = {
-  title: "Search — Benefactor",
+  title: "Search | Benefactor",
 };
 
 export default async function SearchPage({

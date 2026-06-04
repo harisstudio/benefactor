@@ -6,7 +6,7 @@ const CampaignWizard = dynamic(
 );
 
 export const metadata: Metadata = {
-  title: "Start a Benefactor — Create Your Fundraiser",
+  title: "Start a Benefactor | Create Your Fundraiser",
   description: "Start your fundraiser in minutes. Set your goal, tell your story, and share it with the world.",
 };
 

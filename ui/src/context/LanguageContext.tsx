@@ -9,7 +9,7 @@ const SUPPORTED: LangCode[] = ["en", "lt", "ru", "tr", "de", "fr", "es"];
 type Dict = Record<string, string>;
 
 // =============================================================================
-// English — source of truth. All UI strings live here.
+// English - source of truth. All UI strings live here.
 // =============================================================================
 const en: Dict = {
   // ─── Navbar / common chrome ─────────────────────────────────────────────
@@ -229,7 +229,7 @@ const en: Dict = {
 
   // ─── Share modal ────────────────────────────────────────────────────────
   shareTitle: "Share this campaign",
-  shareSubtitle: "Help spread the word — every share helps the cause reach more people.",
+  shareSubtitle: "Help spread the word - every share helps the cause reach more people.",
   shareCopy: "Copy link",
   shareCopied: "Link copied",
   shareWhatsapp: "WhatsApp",
@@ -372,7 +372,7 @@ const en: Dict = {
   careersDeptMarketing: "Marketing",
   careersFullTime: "Full-time",
   careersVolunteer: "Volunteer",
-  careersRoleVolunteer: "Volunteer — help us shape the platform",
+  careersRoleVolunteer: "Volunteer - help us shape the platform",
   careersLocRemote: "Remote",
   careersLocLondon: "London, UK",
   careersRoleSeniorFrontend: "Senior Frontend Engineer",
@@ -592,7 +592,7 @@ const en: Dict = {
 };
 
 // =============================================================================
-// Lithuanian — natural, native-quality translations.
+// Lithuanian - natural, native-quality translations.
 // =============================================================================
 const lt: Dict = {
   // Navbar
@@ -730,7 +730,7 @@ const lt: Dict = {
   supportThanksTitle: "Ačiū, kad žengiate kartu",
   supportThanksBody:
     "Jūsų žinutė paruošta el. pašto programoje. Atsakysime kuo greičiau ir informuosime apie projekto eigą.",
-  showcaseImageCaption: "Netrukus — vieta, sukurta kiekvienam vaikui",
+  showcaseImageCaption: "Netrukus - vieta, sukurta kiekvienam vaikui",
   showcaseImageAlt: "Vaikų stovyklos centras",
 
   // Useful
@@ -806,7 +806,7 @@ const lt: Dict = {
 
   // Share modal
   shareTitle: "Pasidalinkite šia rinkliava",
-  shareSubtitle: "Padėkite skleisti žinią — kiekvienas pasidalijimas leidžia pasiekti daugiau žmonių.",
+  shareSubtitle: "Padėkite skleisti žinią - kiekvienas pasidalijimas leidžia pasiekti daugiau žmonių.",
   shareCopy: "Kopijuoti nuorodą",
   shareCopied: "Nuoroda nukopijuota",
   shareWhatsapp: "WhatsApp",
@@ -875,7 +875,7 @@ const lt: Dict = {
   howPageEyebrow: "Kaip tai veikia",
   howPageTitlePart1: "Nuo istorijos iki",
   howPageTitleEmph: "paramos",
-  howPageTitlePart2: " — per kelias minutes.",
+  howPageTitlePart2: " - per kelias minutes.",
   howPageLede: "Trys žingsniai. Jokio platformos mokesčio. Kiekviena rinkliava peržiūrima prieš paskelbiant.",
   howStepAltTitle1: "Pradėkite rinkliavą",
   howStepAltDesc1: "Nustatykite tikslą, parašykite istoriją ir pridėkite nuotraukų. Užtruks vos kelias minutes.",
@@ -900,10 +900,10 @@ const lt: Dict = {
   aboutTitlePart1: "Dosnumas, padarytas",
   aboutTitleEmph: "paprastu",
   aboutTitlePart2: ".",
-  aboutLede: "Benefactor — lėšų rinkimo platforma, sukurta skaidrumo, pasitikėjimo ir nulinio mokesčio pagrindu.",
+  aboutLede: "Benefactor - lėšų rinkimo platforma, sukurta skaidrumo, pasitikėjimo ir nulinio mokesčio pagrindu.",
   aboutOurStory: "Mūsų istorija",
   aboutStoryP1: "Benefactor atsirado iš klausimo, kurio negalėjome ignoruoti: kodėl geriems žmonėms vis dar taip sunku rinkti pinigus geriems tikslams? Trintį matėme savo akimis. Nepasitikėjimą. Mokesčius. Platformas, kurios pasiimdavo per daug ir grąžindavo per mažai.",
-  aboutStoryP2: "Tad sukūrėme kažką kitokio. Ar tai šeima, susidūrusi su netikėtomis išlaidomis, bendruomenė, atsigaunanti po krizės, ar studentas, siekiantis galimybės — Benefactor egzistuoja tam, kad sumažintų atstumą tarp užuojautos ir veiksmo.",
+  aboutStoryP2: "Tad sukūrėme kažką kitokio. Ar tai šeima, susidūrusi su netikėtomis išlaidomis, bendruomenė, atsigaunanti po krizės, ar studentas, siekiantis galimybės - Benefactor egzistuoja tam, kad sumažintų atstumą tarp užuojautos ir veiksmo.",
   aboutWhatWeDo: "Ką mes darome",
   aboutWhatWeDoP: "Suteikiame paprasčiausią ir skaidriausią būdą rinkti ir aukoti pinigus internete. Jokio platformos mokesčio. Patikrintos rinkliavos. Bankinio lygio saugumas. Ir komanda, kuri peržiūri kiekvieną rinkliavą prieš paskelbiant.",
   aboutCommitment: "Mūsų įsipareigojimas",
@@ -914,8 +914,8 @@ const lt: Dict = {
   aboutValues: "Mūsų vertybės",
   aboutValue1Title: "Radikalus skaidrumas",
   aboutValue1Desc: "Kiekviena rinkliava peržiūrėta. Kiekvienas mokėjimas atsekamas. Pasitikėjimas užtarnaujamas, o ne deklaruojamas.",
-  aboutValue2Title: "Pirmiausia — paprastumas",
-  aboutValue2Desc: "Apsėstai šaliname trukdžius. Jei atrodo sudėtinga — vadinasi, dar nebaigta.",
+  aboutValue2Title: "Pirmiausia - paprastumas",
+  aboutValue2Desc: "Apsėstai šaliname trukdžius. Jei atrodo sudėtinga - vadinasi, dar nebaigta.",
   aboutValue3Title: "Užuojauta be sienų",
   aboutValue3Desc: "Geras tikslas neturi tautybės. Kuriame taip, kad dosnumas tekėtų ten, kur jo reikia.",
 
@@ -949,7 +949,7 @@ const lt: Dict = {
   careersDeptMarketing: "Rinkodara",
   careersFullTime: "Visa darbo diena",
   careersVolunteer: "Savanoris",
-  careersRoleVolunteer: "Savanoris — padėk mums kurti platformą",
+  careersRoleVolunteer: "Savanoris - padėk mums kurti platformą",
   careersLocRemote: "Nuotolinis",
   careersLocLondon: "Londonas, JK",
   careersRoleSeniorFrontend: "Vyresnysis frontend inžinierius",

@@ -5,7 +5,7 @@ import { ProfileHeader } from "@/components/profile/profile-header";
 import { ProfileForm } from "@/components/profile/profile-form";
 
 export const metadata: Metadata = {
-  title: "My Profile — Benefactor",
+  title: "My Profile | Benefactor",
   description: "Manage your account settings and personal information.",
 };
 

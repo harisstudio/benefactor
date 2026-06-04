@@ -11,7 +11,7 @@ import { RedesignUsefulLinks } from "@/components/home/redesign/useful-links";
 export const runtime = "edge";
 
 export const metadata: Metadata = {
-  title: "Benefactor — World Wide Fundraising Platform",
+  title: "Benefactor | World Wide Fundraising Platform",
   description:
     "Start your fundraiser in minutes. Raise money for yourself, a loved one, or a cause you believe in. Transparent, verified, and fee-free.",
 };

@@ -12,7 +12,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Benefactor — World Wide Fundraising Platform",
+  title: "Benefactor | World Wide Fundraising Platform",
   description:
     "Benefactor is a worldwide fundraising platform. Start a fundraiser, donate to causes you care about, and make a difference.",
 };

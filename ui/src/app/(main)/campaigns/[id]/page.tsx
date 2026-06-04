@@ -19,7 +19,7 @@ export async function generateMetadata({
   const { id } = await params;
   const campaign = await getCampaign(id);
   return {
-    title: `${campaign.title} — Benefactor`,
+    title: `${campaign.title} | Benefactor`,
     description: campaign.description,
   };
 }
