@@ -45,7 +45,10 @@ export function DimitriPart2() {
   const { t, language } = useLanguage();
   const landscapeRef = useRef<HTMLVideoElement>(null);
   const portraitRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
+  // Each clip tracks its own mute state. Unmuting one auto-mutes the other
+  // so two narrations never overlap, but the controls feel independent.
+  const [landscapeMuted, setLandscapeMuted] = useState(true);
+  const [portraitMuted, setPortraitMuted] = useState(true);
   const [audioLang, setAudioLang] = useState<AudioLang>(() => {
     if (language === "lt") return "lt";
     if (language === "ru") return "ru";
@@ -65,12 +68,25 @@ export function DimitriPart2() {
     return { time: v.currentTime, wasPlaying: !v.paused && !v.ended };
   }
 
-  function toggleMute() {
-    // Only the landscape clip carries audio so two narrations never play
-    // at once. The portrait teaser stays muted permanently.
-    const next = !muted;
-    setMuted(next);
+  function toggleLandscapeMute() {
+    const next = !landscapeMuted;
+    setLandscapeMuted(next);
     if (landscapeRef.current) landscapeRef.current.muted = next;
+    // If we just unmuted landscape, mute portrait so audio never overlaps.
+    if (!next) {
+      setPortraitMuted(true);
+      if (portraitRef.current) portraitRef.current.muted = true;
+    }
+  }
+
+  function togglePortraitMute() {
+    const next = !portraitMuted;
+    setPortraitMuted(next);
+    if (portraitRef.current) portraitRef.current.muted = next;
+    if (!next) {
+      setLandscapeMuted(true);
+      if (landscapeRef.current) landscapeRef.current.muted = true;
+    }
   }
 
   function changeAudio(next: AudioLang) {
@@ -180,6 +196,17 @@ export function DimitriPart2() {
         >
           {/* Portrait (phone-format) clip on the left */}
           <div className="relative rounded-[28px] border border-surface-muted shadow-xl overflow-hidden bg-primary-navy max-w-[300px] w-full mx-auto lg:max-w-none lg:mx-0 lg:h-full">
+            <div className="absolute top-0 inset-x-0 z-10 flex items-start justify-end p-3 sm:p-4 bg-gradient-to-b from-black/55 via-black/20 to-transparent pointer-events-none">
+              <button
+                type="button"
+                onClick={togglePortraitMute}
+                aria-label={portraitMuted ? t("heroUnmuteVideo") : t("heroMuteVideo")}
+                className="pointer-events-auto shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-white/15 text-white hover:bg-white/25 transition-all backdrop-blur-md border border-white/20"
+              >
+                {portraitMuted ? <IconVolumeOff size={16} /> : <IconVolume size={16} />}
+              </button>
+            </div>
+
             <div className="relative aspect-[9/16] lg:aspect-auto w-full h-full bg-primary-navy">
               <video
                 ref={portraitRef}
@@ -189,10 +216,7 @@ export function DimitriPart2() {
                 muted
                 loop
                 playsInline
-                // Click the portrait clip to control the landscape clip's
-                // audio — keeps the UX consistent without ever playing two
-                // soundtracks at once.
-                onClick={toggleMute}
+                onClick={togglePortraitMute}
                 className="absolute inset-0 w-full h-full object-cover cursor-pointer"
               />
             </div>
@@ -208,11 +232,11 @@ export function DimitriPart2() {
             <div className="absolute top-0 inset-x-0 z-10 flex items-start justify-end p-4 sm:p-5 bg-gradient-to-b from-black/55 via-black/20 to-transparent pointer-events-none">
               <button
                 type="button"
-                onClick={toggleMute}
-                aria-label={muted ? t("heroUnmuteVideo") : t("heroMuteVideo")}
+                onClick={toggleLandscapeMute}
+                aria-label={landscapeMuted ? t("heroUnmuteVideo") : t("heroMuteVideo")}
                 className="pointer-events-auto shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-white/15 text-white hover:bg-white/25 transition-all backdrop-blur-md border border-white/20"
               >
-                {muted ? <IconVolumeOff size={18} /> : <IconVolume size={18} />}
+                {landscapeMuted ? <IconVolumeOff size={18} /> : <IconVolume size={18} />}
               </button>
             </div>
 
@@ -225,7 +249,7 @@ export function DimitriPart2() {
                 muted
                 loop
                 playsInline
-                onClick={toggleMute}
+                onClick={toggleLandscapeMute}
                 className="absolute inset-0 w-full h-full object-cover cursor-pointer"
               />
             </div>
