@@ -13,13 +13,12 @@ import { cn } from "@/lib/utils";
 
 type AudioLang = "en" | "lt" | "ru" | "tr";
 
-// Each language gets its own dubbed video. Turkish dub isn't ready yet so
-// it falls back to the English track until the file is delivered.
+// Each language gets its own dubbed video.
 const VIDEO_SRC: Record<AudioLang, string> = {
   en: "/assets/ches/ches-en.mp4",
   lt: "/assets/ches/ches-lt.mp4",
   ru: "/assets/ches/ches-ru.mp4",
-  tr: "/assets/ches/ches-en.mp4",
+  tr: "/assets/ches/ches-tr.mp4",
 };
 
 const LANG_LABEL: Record<AudioLang, string> = {
