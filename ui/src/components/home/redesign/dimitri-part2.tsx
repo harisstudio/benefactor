@@ -170,11 +170,16 @@ export function DimitriPart2() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="grid gap-5 md:gap-6 lg:grid-cols-[minmax(0,9fr)_minmax(0,16fr)] items-stretch"
+          // On desktop both clips share the same rendered height and the
+          // grid columns are sized to each clip's natural aspect ratio
+          // (portrait 9:16 ≈ 0.56, landscape 16:9 ≈ 1.78 → ~1 : 3.16) so
+          // neither one balloons. On mobile they stack and each fills the
+          // column width as normal.
+          className="grid gap-5 md:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,3.16fr)] items-stretch lg:h-[460px]"
         >
           {/* Portrait (phone-format) clip on the left */}
-          <div className="relative rounded-[28px] border border-surface-muted shadow-xl overflow-hidden bg-primary-navy max-w-[360px] w-full mx-auto lg:max-w-none">
-            <div className="relative aspect-[9/16] w-full bg-primary-navy">
+          <div className="relative rounded-[28px] border border-surface-muted shadow-xl overflow-hidden bg-primary-navy max-w-[300px] w-full mx-auto lg:max-w-none lg:mx-0 lg:h-full">
+            <div className="relative aspect-[9/16] lg:aspect-auto w-full h-full bg-primary-navy">
               <video
                 ref={portraitRef}
                 src={PORTRAIT_SRC[audioLang]}
@@ -195,7 +200,7 @@ export function DimitriPart2() {
           </div>
 
           {/* Landscape Part 2 clip on the right */}
-          <div className="relative rounded-[28px] border border-surface-muted shadow-xl overflow-hidden bg-primary-navy">
+          <div className="relative rounded-[28px] border border-surface-muted shadow-xl overflow-hidden bg-primary-navy lg:h-full">
             <div className="absolute top-0 inset-x-0 z-10 flex items-start justify-end p-4 sm:p-5 bg-gradient-to-b from-black/55 via-black/20 to-transparent pointer-events-none">
               <button
                 type="button"
@@ -207,7 +212,7 @@ export function DimitriPart2() {
               </button>
             </div>
 
-            <div className="relative aspect-[16/9] w-full bg-primary-navy">
+            <div className="relative aspect-[16/9] lg:aspect-auto w-full h-full bg-primary-navy">
               <video
                 ref={landscapeRef}
                 src={LANDSCAPE_SRC[audioLang]}
