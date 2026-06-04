@@ -74,10 +74,10 @@ export function FullNavbar({ alwaysShowLogo = false }: FullNavbarProps) {
     <>
       <nav
         className={cn(
-          "sticky top-0 left-0 right-0 z-50 transition-all duration-300 md:backdrop-blur-[10px]",
+          "sticky top-0 left-0 right-0 z-50 transition-all duration-300 bg-white",
           scrolled
-            ? "bg-white border-b border-surface-muted shadow-sm py-2 md:bg-white/[0.98]"
-            : "bg-white md:bg-transparent py-3 md:py-4",
+            ? "border-b border-surface-muted shadow-sm py-2"
+            : "py-3 md:py-4",
         )}
       >
         <div
