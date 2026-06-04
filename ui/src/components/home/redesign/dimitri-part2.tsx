@@ -141,12 +141,11 @@ export function DimitriPart2() {
               </button>
             </div>
 
-            <div className="relative aspect-[16/9] w-full">
+            <div className="relative aspect-[16/9] w-full bg-primary-navy">
               <video
                 ref={videoRef}
                 src={VIDEO_SRC[audioLang]}
-                poster="/assets/campaign-man-new.jpg"
-                preload="metadata"
+                preload="auto"
                 autoPlay
                 muted
                 loop
