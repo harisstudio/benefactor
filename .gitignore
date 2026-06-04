@@ -2,4 +2,8 @@ node_modules
 .env
 .env.local
 
-.agents/
+.agents/cheslovas_video/
+
+cheslovas_video/
+ui/.next 2/
+**/.DS_Store

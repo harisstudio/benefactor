@@ -66,6 +66,14 @@ const en: Dict = {
   heroHelpFamilyLithuania: "Help a Family in Lithuania",
   heroDonateNow: "Donate now",
 
+  // ─── Dimitri Part 2 ─────────────────────────────────────────────────────
+  dimitriPart2Badge: "Continued Story",
+  dimitriPart2Chapter: "Part 2",
+  dimitriPart2Title: "Dimitri's story continues",
+  dimitriPart2Subtitle:
+    "Pick a language to hear his words — Cheslovas tells the next chapter himself.",
+  dimitriPart2HelpLine: "Stand with Dimitri and his family",
+
   // ─── Checkout success ──────────────────────────────────────────────────
   successHeading: "Thank you for your donation!",
   successTagline: "Every donation is a new hope.",
@@ -637,6 +645,12 @@ const lt: Dict = {
   heroMuteVideo: "Išjungti garsą",
   heroWatchOnYoutube: "Žiūrėti per YouTube",
   heroHelpFamilyLithuania: "Padėk šeimai Lietuvoje",
+  dimitriPart2Badge: "Tęsinys",
+  dimitriPart2Chapter: "2 dalis",
+  dimitriPart2Title: "Dimitrijaus istorija tęsiasi",
+  dimitriPart2Subtitle:
+    "Pasirinkite kalbą ir išgirskite jo žodžius — Česlovas pats pasakoja kitą skyrių.",
+  dimitriPart2HelpLine: "Palaikykite Dimitrijų ir jo šeimą",
   heroDonateNow: "Paaukoti dabar",
 
   // ─── Checkout success ──────────────────────────────────────────────────

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { FullNavbar } from "@/components/layout/full-navbar";
 import { GlobalFooter } from "@/components/layout/footer/index";
 import { RedesignHero } from "@/components/home/redesign/hero";
+import { DimitriPart2 } from "@/components/home/redesign/dimitri-part2";
 import { RedesignLogoShowcase } from "@/components/home/redesign/logo-showcase";
 import { RedesignFeatured } from "@/components/home/redesign/featured";
 import { RedesignHowAndTrust } from "@/components/home/redesign/how-and-trust";
@@ -21,6 +22,7 @@ export default function HomePage() {
       <FullNavbar alwaysShowLogo />
       <main>
         <RedesignHero />
+        <DimitriPart2 />
         <RedesignFeatured />
         <RedesignLogoShowcase />
         <RedesignHowAndTrust />
