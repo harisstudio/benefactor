@@ -70,8 +70,7 @@ const en: Dict = {
   dimitriPart2Badge: "Continued Story",
   dimitriPart2Chapter: "Part 2",
   dimitriStoryBadge: "Story",
-  dimitriPart2Title: "Dimitri's story continues — Part 2",
-  dimitriPart2Subtitle: "",
+  dimitriPart2Title: "Dimitri's story continues Part 2",
   dimitriPart2HelpLine: "Stand with Dimitri and his family",
 
   // ─── Checkout success ──────────────────────────────────────────────────
@@ -648,8 +647,7 @@ const lt: Dict = {
   dimitriPart2Badge: "Tęsinys",
   dimitriPart2Chapter: "2 dalis",
   dimitriStoryBadge: "Istorija",
-  dimitriPart2Title: "Dimitrijaus istorija tęsiasi — 2 dalis",
-  dimitriPart2Subtitle: "",
+  dimitriPart2Title: "Dimitrijaus istorija tęsiasi 2 dalis",
   dimitriPart2HelpLine: "Palaikykite Dimitrijų ir jo šeimą",
   heroDonateNow: "Paaukoti dabar",
 

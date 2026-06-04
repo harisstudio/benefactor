@@ -151,11 +151,6 @@ export function DimitriPart2() {
           <h2 className="font-heading text-[28px] md:text-[40px] font-extrabold text-primary-navy leading-tight">
             {t("dimitriPart2Title")}
           </h2>
-          {t("dimitriPart2Subtitle") ? (
-            <p className="mt-3 text-text-gray text-[15px] md:text-[16px] max-w-[640px] mx-auto">
-              {t("dimitriPart2Subtitle")}
-            </p>
-          ) : null}
         </motion.div>
 
         {/* Language switcher above the video pair so the dub choice reads
