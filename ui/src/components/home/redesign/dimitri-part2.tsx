@@ -63,9 +63,32 @@ export function DimitriPart2() {
     portrait: ResumeState | null;
   }>({ landscape: null, portrait: null });
 
+  // Last-frame snapshots painted as a bridge image while the next src loads,
+  // so the swap doesn't flash to the dark backdrop.
+  const [landscapeBridge, setLandscapeBridge] = useState<string | null>(null);
+  const [portraitBridge, setPortraitBridge] = useState<string | null>(null);
+
   function captureResume(v: HTMLVideoElement | null): ResumeState | null {
     if (!v) return null;
     return { time: v.currentTime, wasPlaying: !v.paused && !v.ended };
+  }
+
+  function captureFrame(v: HTMLVideoElement | null): string | null {
+    if (!v || !v.videoWidth || !v.videoHeight) return null;
+    try {
+      const canvas = document.createElement("canvas");
+      // Downscale a bit to keep the data URL light — the bridge image only
+      // needs to survive a sub-second load gap.
+      const scale = Math.min(1, 640 / v.videoWidth);
+      canvas.width = Math.round(v.videoWidth * scale);
+      canvas.height = Math.round(v.videoHeight * scale);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+      ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
+      return canvas.toDataURL("image/jpeg", 0.75);
+    } catch {
+      return null;
+    }
   }
 
   function toggleLandscapeMute() {
@@ -93,15 +116,20 @@ export function DimitriPart2() {
     if (next === audioLang) return;
     resumeRef.current.landscape = captureResume(landscapeRef.current);
     resumeRef.current.portrait = captureResume(portraitRef.current);
+    // Freeze the current frame as a bridge so the swap doesn't darken.
+    setLandscapeBridge(captureFrame(landscapeRef.current));
+    setPortraitBridge(captureFrame(portraitRef.current));
     setAudioLang(next);
   }
 
-  // After each clip's new src loads, seek back to the remembered point and
-  // resume playback. Runs once per language change for each video.
+  // After each clip's new src loads, seek back to the remembered point,
+  // resume playback, and clear the bridge image once a real frame is
+  // ready so the viewer never sees the dark backdrop.
   useEffect(() => {
     const setup = (
       v: HTMLVideoElement | null,
       slot: "landscape" | "portrait",
+      clearBridge: () => void,
     ) => {
       if (!v) return () => {};
       const resume = resumeRef.current[slot];
@@ -119,11 +147,26 @@ export function DimitriPart2() {
           void v.play().catch(() => {});
         }
       };
+      const onPlaying = () => {
+        clearBridge();
+      };
       v.addEventListener("loadedmetadata", onLoaded, { once: true });
-      return () => v.removeEventListener("loadedmetadata", onLoaded);
+      v.addEventListener("playing", onPlaying, { once: true });
+      // Safety net — clear the bridge after a short timeout in case the
+      // playing event doesn't fire (e.g. the user paused during the swap).
+      const timeout = window.setTimeout(clearBridge, 1500);
+      return () => {
+        v.removeEventListener("loadedmetadata", onLoaded);
+        v.removeEventListener("playing", onPlaying);
+        window.clearTimeout(timeout);
+      };
     };
-    const cleanupL = setup(landscapeRef.current, "landscape");
-    const cleanupP = setup(portraitRef.current, "portrait");
+    const cleanupL = setup(landscapeRef.current, "landscape", () =>
+      setLandscapeBridge(null),
+    );
+    const cleanupP = setup(portraitRef.current, "portrait", () =>
+      setPortraitBridge(null),
+    );
     return () => {
       cleanupL();
       cleanupP();
@@ -214,6 +257,15 @@ export function DimitriPart2() {
                 onClick={togglePortraitMute}
                 className="absolute inset-0 w-full h-full object-cover cursor-pointer"
               />
+              {portraitBridge ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={portraitBridge}
+                  alt=""
+                  aria-hidden
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                />
+              ) : null}
             </div>
             <div className="absolute bottom-0 inset-x-0 z-10 flex items-end justify-start p-4 sm:p-5 bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none">
               <span className="pointer-events-auto inline-flex items-center h-6 px-2.5 rounded-full bg-white/95 text-primary-navy text-[10px] font-bold uppercase tracking-[0.12em]">
@@ -247,6 +299,15 @@ export function DimitriPart2() {
                 onClick={toggleLandscapeMute}
                 className="absolute inset-0 w-full h-full object-cover cursor-pointer"
               />
+              {landscapeBridge ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={landscapeBridge}
+                  alt=""
+                  aria-hidden
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                />
+              ) : null}
             </div>
 
             <div className="absolute bottom-0 inset-x-0 z-10 flex items-end justify-start p-4 sm:p-5 bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none">
