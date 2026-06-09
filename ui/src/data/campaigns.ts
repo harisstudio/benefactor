@@ -1,27 +1,22 @@
 import type { Campaign } from "@/types/campaign";
 
 export const featuredCampaign: Campaign = {
-  id: "1",
-  title: "House reconstruction",
+  id: "2",
+  title: "Kids Camping",
   description:
-    "Winter is approaching in Lithuania, and for one family, the cold brings fear instead of comfort.",
+    "Help us give children a summer they'll never forget — a week of fresh air, friendship, and discovery.",
   story:
-    "This family is currently living in a home that is no longer safe or suitable for the harsh winter months. The house has serious structural problems, poor insulation, and damaged areas that make it difficult to stay warm. Without urgent repairs, the cold weather will turn everyday life into a real struggle.\n\nDespite their difficult situation, they are doing everything they can to survive.",
-  goalAmount: 26000,
-  raisedAmount: 13762,
-  donationCount: 300,
+    "Every summer, families in our community look for safe, joyful, and affordable ways for their kids to spend the school break. For many of them, an organised camp is out of reach. This year we want to change that.\n\nYour donation covers tents, transport, meals, and activities for the kids who need them most. Every euro brings us closer to a week of campfires, games, and memories that stick with them long after the buses head home.",
+  goalAmount: 1500,
+  raisedAmount: 0,
+  donationCount: 0,
   currency: "€",
-  category: "Family",
-  heroImage: "/assets/campaign-man-new.jpg",
-  galleryImages: [
-    "/assets/campaign-house-new.jpg",
-    "/assets/gallery-house-exterior.png",
-    "/assets/gallery-kitchen.png",
-    "/assets/gallery-doorstep.png",
-  ],
-  videoThumbnail: "/assets/campaign-man-new.jpg",
+  category: "Kids",
+  heroImage: "/assets/benefactor_kids_camp.jpg",
+  galleryImages: ["/assets/benefactor_kids_camp.jpg"],
+  videoThumbnail: "/assets/benefactor_kids_camp.jpg",
   organizer: {
     name: "Benefactor Team",
   },
-  createdAt: "2025-10-01",
+  createdAt: "2026-06-08",
 };

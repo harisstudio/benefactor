@@ -69,7 +69,10 @@ function reducer(state: CheckoutState, action: CheckoutAction): CheckoutState {
 }
 
 const initialState: CheckoutState = {
-  frequency: "once",
+  // Default to monthly so the recurring choice is highlighted the moment
+  // the donor lands on the checkout — we want recurring giving to feel
+  // like the primary path.
+  frequency: "monthly",
   selectedAmount: null,
   customAmount: ".00",
   tipPercent: 17.5,
@@ -82,7 +85,9 @@ const initialState: CheckoutState = {
   email: "",
 };
 
-const presetAmounts = [25, 50, 100, 150, 200, 500];
+// Lower-friction preset ladder so first-time donors aren't faced with
+// large amounts; "Other" handles the long tail.
+const presetAmounts = [3, 5, 10, 25, 50];
 
 export function CheckoutCard() {
   const { language } = useLanguage();
