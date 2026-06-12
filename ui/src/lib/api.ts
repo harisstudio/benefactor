@@ -7,7 +7,7 @@
 import type { Campaign, Donor } from "@/types/campaign";
 import type { FundraiserCard } from "@/types/fundraiser";
 
-import { featuredCampaign } from "@/data/campaigns";
+import { featuredCampaign, campaignsById } from "@/data/campaigns";
 import { donors as mockDonors } from "@/data/donors";
 import { featuredFundraisers as mockFundraisers } from "@/data/fundraisers";
 import { topicLabels as mockTopicLabels, topicCards as mockTopicCards } from "@/data/topics";
@@ -84,7 +84,9 @@ export async function getCampaign(id: string): Promise<Campaign> {
   } catch (err) {
     console.warn('API fetch failed, falling back to mock data:', err);
   }
-  return featuredCampaign;
+  // Resolve each id to its own campaign so the detail pages don't all
+  // collapse onto the featured one.
+  return campaignsById[id] ?? featuredCampaign;
 }
 
 export async function getFeaturedCampaign(): Promise<Campaign> {
@@ -139,13 +141,15 @@ export async function getDonors(campaignId: string): Promise<Donor[]> {
       isAnonymous: d.isAnonymous,
       message: d.message,
     }));
-    // Append the historical mock donors after the live ones so the feed always
-    // looks populated even when Stripe has few recent charges.
-    void campaignId;
-    return [...live, ...mockDonors];
+    // Only the campaigns that actually have a donation history get the
+    // historical mock donors appended — a brand-new campaign (0 donors)
+    // should show an empty feed, not another campaign's supporters.
+    const hasHistory = (campaignsById[campaignId]?.donationCount ?? 0) > 0;
+    return hasHistory ? [...live, ...mockDonors] : live;
   } catch (err) {
     console.warn('API fetch failed, falling back to mock data:', err);
-    return mockDonors;
+    const hasHistory = (campaignsById[campaignId]?.donationCount ?? 0) > 0;
+    return hasHistory ? mockDonors : [];
   }
 }
 

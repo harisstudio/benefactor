@@ -54,7 +54,7 @@ export function RedesignLogoShowcase() {
               className="group relative w-full aspect-[4/3] rounded-[28px] border border-surface-muted shadow-lg overflow-hidden block"
             >
               <Image
-                src="/assets/benefactor_kids_camp.jpg"
+                src="/assets/books-stationery.jpg"
                 alt={t("showcaseImageAlt")}
                 fill
                 sizes="(max-width: 1024px) 90vw, 640px"

@@ -66,12 +66,27 @@ const en: Dict = {
   heroHelpFamilyLithuania: "Help a Family in Lithuania",
   heroDonateNow: "Donate now",
 
-  // ─── Dimitri Part 2 ─────────────────────────────────────────────────────
+  // ─── Dimitri story (portrait Part 1/Part 2 toggle + landscape Part 3) ───
   dimitriPart2Badge: "Continued Story",
-  dimitriPart2Chapter: "Part 2",
-  dimitriStoryBadge: "Story",
-  dimitriPart2Title: "Dimitri's story continues Part 2",
+  dimitriPart2Chapter: "Part 3",
+  dimitriChapter1: "Part 1",
+  dimitriChapter2: "Part 2",
+  dimitriPart2Title: "Dimitri's story continues",
   dimitriPart2HelpLine: "Stand with Dimitri and his family",
+
+  // ─── BeConnect app promo (English-only by design) ───────────────────────
+  appPromoBadge: "Mobile app coming soon",
+  appPromoTitle: "Connect with your community",
+  appPromoTagline: "Donate, make a difference, stay safe.",
+  appPromoLead:
+    "BeConnect puts every cause in your pocket. Discover local projects, give in seconds, and follow the impact, all from one beautifully simple app.",
+  appPromoFeature1Title: "Discover",
+  appPromoFeature1Desc: "Find and connect with local projects near you.",
+  appPromoFeature2Title: "Support",
+  appPromoFeature2Desc: "Give once or set up monthly support in seconds.",
+  appPromoFeature3Title: "Secure",
+  appPromoFeature3Desc: "Payments secured by Stripe, every organizer verified.",
+  appPromoStoreNote: "Coming soon to the App Store and Google Play.",
 
   // ─── Checkout success ──────────────────────────────────────────────────
   successHeading: "Thank you for your donation!",
@@ -86,6 +101,7 @@ const en: Dict = {
   // ─── Featured (home) ────────────────────────────────────────────────────
   featuredHeading: "Featured campaign",
   featuredViewAll: "View all",
+  featuredReelsHint: "Swipe up to explore every campaign",
   featuredRaisedOf: "raised of {total}",
   featuredPctFunded: "{pct}% funded",
   featuredStatRaised: "Raised",
@@ -127,15 +143,15 @@ const en: Dict = {
 
   // ─── Logo showcase (home) ───────────────────────────────────────────────
   showcaseBadge: "Future project",
-  showcaseTitle: "Kids Camp Center",
-  showcaseDesc: "Our next initiative is a Kids Camp Center in Lithuania, a safe space where children can learn, play, and grow together. We are preparing to launch the fundraising campaign very soon. Follow us to support the project and watch every stage of the journey unfold with us.",
+  showcaseTitle: "Books & Stationery",
+  showcaseDesc: "Our next initiative supports a local bookseller whose shop is being sold out from under her. On her own she cannot save it, but with help she can relocate, find a new home for her books, and reopen something even better: a warm Books & Stationery shop for the whole neighbourhood. We are preparing to launch the fundraising campaign very soon. Follow us to support the project and watch every stage of the journey unfold with us.",
   showcaseCta: "Support the project",
-  showcaseImageCaption: "Coming soon, a place built for every child",
-  showcaseImageAlt: "Kids Camp Center",
+  showcaseImageCaption: "Coming soon, a new home for her books and stationery",
+  showcaseImageAlt: "Books & Stationery shop",
   // ─── Kids Camp support modal ───
   supportClose: "Close",
   supportComingSoonBadge: "Coming soon",
-  supportHeading: "Be part of the Kids Camp Center journey",
+  supportHeading: "Be part of the Books & Stationery journey",
   supportLeadCopy:
     "We are preparing to launch the fundraising campaign very soon. Until then, you can share your ideas, partner with us, donate, or join as a volunteer. Every message reaches our team directly.",
   supportRoleLabel: "I would like to help as",
@@ -268,7 +284,7 @@ const en: Dict = {
   checkoutEmailRequired: "Email required",
   checkoutEmailRequiredDesc: "Please enter a valid email address so we can send your donation receipt.",
   checkoutPaypalSoonTitle: "PayPal coming soon",
-  checkoutPaypalSoonDesc: "PayPal isn't active yet. Please choose Apple Pay, Google Pay, Revolut Pay, or Card.",
+  checkoutPaypalSoonDesc: "PayPal isn't active yet. Please choose Apple Pay, Google Pay, or Card.",
   checkoutComingSoon: "Coming soon",
   checkoutOneTap: "One tap",
   checkoutPaypal: "PayPal",
@@ -645,10 +661,26 @@ const lt: Dict = {
   heroWatchOnYoutube: "Žiūrėti per YouTube",
   heroHelpFamilyLithuania: "Padėk šeimai Lietuvoje",
   dimitriPart2Badge: "Tęsinys",
-  dimitriPart2Chapter: "2 dalis",
-  dimitriStoryBadge: "Istorija",
-  dimitriPart2Title: "Dimitrijaus istorija tęsiasi 2 dalis",
+  dimitriPart2Chapter: "3 dalis",
+  dimitriChapter1: "1 dalis",
+  dimitriChapter2: "2 dalis",
+  dimitriPart2Title: "Dimitrijaus istorija tęsiasi",
   dimitriPart2HelpLine: "Palaikykite Dimitrijų ir jo šeimą",
+
+  // ─── BeConnect programėlės reklama ──────────────────────────────────────
+  appPromoBadge: "Mobilioji programėlė jau netrukus",
+  appPromoTitle: "Susisiekite su savo bendruomene",
+  appPromoTagline: "Aukokite, keiskite pasaulį, būkite saugūs.",
+  appPromoLead:
+    "Su „BeConnect“ kiekvienas tikslas telpa jūsų kišenėje. Atraskite vietinius projektus, aukokite per kelias sekundes ir stebėkite poveikį – viskas vienoje paprastoje programėlėje.",
+  appPromoFeature1Title: "Atraskite",
+  appPromoFeature1Desc: "Raskite šalia esančius projektus ir prie jų prisijunkite.",
+  appPromoFeature2Title: "Paremkite",
+  appPromoFeature2Desc: "Aukokite vieną kartą arba nustatykite mėnesinę paramą per kelias sekundes.",
+  appPromoFeature3Title: "Saugu",
+  appPromoFeature3Desc: "Mokėjimus saugo „Stripe“, kiekvienas organizatorius patikrintas.",
+  appPromoStoreNote: "Netrukus „App Store“ ir „Google Play“ parduotuvėse.",
+
   heroDonateNow: "Paaukoti dabar",
 
   // ─── Checkout success ──────────────────────────────────────────────────
@@ -664,6 +696,7 @@ const lt: Dict = {
   // Featured
   featuredHeading: "Rekomenduojama rinkliava",
   featuredViewAll: "Žiūrėti visas",
+  featuredReelsHint: "Braukite aukštyn ir peržiūrėkite visas rinkliavas",
   featuredRaisedOf: "surinkta iš {total}",
   featuredPctFunded: "Surinkta {pct} %",
   featuredStatRaised: "Surinkta",
@@ -705,13 +738,13 @@ const lt: Dict = {
 
   // Showcase
   showcaseBadge: "Būsimas projektas",
-  showcaseTitle: "Vaikų stovyklos centras",
-  showcaseDesc: "Mūsų kita iniciatyva yra Vaikų stovyklos centras Lietuvoje, saugi erdvė, kurioje vaikai gali mokytis, žaisti ir augti kartu. Labai greitai pradėsime rinkliavos kampaniją. Sekite mus, palaikykite projektą ir kartu su mumis stebėkite kiekvieną kelionės etapą.",
+  showcaseTitle: "Knygos ir kanceliarija",
+  showcaseDesc: "Mūsų kita iniciatyva remia knygininkę, kurios parduotuvė parduodama jai iš po kojų. Viena ji negali jos išsaugoti, bet su pagalba galės persikelti, rasti naujus namus savo knygoms ir atidaryti dar geresnę vietą: jaukią knygų ir kanceliarijos parduotuvę visam kvartalui. Labai greitai pradėsime rinkliavos kampaniją. Sekite mus, palaikykite projektą ir kartu su mumis stebėkite kiekvieną kelionės etapą.",
   showcaseCta: "Paremti projektą",
   // ─── Kids Camp support modal ───
   supportClose: "Uždaryti",
   supportComingSoonBadge: "Greitai",
-  supportHeading: "Prisijunkite prie Vaikų stovyklos centro kelionės",
+  supportHeading: "Prisijunkite prie Knygų ir kanceliarijos kelionės",
   supportLeadCopy:
     "Labai greitai pradėsime rinkliavos kampaniją. Iki tol galite pasidalinti idėjomis, tapti partneriais, paaukoti arba prisijungti kaip savanoriai. Kiekvienas laiškas pasiekia mūsų komandą tiesiogiai.",
   supportRoleLabel: "Norėčiau prisidėti kaip",
@@ -845,7 +878,7 @@ const lt: Dict = {
   checkoutEmailRequired: "Reikalingas el. paštas",
   checkoutEmailRequiredDesc: "Įveskite galiojantį el. paštą, kad galėtume atsiųsti aukos kvitą.",
   checkoutPaypalSoonTitle: "PayPal greitai bus aktyvus",
-  checkoutPaypalSoonDesc: "PayPal kol kas neaktyvus. Pasirinkite Apple Pay, Google Pay, Revolut Pay arba Kortelę.",
+  checkoutPaypalSoonDesc: "PayPal kol kas neaktyvus. Pasirinkite Apple Pay, Google Pay arba Kortelę.",
   checkoutComingSoon: "Netrukus",
   checkoutOneTap: "Vienu palietimu",
   checkoutPaypal: "PayPal",

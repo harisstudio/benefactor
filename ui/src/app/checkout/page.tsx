@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { CheckoutFooterTagline } from "@/components/checkout/checkout-footer-tagline";
+import { campaignsById, featuredCampaign } from "@/data/campaigns";
 
 const CheckoutCard = dynamic(
   () =>
@@ -14,12 +15,22 @@ export const metadata: Metadata = {
   description: "Complete your donation securely on Benefactor.",
 };
 
-export default function CheckoutPage() {
+export default async function CheckoutPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ campaign?: string }>;
+}) {
+  // Resolve the campaign from the ?campaign=id link so the checkout header
+  // reflects whichever cause the donor came from, not a fixed one.
+  const { campaign: campaignId } = await searchParams;
+  const campaign =
+    (campaignId && campaignsById[campaignId]) || featuredCampaign;
+
   return (
     <>
       <div className="bg-bg-off-white py-8 md:py-14 min-h-[calc(100vh_-_200px)]">
         <div className="max-w-[680px] mx-auto px-4 md:px-5">
-          <CheckoutCard />
+          <CheckoutCard campaign={campaign} />
         </div>
       </div>
 

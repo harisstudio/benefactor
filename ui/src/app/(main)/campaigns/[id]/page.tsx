@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { IconPlayerPlayFilled, IconShare3 } from "@tabler/icons-react";
 import { CampaignHeader } from "@/components/campaign/campaign-header";
+import { CampaignHeroVideo } from "@/components/campaign/campaign-hero-video";
 import { DetailGallery } from "@/components/campaign/detail-gallery";
 import { CampaignStory } from "@/components/campaign/campaign-story";
 import { DonationSidebar } from "@/components/campaign/donation-sidebar";
@@ -24,12 +25,6 @@ export async function generateMetadata({
   };
 }
 
-const storyTruncated =
-  "Winter is approaching in Lithuania, and for one family, the cold brings fear instead of comfort. This family is currently living in a home that is no longer safe or suitable for the harsh winter months. The house has serious structural problems, poor insulation, and damaged areas that make it difficult to stay warm. Without urgent repairs, the cold weather will turn everyday life into a real struggle.";
-
-const storyFull =
-  "Winter is approaching in Lithuania, and for one family, the cold brings fear instead of comfort.\nThis family is currently living in a home that is no longer safe or suitable for the harsh winter months. The house has serious structural problems, poor insulation, and damaged areas that make it difficult to stay warm. Without urgent repairs, the cold weather will turn everyday life into a real struggle.\nDespite their difficult situation, they are doing everything they can to survive. However, due to limited financial resources, they are unable to cover the cost of essential renovations on their own. What they need is not luxury. Only a basic, safe, and warm place to live.\nOur goal is to raise funds to repair damaged walls and floors. Every donation, no matter the size, will go directly toward the renovation of this home. Your support will help transform a cold, unsafe house into a warm and secure place where this family can live with dignity and peace.\nTogether, we can make sure that this family does not have to face the winter in unsafe conditions. Your kindness today can give them warmth, safety, and hope for the future.";
-
 export default async function CampaignPage({
   params,
 }: {
@@ -48,31 +43,38 @@ export default async function CampaignPage({
             <CampaignHeader
               title={campaign.title}
               category={campaign.category}
+              location={campaign.country}
               createdAt={campaign.createdAt}
               verified
             />
 
-            {/* Hero video / image */}
-            <a
-              href="https://www.youtube.com/watch?v=slFSnCxUS4E"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group block relative w-full aspect-video rounded-3xl overflow-hidden bg-black shadow-md"
-            >
-              <Image
-                src={campaign.heroImage}
-                alt={campaign.title}
-                fill
-                sizes="(max-width: 1024px) 100vw, 60vw"
-                className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                priority
-              />
-              <div className="absolute inset-0 bg-black/15 group-hover:bg-black/25 transition-colors flex items-center justify-center">
-                <div className="w-[78px] h-[78px] rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <IconPlayerPlayFilled size={30} className="text-primary-navy ml-1" />
+            {/* Hero: an autoplaying video when the campaign has one, otherwise
+                the static image. */}
+            {campaign.heroVideo ? (
+              <CampaignHeroVideo src={campaign.heroVideo} />
+            ) : (
+              <a
+                href="https://www.youtube.com/watch?v=slFSnCxUS4E"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block relative w-full aspect-video rounded-3xl overflow-hidden bg-black shadow-md"
+              >
+                <Image
+                  src={campaign.heroImage}
+                  alt={campaign.title}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  style={{ objectPosition: campaign.imagePosition ?? "center" }}
+                  className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                  priority
+                />
+                <div className="absolute inset-0 bg-black/15 group-hover:bg-black/25 transition-colors flex items-center justify-center">
+                  <div className="w-[78px] h-[78px] rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <IconPlayerPlayFilled size={30} className="text-primary-navy ml-1" />
+                  </div>
                 </div>
-              </div>
-            </a>
+              </a>
+            )}
 
             {/* Gallery */}
             {campaign.galleryImages.length > 0 && (
@@ -81,7 +83,10 @@ export default async function CampaignPage({
 
             {/* Story */}
             <div className="bg-white border border-surface-muted rounded-3xl p-6 md:p-8 lg:p-10">
-              <CampaignStory truncated={storyTruncated} full={storyFull} />
+              <CampaignStory
+                truncated={campaign.story.split("\n").filter(Boolean)[0] ?? campaign.description}
+                full={campaign.story}
+              />
             </div>
 
             {/* Organizer */}
@@ -145,7 +150,7 @@ export default async function CampaignPage({
             </div>
 
             {/* Mobile recent donors (sidebar is hidden on small screens) */}
-            <MobileRecentDonors donors={donors} totalCount={campaign.donationCount} />
+            <MobileRecentDonors donors={donors} totalCount={campaign.donationCount} campaignId={campaign.id} />
           </div>
 
           {/* Right column sidebar */}

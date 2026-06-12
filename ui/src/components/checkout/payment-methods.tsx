@@ -23,6 +23,7 @@ interface PaymentMethodsProps {
   currency: CurrencyCode;
   donationAmount: number;
   isAnonymous: boolean;
+  campaignId: string;
 }
 
 export function PaymentMethods({
@@ -32,6 +33,7 @@ export function PaymentMethods({
   currency,
   donationAmount,
   isAnonymous,
+  campaignId,
 }: PaymentMethodsProps) {
   const { t } = useLanguage();
   const toast = useToast();
@@ -91,6 +93,7 @@ export function PaymentMethods({
           amount: donationAmountRef.current,
           currency: currencyRef.current,
           isAnonymous: isAnonymousRef.current,
+          campaignId,
         });
 
         const { error, paymentIntent } = await stripe.confirmCardPayment(
@@ -133,38 +136,6 @@ export function PaymentMethods({
   const handleWalletClick = () => {
     if (!paymentRequest) return;
     paymentRequest.show();
-  };
-
-  const handleRevolutPay = async () => {
-    if (!stripe) return;
-    try {
-      const { clientSecret } = await createPaymentIntent(total, currency, {
-        showName: !isAnonymous,
-      });
-      if (!clientSecret) throw new Error("Failed to get client secret");
-
-      addRecentDonor({ amount: donationAmount, currency, isAnonymous });
-
-      // Create a Revolut Pay PaymentMethod first, then confirm — this is
-      // the supported flow when not mounting a PaymentElement.
-      const stripeAny = stripe as any;
-      const pmResult = await stripeAny.createPaymentMethod({
-        type: "revolut_pay",
-      });
-      if (pmResult.error) throw pmResult.error;
-
-      const { error } = await stripeAny.confirmRevolutPayPayment(clientSecret, {
-        payment_method: pmResult.paymentMethod.id,
-        return_url: `${window.location.origin}/checkout/success`,
-      });
-      if (error) {
-        console.error("Revolut Pay error:", error);
-        toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: error.message });
-      }
-    } catch (err: any) {
-      console.error("Revolut Pay flow error:", err);
-      toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: err?.message || "Unknown error" });
-    }
   };
 
   return (
@@ -248,26 +219,6 @@ export function PaymentMethods({
           </span>
         </button>
 
-        {/* Revolut Pay */}
-        <button
-          type="button"
-          onClick={handleRevolutPay}
-          className="w-full h-16 px-4 border-2 border-surface-muted hover:border-primary-navy/40 rounded-[14px] bg-white flex items-center gap-3 transition-all text-left"
-          aria-label="Revolut Pay"
-        >
-          <span className="w-5 h-5 rounded-full border-2 border-surface-muted shrink-0" />
-          <span className="w-14 flex items-center justify-center shrink-0">
-            <Image
-              src="/assets/revolut-pay.svg"
-              alt="Revolut Pay"
-              width={56}
-              height={20}
-              className="h-6 w-auto object-contain"
-            />
-          </span>
-          <span className="text-[15px] font-bold text-primary-navy">Revolut Pay</span>
-        </button>
-
         {/* Card */}
         <label
           className={cn(
@@ -303,7 +254,7 @@ export function PaymentMethods({
               layout: "tabs",
               defaultValues: { billingDetails: { name: "" } },
               // Disable all wallets / Link upsell — those flows are handled
-              // by our own tiles (Apple Pay / Google Pay / Revolut Pay).
+              // by our own tiles (Apple Pay / Google Pay).
               wallets: { applePay: "never", googlePay: "never", link: "never" } as any,
               terms: { card: "never" } as any,
             }}

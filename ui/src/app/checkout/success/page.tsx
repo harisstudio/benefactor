@@ -1,24 +1,45 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { IconCheck, IconArrowLeft, IconHeartHandshake, IconShare3 } from "@tabler/icons-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { campaignsById, featuredCampaign } from "@/data/campaigns";
 
 export default function CheckoutSuccessPage() {
+  // useSearchParams needs a Suspense boundary so the page can prerender.
+  return (
+    <Suspense fallback={null}>
+      <CheckoutSuccessContent />
+    </Suspense>
+  );
+}
+
+function CheckoutSuccessContent() {
   const { t } = useLanguage();
+  // The checkout return_url carries ?campaign=id so the share + campaign
+  // links here point back to the exact cause the donor supported.
+  const searchParams = useSearchParams();
+  const campaignId = searchParams.get("campaign") ?? "";
+  const campaign = campaignsById[campaignId] ?? featuredCampaign;
+  const campaignUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/campaigns/${campaign.id}`
+      : `/campaigns/${campaign.id}`;
 
   const handleShare = () => {
     if (typeof window === "undefined") return;
     if (navigator.share) {
       navigator
         .share({
-          title: "Benefactor",
-          text: t("successShareText"),
-          url: window.location.origin,
+          title: campaign.title,
+          text: `${t("successShareText")} ${campaign.title}`,
+          url: campaignUrl,
         })
         .catch(() => {});
     } else {
-      navigator.clipboard?.writeText(window.location.origin);
+      navigator.clipboard?.writeText(campaignUrl);
     }
   };
 
@@ -67,7 +88,7 @@ export default function CheckoutSuccessPage() {
               {t("successBackHome")}
             </Link>
             <Link
-              href="/campaigns/1"
+              href={campaignUrl}
               className="inline-flex items-center justify-center gap-1.5 h-[52px] px-6 rounded-[100px] font-semibold text-[14px] text-primary-navy bg-white border border-surface-muted hover:bg-bg-off-white transition-all"
             >
               <IconHeartHandshake size={17} />

@@ -12,6 +12,9 @@ const MAX_ENTRIES = 20;
 
 interface StoredDonor extends Omit<Donor, "timeAgo"> {
   timestamp: number;
+  // Which campaign this donation belongs to, so each campaign's feed only
+  // shows its own donors and they never bleed across campaigns.
+  campaignId?: string;
 }
 
 function isBrowser() {
@@ -57,6 +60,7 @@ export function addRecentDonor(input: {
   currency: string;
   isAnonymous?: boolean;
   message?: string;
+  campaignId?: string;
 }) {
   if (!isBrowser()) return;
   const code = input.currency.toUpperCase();
@@ -71,21 +75,29 @@ export function addRecentDonor(input: {
     isAnonymous: true,
     message: input.message,
     timestamp: Date.now(),
+    campaignId: input.campaignId,
   };
   const current = read();
   write([entry, ...current]);
 }
 
-export function getRecentDonors(): Donor[] {
-  return read().map((d) => ({
-    id: d.id,
-    name: d.name,
-    amount: d.amount,
-    currency: d.currency,
-    isAnonymous: d.isAnonymous,
-    message: d.message,
-    timeAgo: formatTimeAgo(d.timestamp),
-  }));
+/**
+ * Recent local donations. Pass a `campaignId` to get only that campaign's
+ * donors; without one you get the whole feed. Entries are always scoped to a
+ * campaign, so a donation to one cause never appears under another.
+ */
+export function getRecentDonors(campaignId?: string): Donor[] {
+  return read()
+    .filter((d) => (campaignId ? d.campaignId === campaignId : true))
+    .map((d) => ({
+      id: d.id,
+      name: d.name,
+      amount: d.amount,
+      currency: d.currency,
+      isAnonymous: d.isAnonymous,
+      message: d.message,
+      timeAgo: formatTimeAgo(d.timestamp),
+    }));
 }
 
 /** Subscribe to changes (cross-tab via 'storage', same-tab via custom event). */

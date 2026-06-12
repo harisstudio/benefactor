@@ -118,3 +118,34 @@
 .animate-rotate-360 {
   animation: rotate-360 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
+/* Horizontal swipe carousel (mobile): hide the scrollbar so the snapping
+   campaign cards read like an Apple-style swipe deck. */
+.snap-cards {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.snap-cards::-webkit-scrollbar {
+  display: none; /* WebKit */
+}
+
+/* Attention pulse — a yellow glowing "signal" used to draw the eye to the
+   inactive Part 2 chapter toggle so viewers don't miss the new clip. */
+@keyframes attention-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 200, 0, 0);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 18px 3px rgba(255, 200, 0, 0.7);
+    transform: scale(1.07);
+  }
+}
+.animate-attention {
+  animation: attention-pulse 1.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-attention {
+    animation: none;
+  }
+}

@@ -17,6 +17,7 @@ import { addRecentDonor } from "@/lib/recent-donors";
 import { useToast } from "@/components/ui/toast";
 import { useLanguage } from "@/context/LanguageContext";
 import { type CurrencyCode } from "@/lib/fx";
+import type { Campaign } from "@/types/campaign";
 
 interface CheckoutState {
   frequency: "once" | "monthly";
@@ -87,9 +88,9 @@ const initialState: CheckoutState = {
 
 // Lower-friction preset ladder so first-time donors aren't faced with
 // large amounts; "Other" handles the long tail.
-const presetAmounts = [3, 5, 10, 25, 50];
+const presetAmounts = [3, 5, 10, 25, 30, 50];
 
-export function CheckoutCard() {
+export function CheckoutCard({ campaign }: { campaign: Campaign }) {
   const { language } = useLanguage();
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
@@ -109,19 +110,29 @@ export function CheckoutCard() {
         donationAmount={donationAmount}
         tipAmount={tipAmount}
         total={total}
+        campaign={campaign}
       />
     </StripeWrapper>
   );
 }
 
-function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
-  state: CheckoutState, dispatch: React.Dispatch<CheckoutAction>, donationAmount: number, tipAmount: number, total: number
+function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total, campaign }: {
+  state: CheckoutState, dispatch: React.Dispatch<CheckoutAction>, donationAmount: number, tipAmount: number, total: number, campaign: Campaign
 }) {
   const { t } = useLanguage();
   const toast = useToast();
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Progress ring + "X to go" derived from the campaign's own numbers.
+  const campaignPct = campaign.goalAmount
+    ? Math.min(100, Math.round((campaign.raisedAmount / campaign.goalAmount) * 100))
+    : 0;
+  const campaignRemaining = `${campaign.currency}${Math.max(
+    0,
+    campaign.goalAmount - campaign.raisedAmount,
+  ).toLocaleString()}`;
 
   // Pre-fill email from signed-in session so logged-in donors don't have
   // to re-type. Anonymous donors fill it manually (browser autofill kicks
@@ -151,6 +162,7 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
       const { clientSecret } = await createPaymentIntent(total, state.currency, {
         showName: !state.isAnonymous,
         email: state.email,
+        campaignId: campaign.id,
       });
       if (!clientSecret) throw new Error("Failed to get client secret");
 
@@ -166,13 +178,14 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
         amount: donationAmount,
         currency: state.currency,
         isAnonymous: state.isAnonymous,
+        campaignId: campaign.id,
       });
 
       const { error } = await stripe.confirmPayment({
         elements,
         clientSecret,
         confirmParams: {
-          return_url: `${window.location.origin}/checkout/success`,
+          return_url: `${window.location.origin}/checkout/success?campaign=${campaign.id}`,
           payment_method_data: {
             billing_details: { email: state.email },
           },
@@ -189,18 +202,18 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
 
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-surface-muted space-y-7">
-      {/* Campaign header */}
+      {/* Campaign header — reflects the campaign the donor came from. */}
       <div className="pb-6 border-b border-surface-muted flex items-start gap-5">
-        <CircularProgress percent={53} size={72} strokeWidth={7} className="shrink-0 text-primary-navy" />
+        <CircularProgress percent={campaignPct} size={72} strokeWidth={7} className="shrink-0 text-primary-navy" />
         <div className="flex-1 min-w-0">
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-text-gray mb-2">
             {t("checkoutYouAreDonatingTo")}
           </p>
           <h1 className="font-heading text-[clamp(20px,2vw,24px)] font-extrabold text-primary-navy leading-tight tracking-[-0.01em] mb-3">
-            {t("checkoutCampaignTitle")}
+            {campaign.title}
           </h1>
           <div className="flex items-center gap-2 text-[13px]">
-            <span className="text-text-gray">{t("checkoutToGo", { amount: "€12,238" })}</span>
+            <span className="text-text-gray">{t("checkoutToGo", { amount: campaignRemaining })}</span>
           </div>
         </div>
       </div>
@@ -283,6 +296,7 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total }: {
         currency={state.currency}
         donationAmount={donationAmount}
         isAnonymous={state.isAnonymous}
+        campaignId={campaign.id}
       />
 
       {/* Privacy checkboxes */}

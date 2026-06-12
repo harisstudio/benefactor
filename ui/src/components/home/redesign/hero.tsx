@@ -160,7 +160,7 @@ export function RedesignHero() {
                 {t("heroHelpFamilyLithuania")}
               </h3>
               <Link
-                href="/checkout"
+                href="/checkout?campaign=1"
                 className="shrink-0 inline-flex items-center justify-center gap-1.5 h-[48px] px-7 rounded-[100px] font-bold text-[15px] bg-primary-yellow text-primary-navy shadow-md hover:bg-primary-yellow-hover hover:shadow-lg active:scale-[0.98] transition-all"
               >
                 {t("heroDonateNow")}

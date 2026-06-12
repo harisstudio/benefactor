@@ -7,3 +7,15 @@ node_modules
 cheslovas_video/
 ui/.next 2/
 **/.DS_Store
+
+# Raw asset source folders (originals live on desktop; used versions are in ui/public/assets)
+cheslovas part 2/
+Be Connect APP/
+Bandup_Campaing/
+kids_camping_Campaing/
+kite_surf_Campaing/
+bookshop_stationery_Campaing/
+Canakkale_village school_Campaing/
+
+# Local preview/dev config (machine-specific paths)
+ui/.claude/

@@ -7,17 +7,18 @@ import { getRecentDonors, subscribeRecentDonors } from "@/lib/recent-donors";
 interface Props {
   donors: Donor[];
   totalCount: number;
+  campaignId: string;
 }
 
-export function MobileRecentDonors({ donors, totalCount }: Props) {
+export function MobileRecentDonors({ donors, totalCount, campaignId }: Props) {
   const [recentLocal, setRecentLocal] = useState<Donor[]>([]);
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    const refresh = () => setRecentLocal(getRecentDonors());
+    const refresh = () => setRecentLocal(getRecentDonors(campaignId));
     refresh();
     return subscribeRecentDonors(refresh);
-  }, []);
+  }, [campaignId]);
 
   const merged = [...recentLocal, ...donors];
   const visible = showAll ? merged : merged.slice(0, 5);

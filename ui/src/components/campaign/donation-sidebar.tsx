@@ -96,10 +96,10 @@ export function DonationSidebar({ campaign, donors }: DonationSidebarProps) {
   // prepend them so the feed updates the moment someone donates.
   const [recentLocal, setRecentLocal] = useState<typeof donors>([]);
   useEffect(() => {
-    const refresh = () => setRecentLocal(getRecentDonors());
+    const refresh = () => setRecentLocal(getRecentDonors(campaign.id));
     refresh();
     return subscribeRecentDonors(refresh);
-  }, []);
+  }, [campaign.id]);
 
   const mergedDonors = [...recentLocal, ...donors];
   const percent = Math.min(
