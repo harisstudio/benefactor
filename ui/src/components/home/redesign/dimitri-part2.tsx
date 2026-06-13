@@ -276,7 +276,7 @@ export function DimitriPart2() {
               <video
                 ref={portraitRef}
                 src={portraitSrc}
-                preload="auto"
+                preload="metadata"
                 autoPlay
                 muted
                 loop
@@ -296,7 +296,7 @@ export function DimitriPart2() {
             </div>
 
             {/* Part 1 / Part 2 toggle — replaces the old STORY badge. */}
-            <div className="absolute bottom-0 inset-x-0 z-10 flex items-end justify-start gap-1.5 p-4 sm:p-5 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+            <div className="absolute bottom-0 inset-x-0 z-10 flex items-end justify-start gap-2.5 p-4 sm:p-5 bg-gradient-to-t from-black/70 via-black/30 to-transparent">
               {([1, 2] as PortraitPart[]).map((p) => {
                 const isActive = portraitPart === p;
                 return (
@@ -306,7 +306,7 @@ export function DimitriPart2() {
                     onClick={() => changePortraitPart(p)}
                     aria-pressed={isActive}
                     className={cn(
-                      "inline-flex items-center h-7 px-3 rounded-full text-[10px] font-bold uppercase tracking-[0.12em] transition-all border",
+                      "inline-flex items-center justify-center h-11 px-5 sm:h-9 sm:px-4 rounded-full text-[13px] sm:text-[12px] font-bold uppercase tracking-[0.1em] transition-all border",
                       isActive
                         ? "bg-white text-primary-navy border-white shadow-sm"
                         : p === 2
@@ -340,7 +340,7 @@ export function DimitriPart2() {
               <video
                 ref={landscapeRef}
                 src={LANDSCAPE_SRC[audioLang]}
-                preload="auto"
+                preload="metadata"
                 autoPlay
                 muted
                 loop
