@@ -19,3 +19,4 @@ Canakkale_village school_Campaing/
 
 # Local preview/dev config (machine-specific paths)
 ui/.claude/
+.vercel/
