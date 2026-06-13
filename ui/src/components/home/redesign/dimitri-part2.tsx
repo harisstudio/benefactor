@@ -62,6 +62,26 @@ export function DimitriPart2() {
   // Part 2 only has Lithuanian audio; Part 1 follows the language switcher.
   const portraitSrc = portraitPart === 2 ? PART2_SRC : PART1_SRC[audioLang];
 
+  // Defer loading the heavy clips until the section is about to enter view, so
+  // they don't weigh down the initial homepage load.
+  const sectionRef = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || inView) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin: "400px" },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [inView]);
+
   // Per-video resume buffer so a language switch continues from the same
   // moment. A chapter switch leaves this null so the new clip plays from 0.
   const resumeRef = useRef<{
@@ -205,6 +225,7 @@ export function DimitriPart2() {
 
   return (
     <section
+      ref={sectionRef}
       id="chapter-part3"
       className="relative overflow-hidden bg-bg-off-white border-t border-surface-muted"
     >
@@ -275,7 +296,7 @@ export function DimitriPart2() {
             <div className="relative aspect-[9/16] lg:aspect-auto w-full lg:h-full bg-primary-navy">
               <video
                 ref={portraitRef}
-                src={portraitSrc}
+                src={inView ? portraitSrc : undefined}
                 preload="metadata"
                 autoPlay
                 muted
@@ -339,7 +360,7 @@ export function DimitriPart2() {
             <div className="relative aspect-[16/9] lg:aspect-auto w-full lg:h-full bg-primary-navy">
               <video
                 ref={landscapeRef}
-                src={LANDSCAPE_SRC[audioLang]}
+                src={inView ? LANDSCAPE_SRC[audioLang] : undefined}
                 preload="metadata"
                 autoPlay
                 muted
