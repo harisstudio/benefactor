@@ -10,6 +10,7 @@ import { createPaymentIntent } from "@/lib/api";
 import { addRecentDonor } from "@/lib/recent-donors";
 import { useToast } from "@/components/ui/toast";
 import type { CurrencyCode } from "@/lib/fx";
+import { PayPalCheckout, PAYPAL_ENABLED } from "./paypal-buttons";
 
 // Wallet identifiers reported by ExpressCheckoutElement. PayPal stays as a
 // separate manual tile because Stripe's PayPal redirect isn't an express
@@ -189,35 +190,65 @@ export function PaymentMethods({
             </span>
           </button>
         )}
-        {/* PayPal — not yet active. Visible so donors know it's planned,
-            but tap shows a toast and selection isn't allowed. */}
-        <button
-          type="button"
-          onClick={() =>
-            toast.show({
-              tone: "info",
-              title: t("checkoutPaypalSoonTitle"),
-              description: t("checkoutPaypalSoonDesc"),
-            })
-          }
-          className="w-full h-16 px-4 border-2 border-surface-muted rounded-[14px] bg-white flex items-center gap-3 text-left opacity-70 hover:opacity-90 transition-opacity"
-          aria-label={t("checkoutPaypal")}
-        >
-          <span className="w-5 h-5 rounded-full border-2 border-surface-muted shrink-0" />
-          <span className="w-14 flex items-center justify-center shrink-0">
-            <Image
-              src="/assets/paypal-logo.svg"
-              alt="PayPal"
-              width={64}
-              height={18}
-              className="h-6 w-auto object-contain"
+        {/* PayPal — selectable once NEXT_PUBLIC_PAYPAL_CLIENT_ID is set;
+            otherwise it stays a "coming soon" placeholder. */}
+        {PAYPAL_ENABLED ? (
+          <label
+            className={cn(
+              "flex items-center gap-3 h-16 px-4 border-2 rounded-[14px] cursor-pointer transition-all",
+              selected === "paypal"
+                ? "border-primary-navy bg-primary-navy/5 shadow-sm"
+                : "border-surface-muted bg-white hover:border-primary-navy/40",
+            )}
+          >
+            <input
+              type="radio"
+              name="payment"
+              value="paypal"
+              checked={selected === "paypal"}
+              onChange={() => onChange("paypal")}
+              className="w-5 h-5 accent-primary-navy shrink-0"
             />
-          </span>
-          <span className="text-[15px] font-bold text-primary-navy flex-1">{t("checkoutPaypal")}</span>
-          <span className="text-[10px] font-bold text-text-gray uppercase tracking-[0.1em] px-2 py-1 rounded-full bg-bg-off-white border border-surface-muted shrink-0">
-            {t("checkoutComingSoon")}
-          </span>
-        </button>
+            <span className="w-14 flex items-center justify-center shrink-0">
+              <Image
+                src="/assets/paypal-logo.svg"
+                alt="PayPal"
+                width={64}
+                height={18}
+                className="h-6 w-auto object-contain"
+              />
+            </span>
+            <span className="text-[15px] font-bold text-primary-navy flex-1">{t("checkoutPaypal")}</span>
+          </label>
+        ) : (
+          <button
+            type="button"
+            onClick={() =>
+              toast.show({
+                tone: "info",
+                title: t("checkoutPaypalSoonTitle"),
+                description: t("checkoutPaypalSoonDesc"),
+              })
+            }
+            className="w-full h-16 px-4 border-2 border-surface-muted rounded-[14px] bg-white flex items-center gap-3 text-left opacity-70 hover:opacity-90 transition-opacity"
+            aria-label={t("checkoutPaypal")}
+          >
+            <span className="w-5 h-5 rounded-full border-2 border-surface-muted shrink-0" />
+            <span className="w-14 flex items-center justify-center shrink-0">
+              <Image
+                src="/assets/paypal-logo.svg"
+                alt="PayPal"
+                width={64}
+                height={18}
+                className="h-6 w-auto object-contain"
+              />
+            </span>
+            <span className="text-[15px] font-bold text-primary-navy flex-1">{t("checkoutPaypal")}</span>
+            <span className="text-[10px] font-bold text-text-gray uppercase tracking-[0.1em] px-2 py-1 rounded-full bg-bg-off-white border border-surface-muted shrink-0">
+              {t("checkoutComingSoon")}
+            </span>
+          </button>
+        )}
 
         {/* Card */}
         <label
@@ -246,6 +277,19 @@ export function PaymentMethods({
           <span className="text-[15px] font-bold text-primary-navy">{t("checkoutCard")}</span>
         </label>
       </div>
+
+      {selected === "paypal" && PAYPAL_ENABLED && (
+        <PayPalCheckout
+          total={total}
+          currency={currency}
+          donationAmount={donationAmount}
+          isAnonymous={isAnonymous}
+          campaignId={campaignId}
+          onError={(message) =>
+            toast.show({ tone: "error", title: t("checkoutPaymentFailed"), description: message })
+          }
+        />
+      )}
 
       {selected === "card" && (
         <div className="pt-2">

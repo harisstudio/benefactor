@@ -5,7 +5,7 @@ import { useLocale } from "@/lib/i18n/LocaleContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { SUPPORTED_LANGUAGES, SUPPORTED_COUNTRIES, LanguageCode, CountryCode } from "@/lib/i18n/config";
 
-const LEGACY_SUPPORTED = ["en", "lt", "ru", "tr", "de", "fr", "es"];
+const LEGACY_SUPPORTED = ["en", "lt", "de", "fr", "es"];
 
 import { IconWorld, IconChevronDown, IconX } from "@tabler/icons-react";
 

@@ -207,11 +207,6 @@ export function AppPromo() {
                 <img src="/assets/google-play-badge.svg" alt="Get it on Google Play" className="h-[46px] w-auto" />
               </a>
             </div>
-            <div className="mt-5 flex justify-center lg:justify-start">
-              <span className="inline-flex items-center h-9 px-4 rounded-full bg-primary-yellow text-primary-navy text-[12px] font-bold uppercase tracking-[0.14em] shadow-sm">
-                {t("appPromoBadge")}
-              </span>
-            </div>
           </motion.div>
 
           {/* Right: animated 3D phone mockups */}

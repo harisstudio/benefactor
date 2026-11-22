@@ -132,15 +132,10 @@ export const campaignsById: Record<string, Campaign> = {
   "5": bandupCampaign,
 };
 
-// Every campaign, in the order they appear on the homepage. Dimitri's
-// family leads (the homepage videos follow it).
-export const allCampaigns: Campaign[] = [
-  dimitriCampaign,
-  kidsCampingCampaign,
-  kiteSurfCampaign,
-  turkeySchoolCampaign,
-  bandupCampaign,
-];
+// Only Dimitri's family campaign is live and listed for now. The others stay
+// defined above (and in campaignsById) so any old links still resolve, but
+// they are not surfaced anywhere in the UI.
+export const allCampaigns: Campaign[] = [dimitriCampaign];
 
 // The campaign highlighted on the homepage and used as the default fallback.
 export const featuredCampaign: Campaign = dimitriCampaign;

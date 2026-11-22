@@ -147,6 +147,9 @@ export function FullNavbar({ alwaysShowLogo = false }: FullNavbarProps) {
 
             <LangToggle className="hidden md:inline-flex" />
 
+            {/* Mobile language toggle — sits right next to the hamburger. */}
+            <LangToggle className="md:hidden" />
+
             {session ? (
               <Link
                 href="/profile"

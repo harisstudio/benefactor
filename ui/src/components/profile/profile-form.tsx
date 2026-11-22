@@ -78,8 +78,7 @@ export function ProfileForm() {
               className={`${inputClass} appearance-none`}
             >
               <option value="en">English</option>
-              <option value="tr">Türkçe</option>
-              <option value="de">Deutsch</option>
+              <option value="lt">Lietuvių</option>
             </select>
           </div>
         </div>

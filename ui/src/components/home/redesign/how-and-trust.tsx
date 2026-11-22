@@ -50,9 +50,6 @@ export function RedesignHowAndTrust() {
                 className="relative bg-bg-off-white border border-surface-muted rounded-3xl p-7 md:p-8 hover:shadow-lg hover:-translate-y-1 transition-all"
               >
                 <div className="flex items-center gap-3 mb-5">
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary-navy text-white text-[14px] font-bold">
-                    {n}
-                  </span>
                   <span className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary-yellow/25">
                     <Icon size={24} className="text-primary-navy" stroke={1.8} />
                   </span>

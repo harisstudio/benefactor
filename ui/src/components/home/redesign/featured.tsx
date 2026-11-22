@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { IconShare3, IconUsers, IconTarget } from "@tabler/icons-react";
-import { allCampaigns } from "@/data/campaigns";
+import { dimitriCampaign } from "@/data/campaigns";
 import type { Campaign } from "@/types/campaign";
 import { ShareModal } from "@/components/share/share-modal";
 import { Amount } from "@/components/ui/amount";
@@ -31,9 +31,7 @@ export function RedesignFeatured() {
         </div>
 
         <div className="space-y-6 md:space-y-8">
-          {allCampaigns.map((c) => (
-            <FeaturedCampaignCard key={c.id} campaign={c} />
-          ))}
+          <FeaturedCampaignCard campaign={dimitriCampaign} />
         </div>
       </div>
     </section>

@@ -80,8 +80,6 @@ export function LanguageSelector() {
                 >
                   <option value="en">English</option>
                   <option value="lt">Lietuvių</option>
-                  <option value="ru">Русский</option>
-                  <option value="tr">Türkçe</option>
                   <option value="de">Deutsch</option>
                   <option value="fr">Français</option>
                   <option value="es">Español</option>

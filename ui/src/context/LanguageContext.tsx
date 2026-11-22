@@ -2,9 +2,9 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-export type LangCode = "en" | "lt" | "ru" | "tr" | "de" | "fr" | "es";
+export type LangCode = "en" | "lt" | "de" | "fr" | "es";
 
-const SUPPORTED: LangCode[] = ["en", "lt", "ru", "tr", "de", "fr", "es"];
+const SUPPORTED: LangCode[] = ["en", "lt", "de", "fr", "es"];
 
 type Dict = Record<string, string>;
 
@@ -1202,13 +1202,11 @@ const lt: Dict = {
 };
 
 // Other languages fall back to English (existing project behavior).
-const ru: Dict = {};
-const tr: Dict = {};
 const de: Dict = {};
 const fr: Dict = {};
 const es: Dict = {};
 
-const dict: Record<LangCode, Dict> = { en, lt, ru, tr, de, fr, es };
+const dict: Record<LangCode, Dict> = { en, lt, de, fr, es };
 
 // Helper: substitute {var} tokens.
 function interpolate(template: string, params?: Record<string, string | number>): string {

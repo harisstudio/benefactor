@@ -5,20 +5,18 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   IconArrowRight,
-  IconVolume,
-  IconVolumeOff,
+  IconPlayerPlayFilled,
 } from "@tabler/icons-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
+import { claimAudio, onAudioClaim } from "@/lib/single-audio";
 
-type AudioLang = "en" | "lt" | "ru" | "tr";
+type AudioLang = "en" | "lt";
 
 // The landscape clip (Part 3) has a dubbed copy per language.
 const LANDSCAPE_SRC: Record<AudioLang, string> = {
   en: "/assets/ches/ches-en.mp4",
   lt: "/assets/ches/ches-lt.mp4",
-  ru: "/assets/ches/ches-ru.mp4",
-  tr: "/assets/ches/ches-tr.mp4",
 };
 
 // The portrait slot holds two nested chapters toggled in place:
@@ -27,16 +25,12 @@ const LANDSCAPE_SRC: Record<AudioLang, string> = {
 const PART1_SRC: Record<AudioLang, string> = {
   en: "/assets/ches/story-en.mp4",
   lt: "/assets/ches/story-lt.mp4",
-  ru: "/assets/ches/story-ru.mp4",
-  tr: "/assets/ches/story-tr.mp4",
 };
 const PART2_SRC = "/assets/ches/part2-lt.mp4";
 
 const LANG_LABEL: Record<AudioLang, string> = {
   en: "English",
   lt: "Lietuvių",
-  ru: "Русский",
-  tr: "Türkçe",
 };
 
 type PortraitPart = 1 | 2;
@@ -46,16 +40,15 @@ export function DimitriPart2() {
   const { t, language } = useLanguage();
   const landscapeRef = useRef<HTMLVideoElement>(null);
   const portraitRef = useRef<HTMLVideoElement>(null);
-  const [landscapeMuted, setLandscapeMuted] = useState(true);
-  const [portraitMuted, setPortraitMuted] = useState(true);
+  // Clips start paused with sound; the play button starts them with audio.
+  const [landscapePaused, setLandscapePaused] = useState(true);
+  const [portraitPaused, setPortraitPaused] = useState(true);
   // Playback progress (0–1) for the Part 3 landscape clip's seek bar.
   const [landscapeProgress, setLandscapeProgress] = useState(0);
   // Which chapter the portrait slot is showing.
   const [portraitPart, setPortraitPart] = useState<PortraitPart>(1);
   const [audioLang, setAudioLang] = useState<AudioLang>(() => {
     if (language === "lt") return "lt";
-    if (language === "ru") return "ru";
-    if (language === "tr") return "tr";
     return "en";
   });
 
@@ -115,25 +108,65 @@ export function DimitriPart2() {
     }
   }
 
-  function toggleLandscapeMute() {
-    const next = !landscapeMuted;
-    setLandscapeMuted(next);
-    if (landscapeRef.current) landscapeRef.current.muted = next;
-    if (!next) {
-      setPortraitMuted(true);
-      if (portraitRef.current) portraitRef.current.muted = true;
+  function toggleLandscapePlay() {
+    const v = landscapeRef.current;
+    if (!v) return;
+    if (v.paused) {
+      // Starting one clip pauses the portrait clip and the hero video.
+      if (portraitRef.current) portraitRef.current.pause();
+      claimAudio("dimitri");
+      void v.play().catch(() => {});
+    } else {
+      v.pause();
     }
   }
 
-  function togglePortraitMute() {
-    const next = !portraitMuted;
-    setPortraitMuted(next);
-    if (portraitRef.current) portraitRef.current.muted = next;
-    if (!next) {
-      setLandscapeMuted(true);
-      if (landscapeRef.current) landscapeRef.current.muted = true;
+  function togglePortraitPlay() {
+    const v = portraitRef.current;
+    if (!v) return;
+    if (v.paused) {
+      if (landscapeRef.current) landscapeRef.current.pause();
+      claimAudio("dimitri");
+      void v.play().catch(() => {});
+    } else {
+      v.pause();
     }
   }
+
+  // Only one clip plays at a time: pause both when another video starts, or
+  // when the section scrolls out of view.
+  useEffect(() => {
+    const off = onAudioClaim("dimitri", () => {
+      landscapeRef.current?.pause();
+      portraitRef.current?.pause();
+    });
+    const el = sectionRef.current;
+    let obs: IntersectionObserver | undefined;
+    if (el) {
+      obs = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) {
+            landscapeRef.current?.pause();
+            portraitRef.current?.pause();
+          }
+        },
+        { threshold: 0.15 },
+      );
+      obs.observe(el);
+    }
+    return () => {
+      off();
+      obs?.disconnect();
+    };
+  }, []);
+
+  // Follow the site-wide language: switching to LT/EN/TR re-dubs the clips
+  // automatically (de/fr/es fall back to the English dub).
+  useEffect(() => {
+    const mapped: AudioLang = language === "lt" ? "lt" : "en";
+    changeAudio(mapped);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language]);
 
   function changeAudio(next: AudioLang) {
     if (next === audioLang) return;
@@ -159,10 +192,10 @@ export function DimitriPart2() {
 
   function changePortraitPart(next: PortraitPart) {
     if (next === portraitPart) return;
-    // New chapter starts from the beginning; bridge the swap so it doesn't
-    // flash to the backdrop.
+    // New chapter starts from the beginning, paused behind the play button.
     resumeRef.current.portrait = null;
     setPortraitBridge(captureFrame(portraitRef.current));
+    setPortraitPaused(true);
     setPortraitPart(next);
   }
 
@@ -181,7 +214,9 @@ export function DimitriPart2() {
           /* ignore */
         }
       }
-      if (!resume || resume.wasPlaying) void v.play().catch(() => {});
+      // Only keep playing if it was already playing before the reload — a
+      // fresh load (or chapter switch) stays paused behind the play button.
+      if (resume?.wasPlaying) void v.play().catch(() => {});
     };
     const onPlaying = () => setLandscapeBridge(null);
     v.addEventListener("loadedmetadata", onLoaded, { once: true });
@@ -210,7 +245,9 @@ export function DimitriPart2() {
           /* ignore */
         }
       }
-      if (!resume || resume.wasPlaying) void v.play().catch(() => {});
+      // Only keep playing if it was already playing before the reload — a
+      // fresh load (or chapter switch) stays paused behind the play button.
+      if (resume?.wasPlaying) void v.play().catch(() => {});
     };
     const onPlaying = () => setPortraitBridge(null);
     v.addEventListener("loadedmetadata", onLoaded, { once: true });
@@ -282,29 +319,30 @@ export function DimitriPart2() {
         >
           {/* Portrait slot — Part 1 / Part 2 nested in place. */}
           <div className="order-1 lg:order-1 relative rounded-[28px] border border-surface-muted shadow-xl overflow-hidden bg-primary-navy w-full lg:h-full">
-            <div className="absolute top-0 inset-x-0 z-10 flex items-start justify-end p-3 sm:p-4 bg-gradient-to-b from-black/55 via-black/20 to-transparent pointer-events-none">
-              <button
-                type="button"
-                onClick={togglePortraitMute}
-                aria-label={portraitMuted ? t("heroUnmuteVideo") : t("heroMuteVideo")}
-                className="pointer-events-auto shrink-0 flex items-center justify-center w-9 h-9 rounded-full bg-white/15 text-white hover:bg-white/25 transition-all backdrop-blur-md border border-white/20"
-              >
-                {portraitMuted ? <IconVolumeOff size={16} /> : <IconVolume size={16} />}
-              </button>
-            </div>
-
             <div className="relative aspect-[9/16] lg:aspect-auto w-full lg:h-full bg-primary-navy">
               <video
                 ref={portraitRef}
                 src={inView ? portraitSrc : undefined}
                 preload="metadata"
-                autoPlay
-                muted
                 loop
                 playsInline
-                onClick={togglePortraitMute}
+                onClick={togglePortraitPlay}
+                onPlay={() => setPortraitPaused(false)}
+                onPause={() => setPortraitPaused(true)}
                 className="absolute inset-0 w-full h-full object-cover cursor-pointer"
               />
+              {portraitPaused && (
+                <button
+                  type="button"
+                  onClick={togglePortraitPlay}
+                  aria-label="Play"
+                  className="absolute inset-0 z-20 flex items-center justify-center bg-black/25"
+                >
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-primary-navy shadow-lg">
+                    <IconPlayerPlayFilled size={24} className="ml-0.5" />
+                  </span>
+                </button>
+              )}
               {portraitBridge ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
@@ -346,33 +384,34 @@ export function DimitriPart2() {
 
           {/* Landscape Part 3 clip. */}
           <div className="order-2 lg:order-2 relative rounded-[28px] border border-surface-muted shadow-xl overflow-hidden bg-primary-navy lg:h-full">
-            <div className="absolute top-0 inset-x-0 z-10 flex items-start justify-end p-4 sm:p-5 bg-gradient-to-b from-black/55 via-black/20 to-transparent pointer-events-none">
-              <button
-                type="button"
-                onClick={toggleLandscapeMute}
-                aria-label={landscapeMuted ? t("heroUnmuteVideo") : t("heroMuteVideo")}
-                className="pointer-events-auto shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-white/15 text-white hover:bg-white/25 transition-all backdrop-blur-md border border-white/20"
-              >
-                {landscapeMuted ? <IconVolumeOff size={18} /> : <IconVolume size={18} />}
-              </button>
-            </div>
-
             <div className="relative aspect-[16/9] lg:aspect-auto w-full lg:h-full bg-primary-navy">
               <video
                 ref={landscapeRef}
                 src={inView ? LANDSCAPE_SRC[audioLang] : undefined}
                 preload="metadata"
-                autoPlay
-                muted
                 loop
                 playsInline
-                onClick={toggleLandscapeMute}
+                onClick={toggleLandscapePlay}
+                onPlay={() => setLandscapePaused(false)}
+                onPause={() => setLandscapePaused(true)}
                 onTimeUpdate={(e) => {
                   const v = e.currentTarget;
                   if (v.duration) setLandscapeProgress(v.currentTime / v.duration);
                 }}
                 className="absolute inset-0 w-full h-full object-cover cursor-pointer"
               />
+              {landscapePaused && (
+                <button
+                  type="button"
+                  onClick={toggleLandscapePlay}
+                  aria-label="Play"
+                  className="absolute inset-0 z-20 flex items-center justify-center bg-black/25"
+                >
+                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/95 text-primary-navy shadow-lg">
+                    <IconPlayerPlayFilled size={28} className="ml-0.5" />
+                  </span>
+                </button>
+              )}
               {landscapeBridge ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img

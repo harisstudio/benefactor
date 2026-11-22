@@ -4,7 +4,6 @@ import { useEffect, useReducer, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { authClient } from "@/lib/auth-client";
 import { StripeWrapper } from "./stripe-wrapper";
-import Image from "next/image";
 import { IconShieldCheck } from "@tabler/icons-react";
 import { DonationTabs } from "./donation-tabs";
 import { AmountGrid } from "./amount-grid";
@@ -329,28 +328,21 @@ function CheckoutInner({ state, dispatch, donationAmount, tipAmount, total, camp
       <DonationSummary donation={donationAmount} tip={tipAmount} total={total} currency={state.currency} />
 
       {/* ──── Donate Button ──── */}
-      <button
-        onClick={handleDonate}
-        disabled={isProcessing}
-        className="w-full h-14 rounded-[100px] font-bold text-[16px] cursor-pointer transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg active:scale-[0.98] bg-primary-yellow text-primary-navy hover:bg-primary-yellow-hover disabled:opacity-70 disabled:shadow-none"
-      >
-        {isProcessing ? (
-          <div className="w-5 h-5 border-2 border-primary-navy border-t-transparent rounded-full animate-spin" />
-        ) : (
-          <>
-            {state.paymentMethod === "paypal" && (
-              <Image
-                src="/assets/paypal-logo.svg"
-                alt="PayPal"
-                width={80}
-                height={22}
-                className="h-[22px] w-auto"
-              />
-            )}
-            {(state.paymentMethod === "card" || state.paymentMethod === "wallet") && t("checkoutDonateNow")}
-          </>
-        )}
-      </button>
+      {/* PayPal renders its own buttons (the CTA) inside PaymentMethods, so the
+          generic donate button is only shown for card / wallet. */}
+      {state.paymentMethod !== "paypal" && (
+        <button
+          onClick={handleDonate}
+          disabled={isProcessing}
+          className="w-full h-14 rounded-[100px] font-bold text-[16px] cursor-pointer transition-all duration-200 flex items-center justify-center gap-3 shadow-md hover:shadow-lg active:scale-[0.98] bg-primary-yellow text-primary-navy hover:bg-primary-yellow-hover disabled:opacity-70 disabled:shadow-none"
+        >
+          {isProcessing ? (
+            <div className="w-5 h-5 border-2 border-primary-navy border-t-transparent rounded-full animate-spin" />
+          ) : (
+            t("checkoutDonateNow")
+          )}
+        </button>
+      )}
 
       {/* Terms */}
       <p className="text-[12px] text-text-gray text-center leading-relaxed">
